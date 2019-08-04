@@ -1,5 +1,7 @@
 package com.arsene.eportfolio.model.entities;
 
+import org.hibernate.annotations.Cascade;
+
 import java.util.List;
 
 import javax.persistence.*;
@@ -16,7 +18,7 @@ public class Subject{
 
     private String image;
 
-    @OneToMany( targetEntity=Ability.class, orphanRemoval = true, cascade = CascadeType.PERSIST)
+    @OneToMany( targetEntity=Ability.class, orphanRemoval = true, cascade = CascadeType.REMOVE)
     private List<Ability> abilities;
 
     public Subject(){ super(); }
