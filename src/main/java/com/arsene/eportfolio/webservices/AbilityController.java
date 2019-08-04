@@ -55,8 +55,10 @@ public class AbilityController {
         for(Subject s:subjectRepository.findAll()){
             if(s.getAbilities().contains(a)){
                 s.getAbilities().remove(a);
+                subjectRepository.save(s);
             }
         }
+
     }
 
     @PostMapping("/")
