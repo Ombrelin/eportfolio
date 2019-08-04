@@ -11,7 +11,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Project{
+public class Project {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,16 +25,19 @@ public class Project{
 
     @ManyToMany
     private List<Technology> technologies;
-    
+
     @ManyToMany
     private List<Ability> abilities;
 
     @ManyToOne
     private Subject subject;
 
-    public Project(){};
+    public Project() {
+    }
 
-    public Project(Integer id, String name, String icon, String description,  String git, Subject subject,String color) {
+    ;
+
+    public Project(Integer id, String name, String icon, String description, String git, Subject subject, String color) {
         this.id = id;
         this.name = name;
         this.icon = icon;
@@ -46,7 +49,7 @@ public class Project{
         this.color = color;
     }
 
-    public Project(Integer id, String name, String icon, String description,  String git, Subject subject,String color, List<Technology> technologies, List<Ability> abilities) {
+    public Project(Integer id, String name, String icon, String description, String git, Subject subject, String color, List<Technology> technologies, List<Ability> abilities) {
         this.id = id;
         this.name = name;
         this.icon = icon;
@@ -178,5 +181,5 @@ public class Project{
         this.abilities = abilities;
     }
 
-    
+
 }

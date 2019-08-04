@@ -4,7 +4,8 @@ public class AuthDTO {
 
     private Boolean success;
 
-    public AuthDTO(){}
+    public AuthDTO() {
+    }
 
     public AuthDTO(Boolean success) {
         this.success = success;

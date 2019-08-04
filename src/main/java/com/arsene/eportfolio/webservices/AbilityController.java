@@ -30,14 +30,14 @@ public class AbilityController {
 
 
     @GetMapping("/")
-    public Iterable<Ability> findAll(){
+    public Iterable<Ability> findAll() {
         return abilityRepository.findAll();
     }
 
     @GetMapping("/{id}")
-    public Ability findById(@PathVariable("id") Integer id){
+    public Ability findById(@PathVariable("id") Integer id) {
         Optional<Ability> t = abilityRepository.findById(id);
-        if(!t.isPresent()){
+        if (!t.isPresent()) {
             throw new ResourceNotFoundException();
         }
         return t.get();
@@ -45,15 +45,15 @@ public class AbilityController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void delete(@PathVariable("id") Integer id){
+    public void delete(@PathVariable("id") Integer id) {
         Optional<Ability> t = abilityRepository.findById(id);
-        if(!t.isPresent()){
+        if (!t.isPresent()) {
             throw new ResourceNotFoundException();
         }
         Ability a = t.get();
 
-        for(Subject s:subjectRepository.findAll()){
-            if(s.getAbilities().contains(a)){
+        for (Subject s : subjectRepository.findAll()) {
+            if (s.getAbilities().contains(a)) {
                 s.getAbilities().remove(a);
                 subjectRepository.save(s);
             }
@@ -63,15 +63,15 @@ public class AbilityController {
 
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    public Ability create(@RequestBody Ability t){
+    public Ability create(@RequestBody Ability t) {
         return abilityRepository.save(t);
     }
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void update(@PathVariable( "id" ) Integer id, @RequestBody Ability resource) {
+    public void update(@PathVariable("id") Integer id, @RequestBody Ability resource) {
         Optional<Ability> t = abilityRepository.findById(resource.getId());
-        if(!t.isPresent()){
+        if (!t.isPresent()) {
             throw new ResourceNotFoundException();
         }
         System.out.println(resource);
@@ -79,9 +79,9 @@ public class AbilityController {
     }
 
     @PostMapping("/{id}/technologies")
-    public Technology addTechnology(@PathVariable("id") Integer id, @RequestBody Technology t){
+    public Technology addTechnology(@PathVariable("id") Integer id, @RequestBody Technology t) {
         Optional<Ability> optionalAbility = abilityRepository.findById(id);
-        if(!optionalAbility.isPresent()){
+        if (!optionalAbility.isPresent()) {
             throw new ResourceNotFoundException();
         }
         Ability ability = optionalAbility.get();

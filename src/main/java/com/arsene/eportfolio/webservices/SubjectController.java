@@ -28,14 +28,14 @@ public class SubjectController {
     ProjectRepository projectRepository;
 
     @GetMapping("/")
-    public Iterable<Subject> findAll(){
+    public Iterable<Subject> findAll() {
         return subjectRepository.findAll();
     }
 
     @GetMapping("/{id}")
-    public Subject findById(@PathVariable("id") Integer id){
+    public Subject findById(@PathVariable("id") Integer id) {
         Optional<Subject> t = subjectRepository.findById(id);
-        if(!t.isPresent()){
+        if (!t.isPresent()) {
             throw new ResourceNotFoundException();
         }
         return t.get();
@@ -43,30 +43,30 @@ public class SubjectController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void delete(@PathVariable("id") Integer id){
+    public void delete(@PathVariable("id") Integer id) {
         subjectRepository.deleteById(id);
     }
 
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    public Subject create(@RequestBody Subject t){
+    public Subject create(@RequestBody Subject t) {
         return subjectRepository.save(t);
     }
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void update(@PathVariable( "id" ) Integer id, @RequestBody Subject resource) {
+    public void update(@PathVariable("id") Integer id, @RequestBody Subject resource) {
         Optional<Subject> t = subjectRepository.findById(resource.getId());
-        if(!t.isPresent()){
+        if (!t.isPresent()) {
             throw new ResourceNotFoundException();
         }
         subjectRepository.save(resource);
     }
 
     @PostMapping("/{id}/abilities")
-    public Ability addAbility(@PathVariable("id") Integer id, @RequestBody Ability resource){
+    public Ability addAbility(@PathVariable("id") Integer id, @RequestBody Ability resource) {
         Optional<Subject> t = subjectRepository.findById(id);
-        if(!t.isPresent()){
+        if (!t.isPresent()) {
             throw new ResourceNotFoundException();
         }
         Subject subject = t.get();
@@ -78,9 +78,9 @@ public class SubjectController {
     }
 
     @PostMapping("/{id}/projects")
-    public Project addProject(@PathVariable("id") Integer id, @RequestBody Project resource){
+    public Project addProject(@PathVariable("id") Integer id, @RequestBody Project resource) {
         Optional<Subject> t = subjectRepository.findById(id);
-        if(!t.isPresent()){
+        if (!t.isPresent()) {
             throw new ResourceNotFoundException();
         }
         Subject subject = t.get();

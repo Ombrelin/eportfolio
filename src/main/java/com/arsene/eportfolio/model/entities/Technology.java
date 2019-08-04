@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import java.util.Objects;
 
 @Entity
-public class Technology{
+public class Technology {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
@@ -16,16 +16,17 @@ public class Technology{
 
     private String image;
 
-    public Technology(){ super(); }
+    public Technology() {
+        super();
+    }
 
-    public Technology(Integer id, String name, String image){
+    public Technology(Integer id, String name, String image) {
         super();
         this.setId(id);
         this.setName(name);
         this.setImage(image);
     }
 
-    
 
     /**
      * @return the id

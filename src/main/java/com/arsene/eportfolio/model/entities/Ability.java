@@ -17,12 +17,14 @@ public class Ability {
 
     private String image;
 
-    @OneToMany(targetEntity=Technology.class, orphanRemoval = true, cascade = CascadeType.REMOVE)
+    @OneToMany(targetEntity = Technology.class, orphanRemoval = true, cascade = CascadeType.REMOVE)
     private List<Technology> technologies;
 
-    public Ability(){ super(); }
+    public Ability() {
+        super();
+    }
 
-    public Ability(Integer id, String name, String color, String image){
+    public Ability(Integer id, String name, String color, String image) {
         super();
         this.setId(id);
         this.setName(name);

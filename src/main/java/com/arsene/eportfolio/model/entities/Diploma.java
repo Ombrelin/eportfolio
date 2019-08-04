@@ -24,7 +24,8 @@ public class Diploma {
 
     private String description;
 
-    public Diploma(){}
+    public Diploma() {
+    }
 
     public Diploma(String name, String school, Integer startYear, Integer endYear, String logo, String description) {
         this.name = name;

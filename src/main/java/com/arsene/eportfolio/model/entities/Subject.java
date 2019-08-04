@@ -7,7 +7,7 @@ import java.util.List;
 import javax.persistence.*;
 
 @Entity
-public class Subject{
+public class Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
@@ -18,12 +18,14 @@ public class Subject{
 
     private String image;
 
-    @OneToMany( targetEntity=Ability.class, orphanRemoval = true, cascade = CascadeType.REMOVE)
+    @OneToMany(targetEntity = Ability.class, orphanRemoval = true, cascade = CascadeType.REMOVE)
     private List<Ability> abilities;
 
-    public Subject(){ super(); }
+    public Subject() {
+        super();
+    }
 
-    public Subject(Integer id, String name, String icon, String image, List<Ability> abilities){
+    public Subject(Integer id, String name, String icon, String image, List<Ability> abilities) {
         super();
         this.id = id;
         this.name = name;

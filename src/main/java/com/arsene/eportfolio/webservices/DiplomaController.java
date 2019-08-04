@@ -18,14 +18,14 @@ public class DiplomaController {
     DiplomaRepository diplomaRepository;
 
     @GetMapping("/")
-    public Iterable<Diploma> findAll(){
+    public Iterable<Diploma> findAll() {
         return diplomaRepository.findAll();
     }
 
     @GetMapping("/{id}")
-    public Diploma findById(@PathVariable("id") Integer id){
+    public Diploma findById(@PathVariable("id") Integer id) {
         Optional<Diploma> t = diplomaRepository.findById(id);
-        if(!t.isPresent()){
+        if (!t.isPresent()) {
             throw new ResourceNotFoundException();
         }
         return t.get();
@@ -33,21 +33,21 @@ public class DiplomaController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void delete(@PathVariable("id") Integer id){
+    public void delete(@PathVariable("id") Integer id) {
         diplomaRepository.deleteById(id);
     }
 
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    public Diploma create(@RequestBody Diploma t){
+    public Diploma create(@RequestBody Diploma t) {
         return diplomaRepository.save(t);
     }
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void update(@PathVariable( "id" ) Integer id, @RequestBody Diploma resource) {
+    public void update(@PathVariable("id") Integer id, @RequestBody Diploma resource) {
         Optional<Diploma> t = diplomaRepository.findById(resource.getId());
-        if(!t.isPresent()){
+        if (!t.isPresent()) {
             throw new ResourceNotFoundException();
         }
         diplomaRepository.save(resource);
