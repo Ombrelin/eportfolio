@@ -2,13 +2,16 @@ package com.arsene.eportfolio.webservices;
 
 import com.arsene.eportfolio.exceptions.ResourceNotFoundException;
 import com.arsene.eportfolio.model.data.AbilityRepository;
+import com.arsene.eportfolio.model.data.SubjectRepository;
 import com.arsene.eportfolio.model.data.TechnologyRepository;
 import com.arsene.eportfolio.model.entities.Ability;
+import com.arsene.eportfolio.model.entities.Subject;
 import com.arsene.eportfolio.model.entities.Technology;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -21,6 +24,9 @@ public class AbilityController {
 
     @Autowired
     TechnologyRepository technologyRepository;
+
+    @Autowired
+    SubjectRepository subjectRepository;
 
 
     @GetMapping("/")
@@ -40,7 +46,17 @@ public class AbilityController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable("id") Integer id){
-        abilityRepository.deleteById(id);
+        Optional<Ability> t = abilityRepository.findById(id);
+        if(!t.isPresent()){
+            throw new ResourceNotFoundException();
+        }
+        Ability a = t.get();
+
+        for(Subject s:subjectRepository.findAll()){
+            if(s.getAbilities().contains(a)){
+                s.getAbilities().remove(a);
+            }
+        }
     }
 
     @PostMapping("/")
