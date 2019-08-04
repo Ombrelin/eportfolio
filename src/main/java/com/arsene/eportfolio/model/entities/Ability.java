@@ -3,11 +3,7 @@ package com.arsene.eportfolio.model.entities;
 import java.util.List;
 import java.util.Objects;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 @Entity
 public class Ability {
@@ -21,7 +17,7 @@ public class Ability {
 
     private String image;
 
-    @OneToMany(targetEntity=Technology.class)
+    @OneToMany(targetEntity=Technology.class, orphanRemoval = true, cascade = CascadeType.REMOVE)
     private List<Technology> technologies;
 
     public Ability(){ super(); }
