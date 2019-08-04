@@ -2,11 +2,7 @@ package com.arsene.eportfolio.model.entities;
 
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 @Entity
 public class Subject{
@@ -20,7 +16,7 @@ public class Subject{
 
     private String image;
 
-    @OneToMany( targetEntity=Ability.class)
+    @OneToMany( targetEntity=Ability.class, orphanRemoval = true, cascade = CascadeType.PERSIST)
     private List<Ability> abilities;
 
     public Subject(){ super(); }
