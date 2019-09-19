@@ -15,6 +15,6 @@ public class EportfolioApplication {
 
     @GetMapping("/")
     public String welcome(){
-        return "index.html";
+        return "index";
     }
 }
