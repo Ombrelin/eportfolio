@@ -13,7 +13,7 @@ public class EportfolioApplication {
         SpringApplication.run(EportfolioApplication.class, args);
     }
 
-    @GetMapping("")
+    @GetMapping("/")
     public String welcome(){
         return "index.html";
     }
