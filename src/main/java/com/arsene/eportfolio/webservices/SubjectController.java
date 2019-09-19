@@ -15,6 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/subjects")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class SubjectController {
 
     @Autowired

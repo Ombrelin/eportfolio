@@ -16,6 +16,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/abilities")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class AbilityController {
 
     @Autowired
