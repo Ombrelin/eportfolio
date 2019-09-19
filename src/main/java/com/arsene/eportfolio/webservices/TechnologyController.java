@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/technologies")
-@CrossOrigin(origins = {"http://localhost:4200", "https://arsenelapostolet.fr"})
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class TechnologyController {
 
     @Autowired

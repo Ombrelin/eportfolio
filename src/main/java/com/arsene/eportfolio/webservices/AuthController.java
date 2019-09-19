@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:4200", "https://arsenelapostolet.fr"})
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class AuthController {
     @PostMapping("/auth")
     public AuthDTO auth() {

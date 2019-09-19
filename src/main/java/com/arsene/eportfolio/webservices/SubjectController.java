@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/subjects")
-@CrossOrigin(origins = {"http://localhost:4200", "https://arsenelapostolet.fr"})
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class SubjectController {
 
     @Autowired

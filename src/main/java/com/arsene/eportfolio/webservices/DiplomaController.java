@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/diplomas")
-@CrossOrigin(origins = {"http://localhost:4200", "https://arsenelapostolet.fr"})
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class DiplomaController {
 
     @Autowired

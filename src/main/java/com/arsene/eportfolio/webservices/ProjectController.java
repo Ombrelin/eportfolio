@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/projects")
-@CrossOrigin(origins = {"http://localhost:4200", "https://arsenelapostolet.fr"})
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ProjectController {
     @Autowired
     ProjectRepository projectRepository;
