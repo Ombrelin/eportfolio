@@ -30,11 +30,13 @@ public class AbilityController {
 
 
     @GetMapping("/")
+    @ResponseStatus(HttpStatus.OK)
     public Iterable<Ability> findAll() {
         return abilityRepository.findAll();
     }
 
     @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public Ability findById(@PathVariable("id") Integer id) {
         Optional<Ability> t = abilityRepository.findById(id);
         if (!t.isPresent()) {
@@ -44,7 +46,7 @@ public class AbilityController {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable("id") Integer id) {
         Optional<Ability> t = abilityRepository.findById(id);
         if (!t.isPresent()) {
@@ -79,6 +81,7 @@ public class AbilityController {
     }
 
     @PostMapping("/{id}/technologies")
+    @ResponseStatus(HttpStatus.OK)
     public Technology addTechnology(@PathVariable("id") Integer id, @RequestBody Technology t) {
         Optional<Ability> optionalAbility = abilityRepository.findById(id);
         if (!optionalAbility.isPresent()) {
