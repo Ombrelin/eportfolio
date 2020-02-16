@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/auth/sign-up").permitAll()
-                .antMatchers("/", "/home**","/**.css","/**.js","/**.ico").permitAll()
+                .antMatchers("/", "/home**", "/**.css", "/**.js", "/**.ico").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
@@ -51,3 +51,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return source;
     }
 }
+
