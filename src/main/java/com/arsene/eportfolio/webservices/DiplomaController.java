@@ -11,7 +11,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/diplomas")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class DiplomaController {
 
     @Autowired

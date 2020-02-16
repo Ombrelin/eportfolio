@@ -13,7 +13,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/technologies")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class TechnologyController {
 
     @Autowired

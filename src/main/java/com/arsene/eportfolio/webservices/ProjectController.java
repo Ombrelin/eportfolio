@@ -15,7 +15,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/projects")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ProjectController {
     @Autowired
     ProjectRepository projectRepository;
