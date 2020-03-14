@@ -70,13 +70,14 @@ public class AbilityController {
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void update(@PathVariable("id") Integer id, @RequestBody Ability resource) {
+    @ResponseBody
+    public Ability update(@PathVariable("id") Integer id, @RequestBody Ability resource) {
         Optional<Ability> t = abilityRepository.findById(resource.getId());
         if (!t.isPresent()) {
             throw new ResourceNotFoundException();
         }
-        System.out.println(resource);
         abilityRepository.save(resource);
+        return resource;
     }
 
     @PostMapping("/{id}/technologies")
