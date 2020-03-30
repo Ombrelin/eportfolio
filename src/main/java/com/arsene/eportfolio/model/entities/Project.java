@@ -2,15 +2,9 @@ package com.arsene.eportfolio.model.entities;
 
 import lombok.Data;
 
-import java.util.ArrayList;
+import javax.persistence.*;
 import java.util.List;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+import java.util.Set;
 
 @Entity
 @Data
@@ -27,10 +21,10 @@ public class Project {
 
 
     @ManyToMany
-    private List<Technology> technologies;
+    private Set<Technology> technologies;
 
-    @ManyToMany
-    private List<Ability> abilities;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<Ability> abilities;
 
     @ManyToOne
     private Subject subject;

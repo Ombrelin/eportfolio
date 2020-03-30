@@ -2,10 +2,8 @@ package com.arsene.eportfolio.model.entities;
 
 import lombok.Data;
 
-import java.util.List;
-import java.util.Objects;
-
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Data
@@ -16,6 +14,7 @@ public class Ability {
     private String name;
     private String color;
     private String image;
-    @OneToMany(targetEntity = Technology.class, orphanRemoval = true, cascade = CascadeType.REMOVE)
-    private List<Technology> technologies;
+
+    @OneToMany(fetch = FetchType.EAGER, targetEntity = Technology.class, orphanRemoval = true, cascade = CascadeType.REMOVE)
+    private Set<Technology> technologies;
 }

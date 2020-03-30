@@ -1,11 +1,9 @@
 package com.arsene.eportfolio.model.entities;
 
 import lombok.Data;
-import org.hibernate.annotations.Cascade;
-
-import java.util.List;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Data
@@ -20,6 +18,6 @@ public class Subject {
 
     private String image;
 
-    @OneToMany(targetEntity = Ability.class, orphanRemoval = true, cascade = CascadeType.REMOVE)
-    private List<Ability> abilities;
+    @OneToMany(fetch = FetchType.EAGER,targetEntity = Ability.class, orphanRemoval = true, cascade = CascadeType.REMOVE)
+    private Set<Ability> abilities;
 }
