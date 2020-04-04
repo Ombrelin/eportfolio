@@ -1,4 +1,4 @@
-package com.arsene.eportfolio.webservices;
+package com.arsene.eportfolio.controllers;
 
 import com.arsene.eportfolio.model.data.DiplomaRepository;
 import com.arsene.eportfolio.model.data.ProjectRepository;
