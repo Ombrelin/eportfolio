@@ -1,9 +1,7 @@
-package com.arsene.eportfolio;
+package com.arsene.eportfolio.services;
 
 import com.arsene.eportfolio.model.data.PerkRepository;
 import com.arsene.eportfolio.model.entities.Perk;
-import com.arsene.eportfolio.services.PerkService;
-import com.arsene.eportfolio.services.PerkServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

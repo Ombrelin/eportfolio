@@ -1,4 +1,4 @@
-package com.arsene.eportfolio.webservices;
+package com.arsene.eportfolio.controllers;
 
 import com.arsene.eportfolio.model.data.UserRepository;
 import com.arsene.eportfolio.model.entities.User;
