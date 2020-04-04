@@ -18,6 +18,6 @@ public class Subject {
 
     private String image;
 
-    @OneToMany(fetch = FetchType.EAGER,targetEntity = Ability.class, orphanRemoval = true, cascade = CascadeType.REMOVE)
+    @OneToMany(fetch = FetchType.EAGER, targetEntity = Ability.class, orphanRemoval = true, cascade = CascadeType.REMOVE)
     private Set<Ability> abilities;
 }

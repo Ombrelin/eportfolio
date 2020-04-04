@@ -7,7 +7,7 @@ import com.arsene.eportfolio.model.data.TechnologyRepository;
 import com.arsene.eportfolio.model.entities.Ability;
 import com.arsene.eportfolio.model.entities.Subject;
 import com.arsene.eportfolio.model.entities.Technology;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,17 +15,14 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/abilities")
+@AllArgsConstructor
 public class AbilityController {
 
-    @Autowired
     AbilityRepository abilityRepository;
 
-    @Autowired
     TechnologyRepository technologyRepository;
 
-    @Autowired
     SubjectRepository subjectRepository;
-
 
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
@@ -36,11 +33,7 @@ public class AbilityController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Ability findById(@PathVariable("id") Integer id) {
-        Optional<Ability> t = abilityRepository.findById(id);
-        if (!t.isPresent()) {
-            throw new ResourceNotFoundException();
-        }
-        return t.get();
+        return abilityRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
     }
 
     @DeleteMapping("/{id}")
@@ -52,6 +45,7 @@ public class AbilityController {
         }
         Ability a = t.get();
 
+        // TODO : Check if needed
         for (Subject s : subjectRepository.findAll()) {
             if (s.getAbilities().contains(a)) {
                 s.getAbilities().remove(a);

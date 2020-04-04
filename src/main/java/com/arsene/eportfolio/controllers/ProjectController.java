@@ -7,7 +7,7 @@ import com.arsene.eportfolio.model.data.TechnologyRepository;
 import com.arsene.eportfolio.model.entities.Ability;
 import com.arsene.eportfolio.model.entities.Project;
 import com.arsene.eportfolio.model.entities.Technology;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,14 +15,11 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/projects")
+@AllArgsConstructor
 public class ProjectController {
-    @Autowired
+
     ProjectRepository projectRepository;
-
-    @Autowired
     AbilityRepository abilityRepository;
-
-    @Autowired
     TechnologyRepository technologyRepository;
 
 
@@ -33,11 +30,7 @@ public class ProjectController {
 
     @GetMapping("/{id}")
     public Project findById(@PathVariable("id") Integer id) {
-        Optional<Project> t = projectRepository.findById(id);
-        if (!t.isPresent()) {
-            throw new ResourceNotFoundException();
-        }
-        return t.get();
+        return projectRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
     }
 
     @DeleteMapping("/{id}")
@@ -65,11 +58,7 @@ public class ProjectController {
     @PostMapping("/{id}/abilities")
     @ResponseStatus(HttpStatus.OK)
     public void addAbility(@PathVariable("id") Integer id, @RequestBody Ability ability) {
-        Optional<Project> t = projectRepository.findById(id);
-        if (!t.isPresent()) {
-            throw new ResourceNotFoundException();
-        }
-        Project p = t.get();
+        Project p = projectRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
         p.getAbilities().add(ability);
         projectRepository.save(p);
     }
@@ -77,16 +66,8 @@ public class ProjectController {
     @DeleteMapping("/{id}/abilities/{idAbility}")
     @ResponseStatus(HttpStatus.OK)
     public void removeAbility(@PathVariable("id") Integer id, @PathVariable("idAbility") Integer idAbility) {
-        Optional<Project> t = projectRepository.findById(id);
-        if (!t.isPresent()) {
-            throw new ResourceNotFoundException();
-        }
-        Project p = t.get();
-        Optional<Ability> a = abilityRepository.findById(idAbility);
-        if (!a.isPresent()) {
-            throw new ResourceNotFoundException();
-        }
-        Ability ability = a.get();
+        Project p = projectRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        Ability ability = abilityRepository.findById(idAbility).orElseThrow(ResourceNotFoundException::new);
         p.getAbilities().remove(ability);
         projectRepository.save(p);
     }
@@ -94,11 +75,7 @@ public class ProjectController {
     @PostMapping("/{id}/technologies")
     @ResponseStatus(HttpStatus.OK)
     public void addTechnology(@PathVariable("id") Integer id, @RequestBody Technology t) {
-        Optional<Project> opt = projectRepository.findById(id);
-        if (!opt.isPresent()) {
-            throw new ResourceNotFoundException();
-        }
-        Project p = opt.get();
+        Project p = projectRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
         p.getTechnologies().add(t);
         projectRepository.save(p);
     }
@@ -106,18 +83,9 @@ public class ProjectController {
     @DeleteMapping("/{id}/technologies/{idTech}")
     @ResponseStatus(HttpStatus.OK)
     public void removeTechnology(@PathVariable("id") Integer id, @PathVariable("idTech") Integer idTech) {
-        Optional<Project> opt = projectRepository.findById(id);
-        if (!opt.isPresent()) {
-            throw new ResourceNotFoundException();
-        }
-        Optional<Technology> optTech = technologyRepository.findById(idTech);
-        if (!optTech.isPresent()) {
-            throw new ResourceNotFoundException();
-        }
-        Project p = opt.get();
-        Technology t = optTech.get();
+        Project p = projectRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        Technology t = technologyRepository.findById(idTech).orElseThrow(ResourceNotFoundException::new);
         p.getTechnologies().remove(t);
         projectRepository.save(p);
     }
-
 }

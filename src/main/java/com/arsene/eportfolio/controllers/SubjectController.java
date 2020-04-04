@@ -7,7 +7,7 @@ import com.arsene.eportfolio.model.data.SubjectRepository;
 import com.arsene.eportfolio.model.entities.Ability;
 import com.arsene.eportfolio.model.entities.Project;
 import com.arsene.eportfolio.model.entities.Subject;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,15 +15,11 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/subjects")
+@AllArgsConstructor
 public class SubjectController {
 
-    @Autowired
     SubjectRepository subjectRepository;
-
-    @Autowired
     AbilityRepository abilityRepository;
-
-    @Autowired
     ProjectRepository projectRepository;
 
     @GetMapping("/")
@@ -33,11 +29,7 @@ public class SubjectController {
 
     @GetMapping("/{id}")
     public Subject findById(@PathVariable("id") Integer id) {
-        Optional<Subject> t = subjectRepository.findById(id);
-        if (!t.isPresent()) {
-            throw new ResourceNotFoundException();
-        }
-        return t.get();
+        return subjectRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
     }
 
     @DeleteMapping("/{id}")

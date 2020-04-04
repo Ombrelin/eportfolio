@@ -5,7 +5,7 @@ import com.arsene.eportfolio.model.data.AbilityRepository;
 import com.arsene.eportfolio.model.data.TechnologyRepository;
 import com.arsene.eportfolio.model.entities.Ability;
 import com.arsene.eportfolio.model.entities.Technology;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,12 +13,10 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/technologies")
+@AllArgsConstructor
 public class TechnologyController {
 
-    @Autowired
     TechnologyRepository technologyRepository;
-
-    @Autowired
     AbilityRepository abilityRepository;
 
     @GetMapping("/")

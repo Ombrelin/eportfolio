@@ -3,7 +3,6 @@ package com.arsene.eportfolio.model.entities;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Entity

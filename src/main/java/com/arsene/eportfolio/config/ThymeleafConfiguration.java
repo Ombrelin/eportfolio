@@ -7,8 +7,8 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 @Configuration
 public class ThymeleafConfiguration {
     @Bean
-    public ClassLoaderTemplateResolver emailTemplateResolver(){
-        ClassLoaderTemplateResolver emailTemplateResolver=new ClassLoaderTemplateResolver();
+    public ClassLoaderTemplateResolver emailTemplateResolver() {
+        ClassLoaderTemplateResolver emailTemplateResolver = new ClassLoaderTemplateResolver();
         emailTemplateResolver.setPrefix("templates/");
         emailTemplateResolver.setTemplateMode("HTML");
         emailTemplateResolver.setSuffix(".html");

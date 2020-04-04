@@ -4,6 +4,7 @@ import com.arsene.eportfolio.model.entities.Perk;
 
 import java.util.List;
 
+
 public interface PerkService {
 
     Perk get(String id);
@@ -12,7 +13,7 @@ public interface PerkService {
 
     Perk create(Perk dto);
 
-    Perk update(String id,Perk dto);
+    Perk update(String id, Perk dto);
 
     void delete(String id);
 
