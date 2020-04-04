@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@AllArgsConstructor
 @Service
+@AllArgsConstructor
 public class PerkServiceImpl implements PerkService {
 
     private PerkRepository perkRepository;
