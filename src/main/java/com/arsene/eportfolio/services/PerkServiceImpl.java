@@ -4,10 +4,12 @@ import com.arsene.eportfolio.exceptions.ResourceNotFoundException;
 import com.arsene.eportfolio.model.data.PerkRepository;
 import com.arsene.eportfolio.model.entities.Perk;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @AllArgsConstructor
+@Service
 public class PerkServiceImpl implements PerkService {
 
     private PerkRepository perkRepository;

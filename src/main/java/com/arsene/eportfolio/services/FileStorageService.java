@@ -17,14 +17,14 @@ public class FileStorageService {
         this.dbFileRepository = dbFileRepository;
     }
 
-    public DBFile store(MultipartFile file){
+    public DBFile store(MultipartFile file) {
 
         // Normalize file name
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
         try {
             // Check if the file's name contains invalid characters
-            if(fileName.contains("..")) {
+            if (fileName.contains("..")) {
                 throw new IllegalArgumentException("Sorry! Filename contains invalid path sequence " + fileName);
             }
 
@@ -40,7 +40,7 @@ public class FileStorageService {
 
     }
 
-    public DBFile retrieve(String fileId){
+    public DBFile retrieve(String fileId) {
         return dbFileRepository.findById(fileId)
                 .orElseThrow(() -> new IllegalArgumentException("No file with such Id"));
     }

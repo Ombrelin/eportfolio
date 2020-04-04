@@ -3,7 +3,7 @@ package com.arsene.eportfolio.controllers;
 import com.arsene.eportfolio.exceptions.ResourceNotFoundException;
 import com.arsene.eportfolio.model.data.DiplomaRepository;
 import com.arsene.eportfolio.model.entities.Diploma;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,9 +11,9 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/diplomas")
+@AllArgsConstructor
 public class DiplomaController {
 
-    @Autowired
     DiplomaRepository diplomaRepository;
 
     @GetMapping("/")
@@ -23,11 +23,7 @@ public class DiplomaController {
 
     @GetMapping("/{id}")
     public Diploma findById(@PathVariable("id") Integer id) {
-        Optional<Diploma> t = diplomaRepository.findById(id);
-        if (!t.isPresent()) {
-            throw new ResourceNotFoundException();
-        }
-        return t.get();
+        return diplomaRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
     }
 
     @DeleteMapping("/{id}")

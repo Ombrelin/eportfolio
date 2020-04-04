@@ -27,10 +27,10 @@ import static org.springframework.web.servlet.support.RequestContextUtils.getLoc
 @RequestMapping("/cv")
 @AllArgsConstructor
 public class CvController {
+    private ServletContext servletContext;
 
     private CvService cvService;
     private SubjectRepository subjectRepository;
-    private ServletContext servletContext;
     private ProjectRepository projectRepository;
     private DiplomaRepository diplomaRepository;
 

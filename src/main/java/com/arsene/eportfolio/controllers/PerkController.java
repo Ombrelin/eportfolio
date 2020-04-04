@@ -47,7 +47,7 @@ public class PerkController {
 
     @DeleteMapping({"/{id}"})
     @ResponseStatus(HttpStatus.OK)
-    public void delete(@PathVariable String id){
+    public void delete(@PathVariable String id) {
         perkService.delete(id);
     }
 }
