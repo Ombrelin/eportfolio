@@ -10,12 +10,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping(WorkExperienceController.BASE_URL)
-@AllArgsConstructor
 public class WorkExperienceController {
 
     public static final String BASE_URL = "/experiences";
 
     private final WorkExperienceService workExperienceService;
+
+    public WorkExperienceController(WorkExperienceService workExperienceService) {
+        this.workExperienceService = workExperienceService;
+    }
 
     @GetMapping
     @ResponseBody
