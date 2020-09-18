@@ -29,7 +29,6 @@ import {MarkdownModule} from 'ngx-markdown';
 import {ProjectModalComponent} from './project-modal/project-modal.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import {MccColorPickerModule} from 'material-community-components';
-import { EnvServiceProvider } from './service/env/env.service.provider';
 
 @NgModule({
   declarations: [
@@ -65,7 +64,7 @@ import { EnvServiceProvider } from './service/env/env.service.provider';
     MarkdownModule.forRoot(),
     MccColorPickerModule
   ],
-  providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true}, EnvServiceProvider],
+  providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true}],
   bootstrap: [AppComponent],
 
   entryComponents: [AbilityModalComponent,

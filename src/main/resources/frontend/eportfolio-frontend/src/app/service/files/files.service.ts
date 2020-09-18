@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {EnvService} from "../env/env.service";
 
 @Injectable({
   providedIn: 'root'
@@ -8,15 +7,14 @@ import {EnvService} from "../env/env.service";
 export class FilesService {
 
   constructor(
-    private http: HttpClient,
-    private env: EnvService
+    private http: HttpClient
   ) {
   }
 
   async upload(file: File) {
     const formData = new FormData();
     formData.append('file', file, file.name);
-    return await this.http.post(`${this.env.apiUrl}/files`, formData,
+    return await this.http.post(`/files`, formData,
       {
         responseType: 'text'
       }
