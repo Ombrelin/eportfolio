@@ -98,10 +98,11 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <executable>ng</executable>
-                    <workingDirectory>src/main/resources/frontend/eportfolio-frontend
-                    </workingDirectory>
+                    <executable>npm</executable>
+                    <workingDirectory>src/main/resources/frontend/eportfolio-frontend</workingDirectory>
                     <arguments>
+                        <argument>run</argument>
+                        <argument>ng</argument>
                         <argument>build</argument>
                     </arguments>
                 </configuration>
