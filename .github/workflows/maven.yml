@@ -25,7 +25,7 @@ jobs:
     - name: NPM install
       run: cd src/main/resources/frontend/eportfolio-frontend && npm install
     - name: Build with Maven
-      run: cd ../../../../.. && mvn -B package --file pom.xml
+      run: mvn -B package --file pom.xml
     - name: Build the Docker image
       run: docker build -t ombrelin/eportfolio-backend:1.0 . --file Dockerfile
     - name: Docker login
