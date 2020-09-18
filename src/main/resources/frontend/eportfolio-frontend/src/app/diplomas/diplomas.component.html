@@ -1,0 +1,26 @@
+<div class="diplomas">
+  <h1>Diplômes</h1>
+  <br><br>
+  <mat-spinner *ngIf="!loaded"></mat-spinner>
+  <div fxLayout="row wrap">
+    <div *ngFor="let diploma of diplomas" fxFlex.gt-md="33.3%">
+      <mat-card>
+        <mat-card-header>
+          <div mat-card-avatar class="diploma-logo" [style.background-image]="'url(' + diploma.logo +')'">
+          </div>
+          <mat-card-title>{{diploma.name}} - {{diploma.school}}</mat-card-title>
+          <mat-card-subtitle>  {{diploma.startYear}} - {{diploma.endYear}}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <markdown ngPreserveWhitespaces>
+            {{diploma.description}}
+          </markdown>
+        </mat-card-content>
+        <mat-card-actions>
+          <a mat-button *ngIf="logged" routerLink="/diploma/{{diploma.id}}">MODIFIER</a>
+          <a mat-button *ngIf="logged" (click)="delete(diploma)">SUPPRIMER</a>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+</div>

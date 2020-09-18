@@ -1,0 +1,45 @@
+<div mat-dialog-title>{{ability.name}}</div>
+<div mat-dialog-content>
+
+
+  <mat-list>
+    <mat-list-item *ngFor="let technology of ability.technologies">
+
+      <img mat-list-avatar src="{{technology.image}}" alt="{{technology.name}}"/>
+      <h4 mat-line>
+
+        {{technology.name}}
+      </h4>
+      <div>
+
+        <a mat-line (click)="handleClickEditTechnology(technology)" *ngIf="logged" mat-icon-button aria-label="edit">
+          <mat-icon>edit</mat-icon>
+        </a>
+
+        <button mat-line *ngIf="logged" mat-icon-button aria-label="delete"
+                (click)="deleteTechnology(technology.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+
+      </div>
+
+    </mat-list-item>
+  </mat-list>
+
+
+</div>
+<div mat-dialog-actions>
+  <div *ngIf="logged">
+    <button mat-button (click)="handleClickAdd()">AJOUTER</button>
+  </div>
+  <div *ngIf="logged">
+    <button mat-button (click)="handleClickEdit()">MODIFIER</button>
+  </div>
+  <div *ngIf="logged">
+    <button mat-button (click)="handleDelete()">SUPPRIMER</button>
+  </div>
+
+
+  <button type="button" mat-button class="close" (click)="closeModale()">FERMER
+  </button>
+</div>

@@ -1,0 +1,19 @@
+<h1 mat-dialog-title>Ajouter ou modifier une compétence</h1>
+
+<mat-dialog-content>
+  <mat-form-field>
+    <input matInput type="text" id="name" placeholder="Nom" [(ngModel)]="ability.name" name="name">
+  </mat-form-field>
+
+  <input type="file" placeholder="Image" id="image" (change)="handleFileInput($event.target.files)" name="image">
+
+  <mcc-color-picker (change)="this.ability.color = $event" ></mcc-color-picker>
+
+</mat-dialog-content>
+
+
+<div mat-dialog-actions>
+  <button type="button" mat-raised-button color="primary"
+          (click)="handleClickSave()">Sauvegarder
+  </button>
+</div>
