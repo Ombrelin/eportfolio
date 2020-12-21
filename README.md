@@ -1,12 +1,16 @@
-# Eportfolio - Back end
+# Eportfolio
 
-Eportfolfio de Arsène Lapostolet
+Eportfolio de Arsène Lapostolet
 Ensemble d'APIs RESTfull spring boot. 
 
 Technologies : 
 
+Backend :
 * Spring Boot
 * Spring Data
 * Spring Security
 * PostgreSQL
-* Heroku
+
+Frontend : 
+* Angular
+* Angular Material
