@@ -125,7 +125,7 @@ public class IntegrationSubjects {
     }
 
     @Test
-    public void getSubject_RetrievesSubjects() throws Exception {
+    public void getSubject_RetrievesSubject() throws Exception {
         // Given
         var subject1 = new Subject();
         subject1.setImage("test image 1");

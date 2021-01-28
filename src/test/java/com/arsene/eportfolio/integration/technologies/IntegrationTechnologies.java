@@ -96,6 +96,7 @@ public class IntegrationTechnologies {
 
         technology.setName("test technology name updated");
 
+
         // When
         mvc.perform(put("/subjects/" + subject.getId() + "/abilities/" + ability.getId() + "/technologies/" + technology.getId())
                 .header("Authorization", token)

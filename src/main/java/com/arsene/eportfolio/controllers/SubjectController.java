@@ -22,7 +22,7 @@ public class SubjectController {
     AbilityRepository abilityRepository;
     ProjectRepository projectRepository;
 
-    @GetMapping("/")
+    @GetMapping
     public Iterable<Subject> findAll() {
         return subjectRepository.findAll();
     }
@@ -38,7 +38,7 @@ public class SubjectController {
         subjectRepository.deleteById(id);
     }
 
-    @PostMapping("/")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Subject create(@RequestBody Subject t) {
         return subjectRepository.save(t);
