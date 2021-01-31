@@ -25,6 +25,7 @@ import java.util.HashSet;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.util.AssertionErrors.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -85,7 +86,6 @@ public class IntegrationAbilities {
         ability.setImage("test ability image");
         ability.setName("test ability name");
         ability.setColor("test ability color");
-        subject.getAbilities().add(ability);
 
         // When
         mvc.perform(post("/subjects/" + subject.getId() + "/abilities")
@@ -102,6 +102,14 @@ public class IntegrationAbilities {
 
         assertEquals("One record should have been inserted", 1L, abilitiesRepository.count());
         ability = abilitiesRepository.findById(ability.getId()).get();
+        assertEquals("Ability name should be correct", "test ability name", ability.getName());
+        assertEquals("Ability image should be correct", "test ability image", ability.getImage());
+        assertEquals("Ability color should be correct", "test ability color", ability.getColor());
+
+        subject = subjectRepository.findById(subject.getId()).get();
+        assertEquals("Subject should have one ability", 1, subject.getAbilities().size());
+
+        ability = subject.getAbilities().stream().findFirst().get();
         assertEquals("Ability name should be correct", "test ability name", ability.getName());
         assertEquals("Ability image should be correct", "test ability image", ability.getImage());
         assertEquals("Ability color should be correct", "test ability color", ability.getColor());
@@ -182,7 +190,60 @@ public class IntegrationAbilities {
                 .andExpect(status().isNoContent());
 
         assertEquals("The existing record should have been deleted", 0L, abilitiesRepository.count());
+        subject = subjectRepository.findById(subject.getId()).get();
+        assertEquals("Subject should have 0 ability", 0, subject.getAbilities().size());
+    }
 
+    // GET /abilities
+    @Test
+    public void getAllAbilties() throws Exception {
+        // Given
+        var subject = new Subject();
+        subject.setImage("test subject 1 image");
+        subject.setIcon("test subject 1 icon");
+        subject.setName("test subject 1 name");
+        subject.setAbilities(new HashSet<>() {});
+
+        subjectRepository.save(subject);
+
+        var ability = new Ability();
+        ability.setImage("test ability 1 image");
+        ability.setName("test ability 1 name");
+        ability.setColor("test ability 1 color");
+        subject.getAbilities().add(ability);
+
+        abilitiesRepository.save(ability);
+
+        var subject2 = new Subject();
+        subject.setImage("test subject 2 image");
+        subject.setIcon("test subject 2 icon");
+        subject.setName("test subject 2 name");
+        subject.setAbilities(new HashSet<>() {});
+
+        subjectRepository.save(subject2);
+
+        var ability2 = new Ability();
+        ability.setImage("test ability 2 image");
+        ability.setName("test ability 2 name");
+        ability.setColor("test ability 2 color");
+        subject.getAbilities().add(ability);
+
+        abilitiesRepository.save(ability2);
+
+        // When
+        mvc.perform(get("/abilities")
+                .contentType("application/json"))
+                // Then
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].image", is("test ability 1 image")))
+                .andExpect(jsonPath("$[0].color", is("test ability 1 color")))
+                .andExpect(jsonPath("$[0].name", is("test ability name 1")))
+                .andExpect(jsonPath("$[0].id", notNullValue()))
+                .andExpect(jsonPath("$[1].image", is("test ability 2 image")))
+                .andExpect(jsonPath("$[1].color", is("test ability 2 color")))
+                .andExpect(jsonPath("$[1].name", is("test ability 2 name")))
+                .andExpect(jsonPath("$[1].id", notNullValue()));
     }
 
 }
