@@ -7,6 +7,7 @@ import com.arsene.eportfolio.model.data.SubjectRepository;
 import com.arsene.eportfolio.model.data.TechnologyRepository;
 import com.arsene.eportfolio.model.entities.Ability;
 import com.arsene.eportfolio.model.entities.Subject;
+import com.arsene.eportfolio.model.entities.Technology;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,8 +24,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.HashSet;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.util.AssertionErrors.assertEquals;
@@ -194,9 +194,52 @@ public class IntegrationAbilities {
         assertEquals("Subject should have 0 ability", 0, subject.getAbilities().size());
     }
 
+    // GET /subjects/{subjectId}/abilities/{id}
+    @Test
+    public void getAllAbilty() throws Exception {
+        // Given
+        var subject = new Subject();
+        subject.setImage("test subject 1 image");
+        subject.setIcon("test subject 1 icon");
+        subject.setName("test subject 1 name");
+        subject.setAbilities(new HashSet<>() {});
+
+        subjectRepository.save(subject);
+
+        var ability = new Ability();
+        ability.setImage("test ability 1 image");
+        ability.setName("test ability 1 name");
+        ability.setColor("test ability 1 color");
+        subject.getAbilities().add(ability);
+
+        abilitiesRepository.save(ability);
+
+        var tech = new Technology();
+        tech.setName("test tech name");
+        tech.setImage("test tech image");
+        ability.getTechnologies().add(tech);
+
+        technologyRepository.save(tech);
+
+        // When
+        mvc.perform(get("/subject/"+subject.getId()+"/abilities/"+ability.getId())
+                .contentType("application/json"))
+                // Then
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].image", is("test ability 1 image")))
+                .andExpect(jsonPath("$[0].color", is("test ability 1 color")))
+                .andExpect(jsonPath("$[0].name", is("test ability 1 name")))
+                .andExpect(jsonPath("$[0].id", notNullValue()))
+                .andExpect(jsonPath("$[0].technologies", notNullValue()))
+                .andExpect(jsonPath("$[0].technologies", hasSize(1)))
+                .andExpect(jsonPath("$[0].technologies[0].name", is("test tech name")))
+                .andExpect(jsonPath("$[0].technologies[0].image", is("test tech image")))
+                .andExpect(jsonPath("$[0].technologies[0].id", notNullValue()));
+    }
     // GET /abilities
     @Test
-    public void getAllAbilties() throws Exception {
+    public void getAllAbilities() throws Exception {
         // Given
         var subject = new Subject();
         subject.setImage("test subject 1 image");
@@ -240,10 +283,12 @@ public class IntegrationAbilities {
                 .andExpect(jsonPath("$[0].color", is("test ability 1 color")))
                 .andExpect(jsonPath("$[0].name", is("test ability name 1")))
                 .andExpect(jsonPath("$[0].id", notNullValue()))
+                .andExpect(jsonPath("$[0].technologies", nullValue()))
                 .andExpect(jsonPath("$[1].image", is("test ability 2 image")))
                 .andExpect(jsonPath("$[1].color", is("test ability 2 color")))
                 .andExpect(jsonPath("$[1].name", is("test ability 2 name")))
-                .andExpect(jsonPath("$[1].id", notNullValue()));
+                .andExpect(jsonPath("$[1].id", notNullValue()))
+                .andExpect(jsonPath("$[1].technologies", nullValue()));
     }
 
 }

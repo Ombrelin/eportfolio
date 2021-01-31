@@ -102,6 +102,7 @@ public class IntegrationTechnologies {
                 .header("Authorization", token)
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(technology)))
+
         // Then
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is("test technology name updated")))
@@ -112,6 +113,13 @@ public class IntegrationTechnologies {
         technology = technologyRepository.findById(technology.getId()).get();
         assertEquals("Technology name should be correct", "test technology name updated", technology.getName());
         assertEquals("Technology image should be correct", "test technology image", technology.getImage());
+
+        ability = abilitiesRepository.findById(ability.getId()).get();
+        assertEquals("Technology should have been added to the ability", 1L, technologyRepository.count());
+        technology = ability.getTechnologies().stream().findFirst().get();
+        assertEquals("Technology name should be correct", "test technology name updated", technology.getName());
+        assertEquals("Technology image should be correct", "test technology image", technology.getImage());
+
     }
 
     // POST /subjects/{subjectId}/abilities/{abilityId}/technologies

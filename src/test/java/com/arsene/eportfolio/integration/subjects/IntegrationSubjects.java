@@ -2,7 +2,9 @@ package com.arsene.eportfolio.integration.subjects;
 
 import com.arsene.eportfolio.EportfolioApplication;
 import com.arsene.eportfolio.integration.IntegrationUtil;
+import com.arsene.eportfolio.model.data.AbilityRepository;
 import com.arsene.eportfolio.model.data.SubjectRepository;
+import com.arsene.eportfolio.model.entities.Ability;
 import com.arsene.eportfolio.model.entities.Subject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,6 +44,9 @@ public class IntegrationSubjects {
 
     @Autowired
     private SubjectRepository repository;
+
+    @Autowired
+    private AbilityRepository abilitiesRepository;
 
     private MockMvc mvc;
 
@@ -96,10 +101,20 @@ public class IntegrationSubjects {
         subject1.setIcon("test icon 1");
         subject1.setName("test name 1");
 
+        var ability = new Ability();
+        ability.setImage("test ability 1 image");
+        ability.setName("test ability 1 name");
+        ability.setColor("test ability 1 color");
+        subject1.getAbilities().add(ability);
+
+        abilitiesRepository.save(ability);
+
         var subject2 = new Subject();
         subject2.setImage("test image 2");
         subject2.setIcon("test icon 2");
         subject2.setName("test name 2");
+
+
 
         repository.save(subject1);
         repository.save(subject2);
@@ -117,35 +132,15 @@ public class IntegrationSubjects {
         .andExpect(jsonPath("$[0].icon", is("test icon 1")))
         .andExpect(jsonPath("$[0].name", is("test name 1")))
         .andExpect(jsonPath("$[0].id", notNullValue()))
+        .andExpect(jsonPath("$[0].abilities", hasSize(1)))
+        .andExpect(jsonPath("$[0].abilities[0].name", is("test name 1")))
+        .andExpect(jsonPath("$[0].abilities[0].image", is("test name 1")))
+        .andExpect(jsonPath("$[0].abilities[0].color", is("test name 1")))
+        .andExpect(jsonPath("$[0].abilities[0].id", notNullValue()))
         .andExpect(jsonPath("$[1].image", is("test image 2")))
         .andExpect(jsonPath("$[1].icon", is("test icon 2")))
         .andExpect(jsonPath("$[1].name", is("test name 2")))
         .andExpect(jsonPath("$[1].id", notNullValue()));
-
-    }
-
-    @Test
-    public void getSubject_RetrievesSubject() throws Exception {
-        // Given
-        var subject1 = new Subject();
-        subject1.setImage("test image 1");
-        subject1.setIcon("test icon 1");
-        subject1.setName("test name 1");
-
-        repository.save(subject1);
-
-        // When
-        mvc.perform(
-                get("/subjects/" + subject1.getId())
-                        .contentType("application/json")
-        )
-
-        // Then
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.image", is("test image 1")))
-        .andExpect(jsonPath("$.icon", is("test icon 1")))
-        .andExpect(jsonPath("$.name", is("test name 1")))
-        .andExpect(jsonPath("$.id", is(subject1.getId())));
 
     }
 
@@ -160,6 +155,14 @@ public class IntegrationSubjects {
 
         repository.save(subject1);
 
+        var ability = new Ability();
+        ability.setImage("test ability 1 image");
+        ability.setName("test ability 1 name");
+        ability.setColor("test ability 1 color");
+        subject1.getAbilities().add(ability);
+
+        abilitiesRepository.save(ability);
+
         // When
         mvc.perform(
                 delete("/subjects/" + subject1.getId())
@@ -171,6 +174,7 @@ public class IntegrationSubjects {
         .andExpect(status().isOk());
 
         assertEquals("The subject should have been deleted", 0L, repository.count());
+        assertEquals("The ability should have been deleted", 0L, abilitiesRepository.count());
     }
 
 
