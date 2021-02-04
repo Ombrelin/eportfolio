@@ -71,14 +71,15 @@ public class IntegrationAbilities {
 
     // POST /subjects/{subjectId}/abilities
     @Test
-    public void createAbility() throws Exception{
+    public void createAbility() throws Exception {
         // Given
         var token = IntegrationUtil.login(mvc, objectMapper);
         var subject = new Subject();
         subject.setImage("test subject image");
         subject.setIcon("test subject icon");
         subject.setName("test subject name");
-        subject.setAbilities(new HashSet<>() {});
+        subject.setAbilities(new HashSet<>() {
+        });
 
         subjectRepository.save(subject);
 
@@ -93,12 +94,12 @@ public class IntegrationAbilities {
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(ability)))
 
-        // Then
-        .andExpect(status().isCreated())
-        .andExpect(jsonPath("$.name", is("test ability name")))
-        .andExpect(jsonPath("$.image", is("test ability image")))
-        .andExpect(jsonPath("$.color", is("test ability color")))
-        .andExpect(jsonPath("$.id", notNullValue()));
+                // Then
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.name", is("test ability name")))
+                .andExpect(jsonPath("$.image", is("test ability image")))
+                .andExpect(jsonPath("$.color", is("test ability color")))
+                .andExpect(jsonPath("$.id", notNullValue()));
 
         assertEquals("One record should have been inserted", 1L, abilitiesRepository.count());
         ability = abilitiesRepository.findById(ability.getId()).get();
@@ -124,7 +125,8 @@ public class IntegrationAbilities {
         subject.setImage("test subject image");
         subject.setIcon("test subject icon");
         subject.setName("test subject name");
-        subject.setAbilities(new HashSet<>() {});
+        subject.setAbilities(new HashSet<>() {
+        });
 
         subjectRepository.save(subject);
 
@@ -144,8 +146,8 @@ public class IntegrationAbilities {
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(ability)))
 
-        // Then
-        .andExpect(status().isOk())
+                // Then
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is("test ability name updated")))
                 .andExpect(jsonPath("$.image", is("test ability image")))
                 .andExpect(jsonPath("$.color", is("test ability color")))
@@ -168,7 +170,8 @@ public class IntegrationAbilities {
         subject.setImage("test subject image");
         subject.setIcon("test subject icon");
         subject.setName("test subject name");
-        subject.setAbilities(new HashSet<>() {});
+        subject.setAbilities(new HashSet<>() {
+        });
 
         subjectRepository.save(subject);
 
@@ -180,8 +183,15 @@ public class IntegrationAbilities {
 
         abilitiesRepository.save(ability);
 
+        var tech = new Technology();
+        tech.setName("test tech name");
+        tech.setImage("test tech image");
+        ability.getTechnologies().add(tech);
+
+        technologyRepository.save(tech);
+
         // When
-        mvc.perform(delete("/subjects/" + subject.getId() + "/abilities"+ ability.getId())
+        mvc.perform(delete("/subjects/" + subject.getId() + "/abilities" + ability.getId())
                 .header("Authorization", token)
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(ability)))
@@ -192,6 +202,7 @@ public class IntegrationAbilities {
         assertEquals("The existing record should have been deleted", 0L, abilitiesRepository.count());
         subject = subjectRepository.findById(subject.getId()).get();
         assertEquals("Subject should have 0 ability", 0, subject.getAbilities().size());
+        assertEquals("Child technology should have been deleted", 0L, technologyRepository.count());
     }
 
     // GET /subjects/{subjectId}/abilities/{id}
@@ -202,7 +213,8 @@ public class IntegrationAbilities {
         subject.setImage("test subject 1 image");
         subject.setIcon("test subject 1 icon");
         subject.setName("test subject 1 name");
-        subject.setAbilities(new HashSet<>() {});
+        subject.setAbilities(new HashSet<>() {
+        });
 
         subjectRepository.save(subject);
 
@@ -222,7 +234,7 @@ public class IntegrationAbilities {
         technologyRepository.save(tech);
 
         // When
-        mvc.perform(get("/subject/"+subject.getId()+"/abilities/"+ability.getId())
+        mvc.perform(get("/subject/" + subject.getId() + "/abilities/" + ability.getId())
                 .contentType("application/json"))
                 // Then
                 .andExpect(status().isOk())
@@ -237,6 +249,7 @@ public class IntegrationAbilities {
                 .andExpect(jsonPath("$[0].technologies[0].image", is("test tech image")))
                 .andExpect(jsonPath("$[0].technologies[0].id", notNullValue()));
     }
+
     // GET /abilities
     @Test
     public void getAllAbilities() throws Exception {
@@ -245,7 +258,8 @@ public class IntegrationAbilities {
         subject.setImage("test subject 1 image");
         subject.setIcon("test subject 1 icon");
         subject.setName("test subject 1 name");
-        subject.setAbilities(new HashSet<>() {});
+        subject.setAbilities(new HashSet<>() {
+        });
 
         subjectRepository.save(subject);
 
@@ -261,7 +275,8 @@ public class IntegrationAbilities {
         subject.setImage("test subject 2 image");
         subject.setIcon("test subject 2 icon");
         subject.setName("test subject 2 name");
-        subject.setAbilities(new HashSet<>() {});
+        subject.setAbilities(new HashSet<>() {
+        });
 
         subjectRepository.save(subject2);
 
