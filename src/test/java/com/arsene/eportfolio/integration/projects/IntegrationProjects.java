@@ -341,7 +341,7 @@ public class IntegrationProjects {
         ability = project1.getAbilities().stream().findFirst().get();
         assertEquals("Child technology should have correct test tech name","test tech name", ability.getName());
         assertEquals("Child technology should have correct test tech image","test tech image", ability.getImage());
-        assertEquals("Child technology should have correct test tech image","test tech color", ability.getColor());
+        assertEquals("Child technology should have correct test tech color","test tech color", ability.getColor());
     }
 
 
