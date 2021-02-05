@@ -8,6 +8,7 @@ import com.arsene.eportfolio.model.data.SubjectRepository;
 import com.arsene.eportfolio.model.data.TechnologyRepository;
 import com.arsene.eportfolio.model.entities.Ability;
 import com.arsene.eportfolio.model.entities.Project;
+import com.arsene.eportfolio.model.entities.Subject;
 import com.arsene.eportfolio.model.entities.Technology;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,6 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import static org.hamcrest.Matchers.*;
@@ -55,6 +57,9 @@ public class IntegrationProjects {
 
     @Autowired
     private ProjectRepository projectRepository;
+
+    @Autowired
+    private SubjectRepository subjectRepository;
 
     private MockMvc mvc;
 
@@ -163,7 +168,7 @@ public class IntegrationProjects {
 
                 // Then
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.image", is("test project 1 image")))
+                .andExpect(jsonPath("$.icon", is("test project 1 icon")))
                 .andExpect(jsonPath("$.color", is("test project 1 color")))
                 .andExpect(jsonPath("$.name", is("test project 1 name updated")))
                 .andExpect(jsonPath("$.id", notNullValue()))
@@ -187,7 +192,6 @@ public class IntegrationProjects {
         project1.setIcon("test project 1 icon");
         project1.setDescription("test project 1 description");
         project1.setGit("test project 1 git");
-
         projectRepository.save(project1);
 
         project1.setName("test project 1 name updated");
@@ -198,13 +202,150 @@ public class IntegrationProjects {
                 .header("Authorization", token))
                 // Then
                 .andExpect(status().isOk());
-        assertEquals("Project should have been deleted",1L,projectRepository.count());
+        assertEquals("Project should have been deleted", 1L, projectRepository.count());
     }
 
     // POST /projects
-    // POST /projects/{id}/technologies
-    // POST /projects/{id}/abilities
-    // DELETE /projects/{id}/technologie
-    // DELETE /projects/{id}/abilities
+    public void createProject() throws Exception {
+        // Given
+        var project1 = new Project();
+        project1.setName("test project 1 name");
+        project1.setColor("test project 1 color");
+        project1.setIcon("test project 1 icon");
+        project1.setDescription("test project 1 description");
+        project1.setGit("test project 1 git");
+
+        // When
+        var response = mvc.perform(post("/projects")
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(project1)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.icon", is("test project 1 icon")))
+                .andExpect(jsonPath("$.color", is("test project 1 color")))
+                .andExpect(jsonPath("$.name", is("test project 1 name")))
+                .andExpect(jsonPath("$.id", notNullValue()))
+                .andExpect(jsonPath("$.description", is("test project 1 description")))
+                .andExpect(jsonPath("$.git", is("test project 1 git")))
+                .andExpect(jsonPath("$.abilities", hasSize(0)))
+                .andExpect(jsonPath("$.technologies", hasSize(0)))
+                .andReturn()
+                .getResponse();
+
+        var project = objectMapper.readValue(response.getContentAsString(), Project.class);
+
+        assertEquals("One project should have been created", 1L, projectRepository.count());
+        project1 = projectRepository.findById(project.getId()).get();
+        assertEquals("Project in DB should have correct image", "test project 1 icon", project1.getIcon());
+        assertEquals("Project in DB should have correct image", "test project 1 name", project1.getName());
+        assertEquals("Project in DB should have correct image", "test project 1 color", project1.getColor());
+        assertEquals("Project in DB should have correct image", "test project 1 git", project1.getGit());
+        assertEquals("Project in DB should have correct image", "test project 1 description", project1.getDescription());
+    }
+
+    // PUT /projects/{id}/technologies
+    public void addTechnology() throws Exception {
+        // Given
+        var token = IntegrationUtil.login(mvc, objectMapper);
+        var project1 = new Project();
+        project1.setName("test project 1 name");
+        project1.setColor("test project 1 color");
+        project1.setIcon("test project 1 icon");
+        project1.setDescription("test project 1 description");
+        project1.setGit("test project 1 git");
+        projectRepository.save(project1);
+
+        var tech = new Technology();
+        tech.setName("test tech name");
+        tech.setImage("test tech image");
+
+        technologyRepository.save(tech);
+
+        // When
+        mvc.perform(put(String.format("/projects/%s/technologies", project1.getId()))
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(project1))
+                .header("Authorization", token))
+                // Then
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.icon", is("test project 1 icon")))
+                .andExpect(jsonPath("$.color", is("test project 1 color")))
+                .andExpect(jsonPath("$.name", is("test project 1 name")))
+                .andExpect(jsonPath("$.id", notNullValue()))
+                .andExpect(jsonPath("$.description", is("test project 1 description")))
+                .andExpect(jsonPath("$.git", is("test project 1 git")))
+                .andExpect(jsonPath("$.abilities", hasSize(0)))
+                .andExpect(jsonPath("$.technologies", hasSize(1)))
+                .andExpect(jsonPath("$.technologies[0].name", is("test tech name")))
+                .andExpect(jsonPath("$.technologies[0].image", is("test tech image")));
+
+        assertEquals("Project should still exist", 1L, projectRepository.count());
+        project1 = projectRepository.findById(project1.getId()).get();
+        assertEquals("Project in DB should have correct image", "test project 1 icon", project1.getIcon());
+        assertEquals("Project in DB should have correct name", "test project 1 name", project1.getName());
+        assertEquals("Project in DB should have correct color", "test project 1 color", project1.getColor());
+        assertEquals("Project in DB should have correct git", "test project 1 git", project1.getGit());
+        assertEquals("Project in DB should have correct description", "test project 1 description", project1.getDescription());
+        assertEquals("Project in DB should have correct child techs", 1, project1.getTechnologies().size());
+        tech = project1.getTechnologies().stream().findFirst().get();
+        assertEquals("Child technology should have correct test tech name","test tech name", tech.getName());
+        assertEquals("Child technology should have correct test tech image","test tech image", tech.getImage());
+    }
+
+    // PUT /projects/{id}/abilities
+    public void addAbility() throws Exception {
+        // Given
+        var token = IntegrationUtil.login(mvc, objectMapper);
+        var project1 = new Project();
+        project1.setName("test project 1 name");
+        project1.setColor("test project 1 color");
+        project1.setIcon("test project 1 icon");
+        project1.setDescription("test project 1 description");
+        project1.setGit("test project 1 git");
+        projectRepository.save(project1);
+
+        var ability = new Ability();
+        ability.setImage("test ability image");
+        ability.setName("test ability name");
+        ability.setColor("test ability color");
+        abilitiesRepository.save(ability);
+
+        // When
+        mvc.perform(put(String.format("/projects/%s/technologies", project1.getId()))
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(project1))
+                .header("Authorization", token))
+                // Then
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.icon", is("test project 1 icon")))
+                .andExpect(jsonPath("$.color", is("test project 1 color")))
+                .andExpect(jsonPath("$.name", is("test project 1 name")))
+                .andExpect(jsonPath("$.id", notNullValue()))
+                .andExpect(jsonPath("$.description", is("test project 1 description")))
+                .andExpect(jsonPath("$.git", is("test project 1 git")))
+                .andExpect(jsonPath("$.abilities", hasSize(0)))
+                .andExpect(jsonPath("$.abilities", hasSize(1)))
+                .andExpect(jsonPath("$.technologies[0].name", is("test ability name")))
+                .andExpect(jsonPath("$.technologies[0].image", is("test ability image")))
+                .andExpect(jsonPath("$.technologies[0].color", is("test ability color")));
+
+        assertEquals("Project should still exist", 1L, projectRepository.count());
+
+        project1 = projectRepository.findById(project1.getId()).get();
+        assertEquals("Project in DB should have correct image", "test project 1 icon", project1.getIcon());
+        assertEquals("Project in DB should have correct name", "test project 1 name", project1.getName());
+        assertEquals("Project in DB should have correct color", "test project 1 color", project1.getColor());
+        assertEquals("Project in DB should have correct git", "test project 1 git", project1.getGit());
+        assertEquals("Project in DB should have correct description", "test project 1 description", project1.getDescription());
+        assertEquals("Project in DB should have correct child techs", 1, project1.getAbilities().size());
+
+        ability = project1.getAbilities().stream().findFirst().get();
+        assertEquals("Child technology should have correct test tech name","test tech name", ability.getName());
+        assertEquals("Child technology should have correct test tech image","test tech image", ability.getImage());
+        assertEquals("Child technology should have correct test tech image","test tech color", ability.getColor());
+    }
+
+
+    // DELETE /projects/{id}/technologie/{techId}
+    // DELETE /projects/{id}/abilities/{abilityId}
 
 }
