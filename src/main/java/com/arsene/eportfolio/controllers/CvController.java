@@ -4,7 +4,7 @@ import com.arsene.eportfolio.model.data.DiplomaRepository;
 import com.arsene.eportfolio.model.data.ProjectRepository;
 import com.arsene.eportfolio.model.data.SubjectRepository;
 import com.arsene.eportfolio.services.CvService;
-import lombok.AllArgsConstructor;
+import com.arsene.eportfolio.services.CvServiceImpl;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -25,14 +25,20 @@ import static org.springframework.web.servlet.support.RequestContextUtils.getLoc
 
 @RestController
 @RequestMapping("/cv")
-@AllArgsConstructor
 public class CvController {
-    private ServletContext servletContext;
+    private final ServletContext servletContext;
+    private final CvService cvService;
+    private final SubjectRepository subjectRepository;
+    private final ProjectRepository projectRepository;
+    private final DiplomaRepository diplomaRepository;
 
-    private CvService cvService;
-    private SubjectRepository subjectRepository;
-    private ProjectRepository projectRepository;
-    private DiplomaRepository diplomaRepository;
+    public CvController(ServletContext servletContext, CvService cvService, SubjectRepository subjectRepository, ProjectRepository projectRepository, DiplomaRepository diplomaRepository) {
+        this.servletContext = servletContext;
+        this.cvService = cvService;
+        this.subjectRepository = subjectRepository;
+        this.projectRepository = projectRepository;
+        this.diplomaRepository = diplomaRepository;
+    }
 
     @GetMapping("")
     public ResponseEntity<Resource> getCv(HttpServletRequest servletRequest, HttpServletResponse servletResponse) {

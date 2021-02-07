@@ -2,20 +2,20 @@ package com.arsene.eportfolio.controllers;
 
 import com.arsene.eportfolio.model.entities.Perk;
 import com.arsene.eportfolio.services.PerkService;
-import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping(PerkController.BASE_URL)
-@AllArgsConstructor
+@RequestMapping("/perks")
 public class PerkController {
 
-    public static final String BASE_URL = "/perks";
-
     private final PerkService perkService;
+
+    public PerkController(PerkService perkService) {
+        this.perkService = perkService;
+    }
 
     @GetMapping
     @ResponseBody

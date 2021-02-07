@@ -7,7 +7,6 @@ import com.arsene.eportfolio.model.data.TechnologyRepository;
 import com.arsene.eportfolio.model.entities.Ability;
 import com.arsene.eportfolio.model.entities.Project;
 import com.arsene.eportfolio.model.entities.Technology;
-import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,13 +14,17 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/projects")
-@AllArgsConstructor
 public class ProjectController {
 
-    ProjectRepository projectRepository;
-    AbilityRepository abilityRepository;
-    TechnologyRepository technologyRepository;
+    private ProjectRepository projectRepository;
+    private AbilityRepository abilityRepository;
+    private TechnologyRepository technologyRepository;
 
+    public ProjectController(ProjectRepository projectRepository, AbilityRepository abilityRepository, TechnologyRepository technologyRepository) {
+        this.projectRepository = projectRepository;
+        this.abilityRepository = abilityRepository;
+        this.technologyRepository = technologyRepository;
+    }
 
     @GetMapping("/")
     public Iterable<Project> findAll() {

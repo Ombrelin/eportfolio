@@ -2,7 +2,6 @@ package com.arsene.eportfolio.controllers;
 
 import com.arsene.eportfolio.model.entities.DBFile;
 import com.arsene.eportfolio.services.FileStorageService;
-import lombok.AllArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -14,10 +13,13 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/files")
-@AllArgsConstructor
 public class FileStorageController {
 
     private FileStorageService fileStorageService;
+
+    public FileStorageController(FileStorageService fileStorageService) {
+        this.fileStorageService = fileStorageService;
+    }
 
     @PostMapping
     public String upload(@RequestParam("file") MultipartFile file) {

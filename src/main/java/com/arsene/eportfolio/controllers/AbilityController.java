@@ -7,7 +7,8 @@ import com.arsene.eportfolio.model.data.TechnologyRepository;
 import com.arsene.eportfolio.model.entities.Ability;
 import com.arsene.eportfolio.model.entities.Subject;
 import com.arsene.eportfolio.model.entities.Technology;
-import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,26 +16,27 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/abilities")
-@AllArgsConstructor
 public class AbilityController {
 
-    AbilityRepository abilityRepository;
+    private final Logger logger = LoggerFactory.getLogger(AbilityController.class);
 
-    TechnologyRepository technologyRepository;
+    private final AbilityRepository abilityRepository;
+    private final TechnologyRepository technologyRepository;
+    private final SubjectRepository subjectRepository;
 
-    SubjectRepository subjectRepository;
+    public AbilityController(AbilityRepository abilityRepository, TechnologyRepository technologyRepository, SubjectRepository subjectRepository) {
+        this.abilityRepository = abilityRepository;
+        this.technologyRepository = technologyRepository;
+        this.subjectRepository = subjectRepository;
+    }
 
-    @GetMapping("/")
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Iterable<Ability> findAll() {
         return abilityRepository.findAll();
     }
 
-    @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Ability findById(@PathVariable("id") Integer id) {
-        return abilityRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
-    }
+
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

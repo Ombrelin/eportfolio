@@ -3,16 +3,18 @@ package com.arsene.eportfolio.services;
 import com.arsene.eportfolio.exceptions.ResourceNotFoundException;
 import com.arsene.eportfolio.model.data.PerkRepository;
 import com.arsene.eportfolio.model.entities.Perk;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
 public class PerkServiceImpl implements PerkService {
 
-    private PerkRepository perkRepository;
+    private final PerkRepository perkRepository;
+
+    public PerkServiceImpl(PerkRepository perkRepository) {
+        this.perkRepository = perkRepository;
+    }
 
     @Override
     public Perk get(String id) {

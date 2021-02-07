@@ -21,6 +21,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -67,10 +71,7 @@ public class IntegrationSubjects {
     public void createSubject_InsertsInDb() throws Exception {
         // Given
         var token = IntegrationUtil.login(mvc, objectMapper);
-        var subject = new Subject();
-        subject.setImage("test image");
-        subject.setIcon("test icon");
-        subject.setName("test name");
+        var subject = new Subject("test name","test icon","test image");
 
         // When
         mvc.perform(
@@ -96,25 +97,17 @@ public class IntegrationSubjects {
     @Test
     public void getSubjects_RetrievesExistingSubjects() throws Exception {
         // Given
-        var subject1 = new Subject();
-        subject1.setImage("test image 1");
-        subject1.setIcon("test icon 1");
-        subject1.setName("test name 1");
 
-        var ability = new Ability();
-        ability.setImage("test ability 1 image");
-        ability.setName("test ability 1 name");
-        ability.setColor("test ability 1 color");
-        subject1.getAbilities().add(ability);
 
+        var subject1 = new Subject("test name 1", "test icon 1","test image 1");
+        repository.save(subject1);
+
+        var ability = new Ability("test ability 1 name","test ability 1 color","test ability 1 image", subject1);
         abilitiesRepository.save(ability);
 
-        var subject2 = new Subject();
-        subject2.setImage("test image 2");
-        subject2.setIcon("test icon 2");
-        subject2.setName("test name 2");
+        subject1.getAbilities().add(ability);
 
-
+        var subject2 = new Subject("test name 2","test icon 2","test image 2");
 
         repository.save(subject1);
         repository.save(subject2);
@@ -133,9 +126,9 @@ public class IntegrationSubjects {
         .andExpect(jsonPath("$[0].name", is("test name 1")))
         .andExpect(jsonPath("$[0].id", notNullValue()))
         .andExpect(jsonPath("$[0].abilities", hasSize(1)))
-        .andExpect(jsonPath("$[0].abilities[0].name", is("test name 1")))
-        .andExpect(jsonPath("$[0].abilities[0].image", is("test name 1")))
-        .andExpect(jsonPath("$[0].abilities[0].color", is("test name 1")))
+        .andExpect(jsonPath("$[0].abilities[0].name", is("test ability 1 name")))
+        .andExpect(jsonPath("$[0].abilities[0].image", is("test ability 1 image")))
+        .andExpect(jsonPath("$[0].abilities[0].color", is("test ability 1 color")))
         .andExpect(jsonPath("$[0].abilities[0].id", notNullValue()))
         .andExpect(jsonPath("$[1].image", is("test image 2")))
         .andExpect(jsonPath("$[1].icon", is("test icon 2")))
@@ -148,20 +141,17 @@ public class IntegrationSubjects {
     public void deleteSubject_DeletesFromDb() throws Exception {
         // Given
         var token = IntegrationUtil.login(mvc, objectMapper);
-        var subject1 = new Subject();
-        subject1.setImage("test image 1");
-        subject1.setIcon("test icon 1");
-        subject1.setName("test name 1");
 
-        repository.save(subject1);
 
-        var ability = new Ability();
-        ability.setImage("test ability 1 image");
-        ability.setName("test ability 1 name");
-        ability.setColor("test ability 1 color");
-        subject1.getAbilities().add(ability);
 
+
+        var subject1 = new Subject("test name 1","test icon 1","test image 1");
+
+        var ability = new Ability("test ability 1 name","test ability 1 color","test ability 1 image", subject1);
         abilitiesRepository.save(ability);
+
+        subject1.getAbilities().add(ability);
+        repository.save(subject1);
 
         // When
         mvc.perform(
@@ -182,19 +172,11 @@ public class IntegrationSubjects {
     public void editSubject_EditsInDb() throws Exception {
         // Given
         var token = IntegrationUtil.login(mvc, objectMapper);
-        var subject1 = new Subject();
-        subject1.setImage("test image 1");
-        subject1.setIcon("test icon 1");
-        subject1.setName("test name 1");
 
+        var subject1 = new Subject("test name 1","test icon 1","test image 1");
         repository.save(subject1);
 
-        var editDto = new Subject();
-        editDto.setImage("test image 1");
-        editDto.setIcon("test icon 1");
-        editDto.setName("test name updated");
-        editDto.setId(subject1.getId());
-        editDto.setAbilities(new HashSet<>());
+        var editDto = new Subject(subject1.getId(),"test name updated","test icon 1","test image 1");
 
         // When
         mvc.perform(

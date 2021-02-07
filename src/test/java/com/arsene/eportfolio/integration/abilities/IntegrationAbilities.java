@@ -64,9 +64,9 @@ public class IntegrationAbilities {
                 .apply(springSecurity())
                 .build();
 
-        technologyRepository.deleteAll();
         subjectRepository.deleteAll();
         abilitiesRepository.deleteAll();
+        technologyRepository.deleteAll();
     }
 
     // POST /subjects/{subjectId}/abilities
@@ -74,19 +74,10 @@ public class IntegrationAbilities {
     public void createAbility() throws Exception {
         // Given
         var token = IntegrationUtil.login(mvc, objectMapper);
-        var subject = new Subject();
-        subject.setImage("test subject image");
-        subject.setIcon("test subject icon");
-        subject.setName("test subject name");
-        subject.setAbilities(new HashSet<>() {
-        });
-
+        var subject = new Subject("test subject name", "test subject icon", "test subject image");
         subjectRepository.save(subject);
 
-        var ability = new Ability();
-        ability.setImage("test ability image");
-        ability.setName("test ability name");
-        ability.setColor("test ability color");
+        var ability = new Ability("test ability name", "test ability color", "test ability image", subject);
 
         // When
         mvc.perform(post("/subjects/" + subject.getId() + "/abilities")
@@ -121,22 +112,15 @@ public class IntegrationAbilities {
     public void updateAbility() throws Exception {
         // Given
         var token = IntegrationUtil.login(mvc, objectMapper);
-        var subject = new Subject();
-        subject.setImage("test subject image");
-        subject.setIcon("test subject icon");
-        subject.setName("test subject name");
-        subject.setAbilities(new HashSet<>() {
-        });
 
+        var subject = new Subject("test subject name", "test subject icon", "test subject image");
         subjectRepository.save(subject);
 
-        var ability = new Ability();
-        ability.setImage("test ability image");
-        ability.setName("test ability name");
-        ability.setColor("test ability color");
-        subject.getAbilities().add(ability);
-
+        var ability = new Ability("test ability name", "test ability color", "test ability image", subject);
         abilitiesRepository.save(ability);
+
+        subject.getAbilities().add(ability);
+        subjectRepository.save(subject);
 
         ability.setName("test ability updated");
 
@@ -166,29 +150,21 @@ public class IntegrationAbilities {
     public void deleteAbility() throws Exception {
         // Given
         var token = IntegrationUtil.login(mvc, objectMapper);
-        var subject = new Subject();
-        subject.setImage("test subject image");
-        subject.setIcon("test subject icon");
-        subject.setName("test subject name");
-        subject.setAbilities(new HashSet<>() {
-        });
 
+        var subject = new Subject("test subject name", "test subject icon", "test subject image");
         subjectRepository.save(subject);
 
-        var ability = new Ability();
-        ability.setImage("test ability image");
-        ability.setName("test ability name");
-        ability.setColor("test ability color");
-        subject.getAbilities().add(ability);
-
+        var ability = new Ability("test ability name", "test ability color", "test ability image", subject);
         abilitiesRepository.save(ability);
 
-        var tech = new Technology();
-        tech.setName("test tech name");
-        tech.setImage("test tech image");
-        ability.getTechnologies().add(tech);
+        subject.getAbilities().add(ability);
+        subjectRepository.save(subject);
 
+        var tech = new Technology("test tech name", "test tech image");
         technologyRepository.save(tech);
+
+        ability.getTechnologies().add(tech);
+        abilitiesRepository.save(ability);
 
         // When
         mvc.perform(delete("/subjects/" + subject.getId() + "/abilities" + ability.getId())
@@ -207,86 +183,60 @@ public class IntegrationAbilities {
 
     // GET /subjects/{subjectId}/abilities/{id}
     @Test
-    public void getAllAbilty() throws Exception {
+    public void getAbility() throws Exception {
         // Given
-        var subject = new Subject();
-        subject.setImage("test subject 1 image");
-        subject.setIcon("test subject 1 icon");
-        subject.setName("test subject 1 name");
-        subject.setAbilities(new HashSet<>() {
-        });
-
+        var subject = new Subject("test subject 1 name", "test subject 1 icon", "test subject 1 image");
         subjectRepository.save(subject);
 
-        var ability = new Ability();
-        ability.setImage("test ability 1 image");
-        ability.setName("test ability 1 name");
-        ability.setColor("test ability 1 color");
-        subject.getAbilities().add(ability);
-
+        var ability = new Ability("test ability 1 name", "test ability 1 color", "test ability 1 image", subject);
         abilitiesRepository.save(ability);
 
-        var tech = new Technology();
-        tech.setName("test tech name");
-        tech.setImage("test tech image");
-        ability.getTechnologies().add(tech);
+        subject.getAbilities().add(ability);
+        subjectRepository.save(subject);
 
+        var tech = new Technology("test tech name", "test tech image");
         technologyRepository.save(tech);
 
+        ability.getTechnologies().add(tech);
+        abilitiesRepository.save(ability);
+
         // When
-        mvc.perform(get("/subject/" + subject.getId() + "/abilities/" + ability.getId())
+        mvc.perform(get("/subjects/" + subject.getId() + "/abilities/" + ability.getId())
                 .contentType("application/json"))
                 // Then
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].image", is("test ability 1 image")))
-                .andExpect(jsonPath("$[0].color", is("test ability 1 color")))
-                .andExpect(jsonPath("$[0].name", is("test ability 1 name")))
-                .andExpect(jsonPath("$[0].id", notNullValue()))
-                .andExpect(jsonPath("$[0].technologies", notNullValue()))
-                .andExpect(jsonPath("$[0].technologies", hasSize(1)))
-                .andExpect(jsonPath("$[0].technologies[0].name", is("test tech name")))
-                .andExpect(jsonPath("$[0].technologies[0].image", is("test tech image")))
-                .andExpect(jsonPath("$[0].technologies[0].id", notNullValue()));
+                .andExpect(jsonPath("$.image", is("test ability 1 image")))
+                .andExpect(jsonPath("$.color", is("test ability 1 color")))
+                .andExpect(jsonPath("$.name", is("test ability 1 name")))
+                .andExpect(jsonPath("$.id", notNullValue()))
+                .andExpect(jsonPath("$.technologies", notNullValue()))
+                .andExpect(jsonPath("$.technologies", hasSize(1)))
+                .andExpect(jsonPath("$.technologies[0].name", is("test tech name")))
+                .andExpect(jsonPath("$.technologies[0].image", is("test tech image")))
+                .andExpect(jsonPath("$.technologies[0].id", notNullValue()));
     }
 
     // GET /abilities
     @Test
     public void getAllAbilities() throws Exception {
         // Given
-        var subject = new Subject();
-        subject.setImage("test subject 1 image");
-        subject.setIcon("test subject 1 icon");
-        subject.setName("test subject 1 name");
-        subject.setAbilities(new HashSet<>() {
-        });
-
+        var subject = new Subject("test subject 1 name", "test subject 1 icon", "test subject 1 image");
         subjectRepository.save(subject);
 
-        var ability = new Ability();
-        ability.setImage("test ability 1 image");
-        ability.setName("test ability 1 name");
-        ability.setColor("test ability 1 color");
-        subject.getAbilities().add(ability);
-
+        var ability = new Ability("test ability 1 name", "test ability 1 color", "test ability 1 image", subject);
         abilitiesRepository.save(ability);
 
-        var subject2 = new Subject();
-        subject.setImage("test subject 2 image");
-        subject.setIcon("test subject 2 icon");
-        subject.setName("test subject 2 name");
-        subject.setAbilities(new HashSet<>() {
-        });
+        subject.getAbilities().add(ability);
+        subjectRepository.save(subject);
 
+        var subject2 = new Subject("test subject 2 name", "test subject 2 icon", "test subject 2 image");
         subjectRepository.save(subject2);
 
-        var ability2 = new Ability();
-        ability.setImage("test ability 2 image");
-        ability.setName("test ability 2 name");
-        ability.setColor("test ability 2 color");
-        subject.getAbilities().add(ability);
-
+        var ability2 = new Ability("test ability 2 name", "test ability 2 color", "test ability 2 image", subject);
         abilitiesRepository.save(ability2);
+
+        subject2.getAbilities().add(ability2);
+        subjectRepository.save(subject2);
 
         // When
         mvc.perform(get("/abilities")

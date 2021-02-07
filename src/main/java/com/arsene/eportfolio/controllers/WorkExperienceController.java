@@ -2,17 +2,14 @@ package com.arsene.eportfolio.controllers;
 
 import com.arsene.eportfolio.model.entities.WorkExperience;
 import com.arsene.eportfolio.services.WorkExperienceService;
-import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping(WorkExperienceController.BASE_URL)
+@RequestMapping("/experiences")
 public class WorkExperienceController {
-
-    public static final String BASE_URL = "/experiences";
 
     private final WorkExperienceService workExperienceService;
 

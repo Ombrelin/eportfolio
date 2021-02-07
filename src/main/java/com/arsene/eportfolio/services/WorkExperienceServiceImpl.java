@@ -3,16 +3,18 @@ package com.arsene.eportfolio.services;
 import com.arsene.eportfolio.exceptions.ResourceNotFoundException;
 import com.arsene.eportfolio.model.data.WorkExperienceRepository;
 import com.arsene.eportfolio.model.entities.WorkExperience;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
 public class WorkExperienceServiceImpl implements WorkExperienceService {
 
-    private WorkExperienceRepository workExperienceRepository;
+    private final WorkExperienceRepository workExperienceRepository;
+
+    public WorkExperienceServiceImpl(WorkExperienceRepository workExperienceRepository) {
+        this.workExperienceRepository = workExperienceRepository;
+    }
 
     @Override
     public List<WorkExperience> getAll() {

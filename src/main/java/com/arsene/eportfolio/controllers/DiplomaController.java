@@ -3,7 +3,6 @@ package com.arsene.eportfolio.controllers;
 import com.arsene.eportfolio.exceptions.ResourceNotFoundException;
 import com.arsene.eportfolio.model.data.DiplomaRepository;
 import com.arsene.eportfolio.model.entities.Diploma;
-import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,10 +10,13 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/diplomas")
-@AllArgsConstructor
 public class DiplomaController {
 
-    DiplomaRepository diplomaRepository;
+    private DiplomaRepository diplomaRepository;
+
+    public DiplomaController(DiplomaRepository diplomaRepository) {
+        this.diplomaRepository = diplomaRepository;
+    }
 
     @GetMapping("/")
     public Iterable<Diploma> findAll() {

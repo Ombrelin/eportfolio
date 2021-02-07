@@ -287,8 +287,8 @@ public class IntegrationProjects {
         assertEquals("Project in DB should have correct description", "test project 1 description", project1.getDescription());
         assertEquals("Project in DB should have correct child techs", 1, project1.getTechnologies().size());
         tech = project1.getTechnologies().stream().findFirst().get();
-        assertEquals("Child technology should have correct test tech name","test tech name", tech.getName());
-        assertEquals("Child technology should have correct test tech image","test tech image", tech.getImage());
+        assertEquals("Child technology should have correct test tech name", "test tech name", tech.getName());
+        assertEquals("Child technology should have correct test tech image", "test tech image", tech.getImage());
     }
 
     // PUT /projects/{id}/abilities
@@ -339,13 +339,74 @@ public class IntegrationProjects {
         assertEquals("Project in DB should have correct child techs", 1, project1.getAbilities().size());
 
         ability = project1.getAbilities().stream().findFirst().get();
-        assertEquals("Child technology should have correct test tech name","test tech name", ability.getName());
-        assertEquals("Child technology should have correct test tech image","test tech image", ability.getImage());
-        assertEquals("Child technology should have correct test tech color","test tech color", ability.getColor());
+        assertEquals("Child technology should have correct test tech name", "test tech name", ability.getName());
+        assertEquals("Child technology should have correct test tech image", "test tech image", ability.getImage());
+        assertEquals("Child technology should have correct test tech color", "test tech color", ability.getColor());
     }
 
+    // DELETE /projects/{id}/technology/{techId}
+    @Test
+    public void removeTech() throws Exception {
+        // Given
+        var token = IntegrationUtil.login(mvc, objectMapper);
 
-    // DELETE /projects/{id}/technologie/{techId}
+        var tech = new Technology();
+        tech.setName("test tech name");
+        tech.setImage("test tech image");
+        technologyRepository.save(tech);
+
+        var project1 = new Project();
+        project1.setName("test project 1 name");
+        project1.setColor("test project 1 color");
+        project1.setIcon("test project 1 icon");
+        project1.setDescription("test project 1 description");
+        project1.setGit("test project 1 git");
+        project1.getTechnologies().add(tech);
+        projectRepository.save(project1);
+
+        // When
+        mvc.perform(delete(String.format("/projects/%s/technologies/%s", project1.getId(), tech.getId()))
+                .contentType("application/json")
+                .header("Authorization", token))
+                // Then
+                .andExpect(status().isNoContent());
+
+        project1 = projectRepository.findById(project1.getId()).get();
+        assertEquals("Tech should have been removed from project", 0, project1.getTechnologies().size());
+        assertEquals("Tech should not have been deleted", 1L, technologyRepository.count());
+    }
+
     // DELETE /projects/{id}/abilities/{abilityId}
+    @Test
+    public void removeAbility() throws Exception {
+        // Given
+        var token = IntegrationUtil.login(mvc, objectMapper);
+
+        var ability = new Ability();
+        ability.setImage("test ability image");
+        ability.setName("test ability name");
+        ability.setColor("test ability color");
+        abilitiesRepository.save(ability);
+
+        var project1 = new Project();
+        project1.setName("test project 1 name");
+        project1.setColor("test project 1 color");
+        project1.setIcon("test project 1 icon");
+        project1.setDescription("test project 1 description");
+        project1.setGit("test project 1 git");
+        project1.getAbilities().add(ability);
+        projectRepository.save(project1);
+
+        // When
+        mvc.perform(delete(String.format("/projects/%s/abilities/%s", project1.getId(), ability.getId()))
+                .contentType("application/json")
+                .header("Authorization", token))
+                // Then
+                .andExpect(status().isNoContent());
+
+        project1 = projectRepository.findById(project1.getId()).get();
+        assertEquals("Tech should have been removed from project", 0, project1.getAbilities().size());
+        assertEquals("Tech should not have been deleted", 1L, abilitiesRepository.count());
+    }
 
 }

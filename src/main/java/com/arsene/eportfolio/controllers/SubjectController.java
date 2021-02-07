@@ -2,12 +2,12 @@ package com.arsene.eportfolio.controllers;
 
 import com.arsene.eportfolio.exceptions.ResourceNotFoundException;
 import com.arsene.eportfolio.model.data.AbilityRepository;
-import com.arsene.eportfolio.model.data.ProjectRepository;
 import com.arsene.eportfolio.model.data.SubjectRepository;
+import com.arsene.eportfolio.model.dtos.AbilityDto;
 import com.arsene.eportfolio.model.entities.Ability;
-import com.arsene.eportfolio.model.entities.Project;
 import com.arsene.eportfolio.model.entities.Subject;
-import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,12 +15,17 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/subjects")
-@AllArgsConstructor
 public class SubjectController {
 
-    SubjectRepository subjectRepository;
-    AbilityRepository abilityRepository;
-    ProjectRepository projectRepository;
+    private final Logger logger = LoggerFactory.getLogger(SubjectController.class);
+
+    private SubjectRepository subjectRepository;
+    private AbilityRepository abilityRepository;
+
+    public SubjectController(SubjectRepository subjectRepository, AbilityRepository abilityRepository) {
+        this.subjectRepository = subjectRepository;
+        this.abilityRepository = abilityRepository;
+    }
 
     @GetMapping
     public Iterable<Subject> findAll() {
@@ -68,16 +73,15 @@ public class SubjectController {
         return resource;
     }
 
-    @PostMapping("/{id}/projects")
-    public Project addProject(@PathVariable("id") Integer id, @RequestBody Project resource) {
-        Optional<Subject> t = subjectRepository.findById(id);
-        if (!t.isPresent()) {
-            throw new ResourceNotFoundException();
-        }
-        Subject subject = t.get();
-        resource.setSubject(subject);
-        projectRepository.save(resource);
+    @GetMapping("/{subjectId}/abilities/{abilityId}")
+    @ResponseStatus(HttpStatus.OK)
+    public AbilityDto getAbility(@PathVariable("subjectId") Integer subjectId, @PathVariable("abilityId") Integer abilityId) {
+        var ability = abilityRepository.findById(abilityId).orElseThrow(ResourceNotFoundException::new);
 
-        return resource;
+        if (ability.getSubject().getId() == subjectId) {
+            return new AbilityDto(ability.getId(), ability.getName(), ability.getColor(), ability.getImage(), ability.getTechnologies());
+        }
+        throw new ResourceNotFoundException();
     }
+
 }

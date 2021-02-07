@@ -1,18 +1,11 @@
 package com.arsene.eportfolio.model.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-@Data
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
 public class Perk {
 
     @Id
@@ -22,4 +15,42 @@ public class Perk {
 
     private String name;
     private String image;
+
+    public Perk() {
+    }
+
+    public Perk(String name, String image) {
+        this.name = name;
+        this.image = image;
+    }
+
+    public Perk(String id, String name, String image) {
+        this.id = id;
+        this.name = name;
+        this.image = image;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 }
