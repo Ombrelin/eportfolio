@@ -6,8 +6,8 @@ import {ProjectService} from '../service/data/project.service';
 import {Subject} from '../subject/subject.component';
 import {TechnologyService} from '../service/data/technology.service';
 import {Ability, Technology} from '../ability/ability.component';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-project-form',

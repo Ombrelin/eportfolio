@@ -3,7 +3,7 @@ import {Subject} from '../subject/subject.component';
 import {SubjectService} from '../service/data/subject.service';
 import {DOCUMENT} from '@angular/common';
 import {AuthService} from '../service/auth/auth.service';
-import { MatDialog } from '@angular/material/dialog';
+import {MatDialog} from '@angular/material/dialog';
 import {LoginComponent} from '../login/login.component';
 import {SubjectsComponent} from '../subjects/subjects.component';
 import {SubjectFormComponent} from '../subject-form/subject-form.component';

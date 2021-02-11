@@ -16,7 +16,11 @@ public class Subject {
 
     private String image;
 
-    @OneToMany(fetch = FetchType.EAGER, targetEntity = Ability.class, orphanRemoval = true, cascade = CascadeType.REMOVE)
+    @OneToMany(
+            mappedBy = "subject",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     private Set<Ability> abilities;
 
     public Subject() {

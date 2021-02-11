@@ -1,5 +1,6 @@
 package com.arsene.eportfolio.model.dtos;
 
+import com.arsene.eportfolio.model.entities.Ability;
 import com.arsene.eportfolio.model.entities.Technology;
 
 import java.util.Set;
@@ -11,6 +12,14 @@ public class AbilityDto {
     private String color;
     private String image;
     private Set<Technology> technologies;
+
+    public AbilityDto(Ability ability) {
+        this.id = ability.getId();
+        this.name = ability.getName();
+        this.color = ability.getColor();
+        this.image = ability.getImage();
+        this.technologies = ability.getTechnologies();
+    }
 
     public AbilityDto(Integer id, String name, String color, String image, Set<Technology> technologies) {
         this.id = id;

@@ -37,9 +37,9 @@ public class WorkExperienceServiceTest {
     @DisplayName("Getting all WorkExperiences")
     public void getWorkExperiencesTest() {
         List<WorkExperience> WorkExperienceMock = new LinkedList<WorkExperience>();
-        WorkExperienceMock.add(new WorkExperience("Id1", "TestPosition1", "TestCompany1","TestDescription1", 2010,2011));
-        WorkExperienceMock.add(new WorkExperience("Id2", "TestPosition2", "TestCompany2","TestDescription2", 2020,2021));
-        WorkExperienceMock.add(new WorkExperience("Id3", "TestPosition3", "TestCompany3","TestDescription3", 2030,2031));
+        WorkExperienceMock.add(new WorkExperience("Id1", "TestPosition1", "TestCompany1", "TestDescription1", 2010, 2011));
+        WorkExperienceMock.add(new WorkExperience("Id2", "TestPosition2", "TestCompany2", "TestDescription2", 2020, 2021));
+        WorkExperienceMock.add(new WorkExperience("Id3", "TestPosition3", "TestCompany3", "TestDescription3", 2030, 2031));
 
         when(workExperienceRepository.findAll()).thenReturn(WorkExperienceMock);
 
@@ -76,7 +76,7 @@ public class WorkExperienceServiceTest {
     @Test
     @DisplayName("Getting a WorkExperience from its ID")
     public void getWorkExperienceTest() {
-        Optional<WorkExperience> workExperienceMock = Optional.of(new WorkExperience("Id1", "TestPosition1", "TestCompany1","TestDescription1", 2010,2011));
+        Optional<WorkExperience> workExperienceMock = Optional.of(new WorkExperience("Id1", "TestPosition1", "TestCompany1", "TestDescription1", 2010, 2011));
         when(workExperienceRepository.findById("Id1")).thenReturn(workExperienceMock);
 
         WorkExperience workExperience = workExperienceService.get("Id1");
@@ -93,11 +93,11 @@ public class WorkExperienceServiceTest {
     @Test
     @DisplayName("Creating a new WorkExperience")
     public void createWorkExperienceTest() {
-        WorkExperience workExperienceMock = new WorkExperience("Id1", "TestPosition1", "TestCompany1","TestDescription1", 2010,2011);
+        WorkExperience workExperienceMock = new WorkExperience("Id1", "TestPosition1", "TestCompany1", "TestDescription1", 2010, 2011);
         given(workExperienceRepository.save(any(WorkExperience.class))).willReturn(workExperienceMock);
 
         // When
-        WorkExperience workExperience = workExperienceService.create(new WorkExperience(null, "TestPosition1", "TestCompany1","TestDescription1", 2010,2011));
+        WorkExperience workExperience = workExperienceService.create(new WorkExperience(null, "TestPosition1", "TestCompany1", "TestDescription1", 2010, 2011));
 
         then(workExperienceRepository).should().save(any(WorkExperience.class));
         assertEquals("Id1", workExperience.getId());
@@ -106,8 +106,8 @@ public class WorkExperienceServiceTest {
     @Test
     @DisplayName("Updating a WorkExperience")
     public void updateWorkExperienceTest() {
-        WorkExperience workExperienceMock = new WorkExperience("Id1", "TestPosition1", "TestCompany1","TestDescription1", 2010,2011);
-        WorkExperience workExperienceMockUpdated = new WorkExperience("Id1", "TestPositionUpdated1", "TestCompany1","TestDescription1", 2010,2011);
+        WorkExperience workExperienceMock = new WorkExperience("Id1", "TestPosition1", "TestCompany1", "TestDescription1", 2010, 2011);
+        WorkExperience workExperienceMockUpdated = new WorkExperience("Id1", "TestPositionUpdated1", "TestCompany1", "TestDescription1", 2010, 2011);
         given(workExperienceRepository.findById("Id1")).willReturn(Optional.of(workExperienceMock));
         given(workExperienceRepository.save(any(WorkExperience.class))).willReturn(workExperienceMockUpdated);
 
@@ -122,7 +122,7 @@ public class WorkExperienceServiceTest {
     @Test
     @DisplayName("Delete a WorkExperience")
     public void deleteWorkExperienceTest() {
-        WorkExperience workExperienceMock = new WorkExperience("Id1", "TestPosition1", "TestCompany1","TestDescription1", 2010,2011);
+        WorkExperience workExperienceMock = new WorkExperience("Id1", "TestPosition1", "TestCompany1", "TestDescription1", 2010, 2011);
         workExperienceService.delete(workExperienceMock.getId());
 
         then(workExperienceRepository).should().deleteById(any(String.class));

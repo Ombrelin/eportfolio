@@ -5,6 +5,8 @@ import com.arsene.eportfolio.integration.IntegrationUtil;
 import com.arsene.eportfolio.model.data.AbilityRepository;
 import com.arsene.eportfolio.model.data.SubjectRepository;
 import com.arsene.eportfolio.model.data.TechnologyRepository;
+import com.arsene.eportfolio.model.dtos.AbilityDto;
+import com.arsene.eportfolio.model.dtos.UpdateAbilityDto;
 import com.arsene.eportfolio.model.entities.Ability;
 import com.arsene.eportfolio.model.entities.Subject;
 import com.arsene.eportfolio.model.entities.Technology;
@@ -20,9 +22,10 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.context.WebApplicationContext;
-
-import java.util.HashSet;
 
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -57,6 +60,9 @@ public class IntegrationAbilities {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private PlatformTransactionManager transactionManager;
+
     @BeforeEach
     public void setup() {
         mvc = MockMvcBuilders
@@ -71,6 +77,7 @@ public class IntegrationAbilities {
 
     // POST /subjects/{subjectId}/abilities
     @Test
+    //@Transactional
     public void createAbility() throws Exception {
         // Given
         var token = IntegrationUtil.login(mvc, objectMapper);
@@ -80,7 +87,7 @@ public class IntegrationAbilities {
         var ability = new Ability("test ability name", "test ability color", "test ability image", subject);
 
         // When
-        mvc.perform(post("/subjects/" + subject.getId() + "/abilities")
+        var result = mvc.perform(post("/subjects/" + subject.getId() + "/abilities")
                 .header("Authorization", token)
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(ability)))
@@ -90,22 +97,33 @@ public class IntegrationAbilities {
                 .andExpect(jsonPath("$.name", is("test ability name")))
                 .andExpect(jsonPath("$.image", is("test ability image")))
                 .andExpect(jsonPath("$.color", is("test ability color")))
-                .andExpect(jsonPath("$.id", notNullValue()));
+                .andExpect(jsonPath("$.id", notNullValue()))
+                .andReturn().getResponse().getContentAsString();
 
-        assertEquals("One record should have been inserted", 1L, abilitiesRepository.count());
-        ability = abilitiesRepository.findById(ability.getId()).get();
-        assertEquals("Ability name should be correct", "test ability name", ability.getName());
-        assertEquals("Ability image should be correct", "test ability image", ability.getImage());
-        assertEquals("Ability color should be correct", "test ability color", ability.getColor());
+        var responseDto = objectMapper.readValue(result, AbilityDto.class);
 
-        subject = subjectRepository.findById(subject.getId()).get();
-        assertEquals("Subject should have one ability", 1, subject.getAbilities().size());
+        var transactionTemplate = new TransactionTemplate(transactionManager);
+        transactionTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
+        transactionTemplate.execute(status -> {
+            assertEquals("One record should have been inserted", 1L, abilitiesRepository.count());
+            var abilityFromDb = abilitiesRepository.findById(responseDto.getId()).get();
+            assertEquals("Ability name should be correct", "test ability name", abilityFromDb.getName());
+            assertEquals("Ability image should be correct", "test ability image", abilityFromDb.getImage());
+            assertEquals("Ability color should be correct", "test ability color", abilityFromDb.getColor());
 
-        ability = subject.getAbilities().stream().findFirst().get();
-        assertEquals("Ability name should be correct", "test ability name", ability.getName());
-        assertEquals("Ability image should be correct", "test ability image", ability.getImage());
-        assertEquals("Ability color should be correct", "test ability color", ability.getColor());
+            var subjectFromDb = subjectRepository.findById(subject.getId()).get();
+            assertEquals("Subject should have one ability", 1, subjectFromDb.getAbilities().size());
+
+            abilityFromDb = subjectFromDb.getAbilities().stream().findFirst().get();
+            assertEquals("Ability name should be correct", "test ability name", abilityFromDb.getName());
+            assertEquals("Ability image should be correct", "test ability image", abilityFromDb.getImage());
+            assertEquals("Ability color should be correct", "test ability color", abilityFromDb.getColor());
+
+            return null;
+        });
+
     }
+
 
     // PUT /subjects/{subjectId}/abilities/{abilityId}
     @Test
@@ -122,13 +140,13 @@ public class IntegrationAbilities {
         subject.getAbilities().add(ability);
         subjectRepository.save(subject);
 
-        ability.setName("test ability updated");
+        var abilityDto = new UpdateAbilityDto(ability.getId(), "test ability name updated", ability.getColor(), ability.getImage());
 
         // When
         mvc.perform(put("/subjects/" + subject.getId() + "/abilities/" + ability.getId())
                 .header("Authorization", token)
                 .contentType("application/json")
-                .content(objectMapper.writeValueAsString(ability)))
+                .content(objectMapper.writeValueAsString(abilityDto)))
 
                 // Then
                 .andExpect(status().isOk())
@@ -137,12 +155,16 @@ public class IntegrationAbilities {
                 .andExpect(jsonPath("$.color", is("test ability color")))
                 .andExpect(jsonPath("$.id", is(ability.getId())));
 
-        assertEquals("The existing record should still be there", 1L, abilitiesRepository.count());
-        ability = abilitiesRepository.findById(ability.getId()).get();
-        assertEquals("Ability name should be correct", "test ability name updated", ability.getName());
-        assertEquals("Ability image should be correct", "test ability image", ability.getImage());
-        assertEquals("Ability color should be correct", "test ability color", ability.getColor());
-
+        var transactionTemplate = new TransactionTemplate(transactionManager);
+        transactionTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
+        transactionTemplate.execute(status -> {
+            assertEquals("The existing record should still be there", 1L, abilitiesRepository.count());
+            var abilityFromDb = abilitiesRepository.findById(ability.getId()).get();
+            assertEquals("Ability name should be correct", "test ability name updated", abilityFromDb.getName());
+            assertEquals("Ability image should be correct", "test ability image", abilityFromDb.getImage());
+            assertEquals("Ability color should be correct", "test ability color", abilityFromDb.getColor());
+            return null;
+        });
     }
 
     // DELETE /subjects/{subjectId}/abilities/{abilityId}
@@ -167,18 +189,21 @@ public class IntegrationAbilities {
         abilitiesRepository.save(ability);
 
         // When
-        mvc.perform(delete("/subjects/" + subject.getId() + "/abilities" + ability.getId())
-                .header("Authorization", token)
-                .contentType("application/json")
-                .content(objectMapper.writeValueAsString(ability)))
+        mvc.perform(delete(String.format("/subjects/%d/abilities/%d", subject.getId(), ability.getId()))
+                .header("Authorization", token))
 
                 // Then
                 .andExpect(status().isNoContent());
 
-        assertEquals("The existing record should have been deleted", 0L, abilitiesRepository.count());
-        subject = subjectRepository.findById(subject.getId()).get();
-        assertEquals("Subject should have 0 ability", 0, subject.getAbilities().size());
-        assertEquals("Child technology should have been deleted", 0L, technologyRepository.count());
+        var transactionTemplate = new TransactionTemplate(transactionManager);
+        transactionTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
+        transactionTemplate.execute(status -> {
+            assertEquals("The existing record should have been deleted", 0L, abilitiesRepository.count());
+            var subjectInDb = subjectRepository.findById(subject.getId()).get();
+            assertEquals("Subject should have 0 ability", 0, subjectInDb.getAbilities().size());
+            assertEquals("Child technology should have been deleted", 0L, technologyRepository.count());
+            return null;
+        });
     }
 
     // GET /subjects/{subjectId}/abilities/{id}
@@ -246,14 +271,14 @@ public class IntegrationAbilities {
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].image", is("test ability 1 image")))
                 .andExpect(jsonPath("$[0].color", is("test ability 1 color")))
-                .andExpect(jsonPath("$[0].name", is("test ability name 1")))
+                .andExpect(jsonPath("$[0].name", is("test ability 1 name")))
                 .andExpect(jsonPath("$[0].id", notNullValue()))
-                .andExpect(jsonPath("$[0].technologies", nullValue()))
+                .andExpect(jsonPath("$[0].technologies", empty()))
                 .andExpect(jsonPath("$[1].image", is("test ability 2 image")))
                 .andExpect(jsonPath("$[1].color", is("test ability 2 color")))
                 .andExpect(jsonPath("$[1].name", is("test ability 2 name")))
                 .andExpect(jsonPath("$[1].id", notNullValue()))
-                .andExpect(jsonPath("$[1].technologies", nullValue()));
+                .andExpect(jsonPath("$[1].technologies", empty()));
     }
 
 }

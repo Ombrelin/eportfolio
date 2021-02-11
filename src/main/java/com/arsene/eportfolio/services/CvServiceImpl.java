@@ -10,7 +10,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 @Service
-public class CvServiceImpl implements CvService{
+public class CvServiceImpl implements CvService {
 
     private final TemplateEngine templateEngine;
 

@@ -8,9 +8,7 @@ import com.arsene.eportfolio.model.data.SubjectRepository;
 import com.arsene.eportfolio.model.data.TechnologyRepository;
 import com.arsene.eportfolio.model.entities.Ability;
 import com.arsene.eportfolio.model.entities.Project;
-import com.arsene.eportfolio.model.entities.Subject;
 import com.arsene.eportfolio.model.entities.Technology;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,11 +23,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.HashSet;
 import java.util.Set;
 
-import static org.hamcrest.Matchers.*;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.util.AssertionErrors.assertEquals;

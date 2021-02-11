@@ -27,7 +27,7 @@ import {FormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
 import {MarkdownModule} from 'ngx-markdown';
 import {ProjectModalComponent} from './project-modal/project-modal.component';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MccColorPickerModule} from 'material-community-components';
 
 @NgModule({

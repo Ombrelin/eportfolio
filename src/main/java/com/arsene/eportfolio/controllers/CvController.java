@@ -4,7 +4,6 @@ import com.arsene.eportfolio.model.data.DiplomaRepository;
 import com.arsene.eportfolio.model.data.ProjectRepository;
 import com.arsene.eportfolio.model.data.SubjectRepository;
 import com.arsene.eportfolio.services.CvService;
-import com.arsene.eportfolio.services.CvServiceImpl;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;

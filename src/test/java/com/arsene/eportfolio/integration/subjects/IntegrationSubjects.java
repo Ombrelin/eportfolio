@@ -4,6 +4,7 @@ import com.arsene.eportfolio.EportfolioApplication;
 import com.arsene.eportfolio.integration.IntegrationUtil;
 import com.arsene.eportfolio.model.data.AbilityRepository;
 import com.arsene.eportfolio.model.data.SubjectRepository;
+import com.arsene.eportfolio.model.dtos.UpdateSubjectDto;
 import com.arsene.eportfolio.model.entities.Ability;
 import com.arsene.eportfolio.model.entities.Subject;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,12 +20,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -71,7 +66,7 @@ public class IntegrationSubjects {
     public void createSubject_InsertsInDb() throws Exception {
         // Given
         var token = IntegrationUtil.login(mvc, objectMapper);
-        var subject = new Subject("test name","test icon","test image");
+        var subject = new Subject("test name", "test icon", "test image");
 
         // When
         mvc.perform(
@@ -81,8 +76,8 @@ public class IntegrationSubjects {
                         .content(objectMapper.writeValueAsString(subject))
         )
 
-        // Then
-        .andExpect(status().isCreated());
+                // Then
+                .andExpect(status().isCreated());
 
         assertEquals("Database should contain exactly one subject", 1L, repository.count());
 
@@ -99,15 +94,15 @@ public class IntegrationSubjects {
         // Given
 
 
-        var subject1 = new Subject("test name 1", "test icon 1","test image 1");
+        var subject1 = new Subject("test name 1", "test icon 1", "test image 1");
         repository.save(subject1);
 
-        var ability = new Ability("test ability 1 name","test ability 1 color","test ability 1 image", subject1);
+        var ability = new Ability("test ability 1 name", "test ability 1 color", "test ability 1 image", subject1);
         abilitiesRepository.save(ability);
 
         subject1.getAbilities().add(ability);
 
-        var subject2 = new Subject("test name 2","test icon 2","test image 2");
+        var subject2 = new Subject("test name 2", "test icon 2", "test image 2");
 
         repository.save(subject1);
         repository.save(subject2);
@@ -118,22 +113,22 @@ public class IntegrationSubjects {
                         .contentType("application/json")
         )
 
-        // Then
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$", hasSize(2)))
-        .andExpect(jsonPath("$[0].image", is("test image 1")))
-        .andExpect(jsonPath("$[0].icon", is("test icon 1")))
-        .andExpect(jsonPath("$[0].name", is("test name 1")))
-        .andExpect(jsonPath("$[0].id", notNullValue()))
-        .andExpect(jsonPath("$[0].abilities", hasSize(1)))
-        .andExpect(jsonPath("$[0].abilities[0].name", is("test ability 1 name")))
-        .andExpect(jsonPath("$[0].abilities[0].image", is("test ability 1 image")))
-        .andExpect(jsonPath("$[0].abilities[0].color", is("test ability 1 color")))
-        .andExpect(jsonPath("$[0].abilities[0].id", notNullValue()))
-        .andExpect(jsonPath("$[1].image", is("test image 2")))
-        .andExpect(jsonPath("$[1].icon", is("test icon 2")))
-        .andExpect(jsonPath("$[1].name", is("test name 2")))
-        .andExpect(jsonPath("$[1].id", notNullValue()));
+                // Then
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].image", is("test image 1")))
+                .andExpect(jsonPath("$[0].icon", is("test icon 1")))
+                .andExpect(jsonPath("$[0].name", is("test name 1")))
+                .andExpect(jsonPath("$[0].id", notNullValue()))
+                .andExpect(jsonPath("$[0].abilities", hasSize(1)))
+                .andExpect(jsonPath("$[0].abilities[0].name", is("test ability 1 name")))
+                .andExpect(jsonPath("$[0].abilities[0].image", is("test ability 1 image")))
+                .andExpect(jsonPath("$[0].abilities[0].color", is("test ability 1 color")))
+                .andExpect(jsonPath("$[0].abilities[0].id", notNullValue()))
+                .andExpect(jsonPath("$[1].image", is("test image 2")))
+                .andExpect(jsonPath("$[1].icon", is("test icon 2")))
+                .andExpect(jsonPath("$[1].name", is("test name 2")))
+                .andExpect(jsonPath("$[1].id", notNullValue()));
 
     }
 
@@ -143,15 +138,11 @@ public class IntegrationSubjects {
         var token = IntegrationUtil.login(mvc, objectMapper);
 
 
-
-
-        var subject1 = new Subject("test name 1","test icon 1","test image 1");
-
-        var ability = new Ability("test ability 1 name","test ability 1 color","test ability 1 image", subject1);
-        abilitiesRepository.save(ability);
-
-        subject1.getAbilities().add(ability);
+        var subject1 = new Subject("test name 1", "test icon 1", "test image 1");
         repository.save(subject1);
+
+        var ability = new Ability("test ability 1 name", "test ability 1 color", "test ability 1 image", subject1);
+        abilitiesRepository.save(ability);
 
         // When
         mvc.perform(
@@ -160,8 +151,8 @@ public class IntegrationSubjects {
                         .contentType("application/json")
         )
 
-        // Then
-        .andExpect(status().isOk());
+                // Then
+                .andExpect(status().isNoContent());
 
         assertEquals("The subject should have been deleted", 0L, repository.count());
         assertEquals("The ability should have been deleted", 0L, abilitiesRepository.count());
@@ -173,10 +164,10 @@ public class IntegrationSubjects {
         // Given
         var token = IntegrationUtil.login(mvc, objectMapper);
 
-        var subject1 = new Subject("test name 1","test icon 1","test image 1");
+        var subject1 = new Subject("test name 1", "test icon 1", "test image 1");
         repository.save(subject1);
 
-        var editDto = new Subject(subject1.getId(),"test name updated","test icon 1","test image 1");
+        var editDto = new UpdateSubjectDto(subject1.getId(), "test name updated", "test icon 1", "test image 1");
 
         // When
         mvc.perform(
@@ -192,7 +183,7 @@ public class IntegrationSubjects {
         assertEquals("The subject should still exist", 1L, repository.count());
 
         subject1 = repository.findById(subject1.getId()).get();
-        assertEquals("The name should have been updated", "test name updated",subject1.getName());
+        assertEquals("The name should have been updated", "test name updated", subject1.getName());
     }
 
 }

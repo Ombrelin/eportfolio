@@ -1,9 +1,8 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {Subject} from '../subject/subject.component';
 import {SubjectService} from '../service/data/subject.service';
-import {MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { MatDialogRef } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-subject-form',

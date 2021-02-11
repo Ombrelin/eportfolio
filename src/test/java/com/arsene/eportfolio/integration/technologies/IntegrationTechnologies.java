@@ -103,11 +103,12 @@ public class IntegrationTechnologies {
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(technology)))
 
-        // Then
+                // Then
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is("test technology name updated")))
                 .andExpect(jsonPath("$.image", is("test technology image")))
-                .andExpect(jsonPath("$.id", notNullValue()));;
+                .andExpect(jsonPath("$.id", notNullValue()));
+        ;
 
         assertEquals("The record should still be there", 1L, technologyRepository.count());
         technology = technologyRepository.findById(technology.getId()).get();
@@ -151,7 +152,7 @@ public class IntegrationTechnologies {
                 .header("Authorization", token)
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(technology)))
-        // Then
+                // Then
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name", is("test technology name")))
                 .andExpect(jsonPath("$.image", is("test technology image")))
@@ -192,14 +193,14 @@ public class IntegrationTechnologies {
         mvc.perform(delete("/subjects/" + subject.getId() + "/abilities/" + ability.getId() + "/technologies/" + technology.getId())
                 .header("Authorization", token)
                 .contentType("application/json"))
-       // Then
+                // Then
                 .andExpect(status().isNoContent());
         assertEquals("The record should have been deleted", 0L, technologyRepository.count());
     }
 
     // GET /technologies
     @Test
-    public void getTechnologies() throws Exception{
+    public void getTechnologies() throws Exception {
         // Given
         var subject = new Subject();
         subject.setImage("test subject image");
@@ -230,14 +231,14 @@ public class IntegrationTechnologies {
         mvc.perform(get("/technologies")
                 .contentType("application/json"))
 
-        // Then
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$", hasSize(2)))
-        .andExpect(jsonPath("$[0].image", is("test technology image 1")))
-        .andExpect(jsonPath("$[0].name", is("test technology name 1")))
-        .andExpect(jsonPath("$[0].id", notNullValue()))
-        .andExpect(jsonPath("$[1].image", is("test technology image 2")))
-        .andExpect(jsonPath("$[1].name", is("test technology name 2")))
-        .andExpect(jsonPath("$[1].id", notNullValue()));
+                // Then
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].image", is("test technology image 1")))
+                .andExpect(jsonPath("$[0].name", is("test technology name 1")))
+                .andExpect(jsonPath("$[0].id", notNullValue()))
+                .andExpect(jsonPath("$[1].image", is("test technology image 2")))
+                .andExpect(jsonPath("$[1].name", is("test technology name 2")))
+                .andExpect(jsonPath("$[1].id", notNullValue()));
     }
 }

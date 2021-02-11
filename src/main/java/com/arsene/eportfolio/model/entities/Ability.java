@@ -13,7 +13,9 @@ public class Ability {
     private String color;
     private String image;
 
-    @ManyToOne
+    @ManyToOne(
+            fetch = FetchType.LAZY
+    )
     private Subject subject;
 
     @OneToMany(fetch = FetchType.EAGER, targetEntity = Technology.class, orphanRemoval = true, cascade = CascadeType.REMOVE)

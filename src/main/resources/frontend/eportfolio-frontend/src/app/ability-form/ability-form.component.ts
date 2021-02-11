@@ -2,9 +2,8 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {Ability} from '../ability/ability.component';
 import {SubjectService} from '../service/data/subject.service';
 import {AbilityService} from '../service/data/ability.service';
-import {MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { MatDialogRef } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
 import {FilesService} from '../service/files/files.service';
 
 @Component({

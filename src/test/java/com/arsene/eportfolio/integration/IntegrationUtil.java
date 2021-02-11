@@ -10,7 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class IntegrationUtil {
 
-    public static String login(MockMvc mvc, ObjectMapper objectMapper) throws Exception{
+    public static String login(MockMvc mvc, ObjectMapper objectMapper) throws Exception {
         User user = new User();
         user.setUsername("John Shepard");
         user.setPassword("Tali");

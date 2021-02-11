@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Ability} from '../ability/ability.component';
 import {SubjectService} from '../service/data/subject.service';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {AbilityFormComponent} from '../ability-form/ability-form.component';
 import {SubjectFormComponent} from '../subject-form/subject-form.component';
 

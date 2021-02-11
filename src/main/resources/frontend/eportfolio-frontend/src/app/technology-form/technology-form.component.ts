@@ -3,8 +3,7 @@ import {Technology} from '../ability/ability.component';
 import {AbilityService} from '../service/data/ability.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TechnologyService} from '../service/data/technology.service';
-import { MatDialogRef } from '@angular/material/dialog';
-import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-technology-form',

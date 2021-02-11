@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {Ability, AbilityModalData, Technology} from '../ability/ability.component';
 import {Subject} from '../subject/subject.component';
 import {AbilityService} from '../service/data/ability.service';

@@ -3,7 +3,7 @@ import {DOCUMENT} from '@angular/common';
 import {Subject} from '../subject/subject.component';
 import {AbilityService} from '../service/data/ability.service';
 import {AbilityModalComponent} from '../ability-modal/ability-modal.component';
-import { MatDialog } from '@angular/material/dialog';
+import {MatDialog} from '@angular/material/dialog';
 
 
 @Component({

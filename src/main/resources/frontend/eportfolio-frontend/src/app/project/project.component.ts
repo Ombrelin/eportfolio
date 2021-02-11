@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Subject} from '../subject/subject.component';
 import {Ability, Technology} from '../ability/ability.component';
-import { MatDialog } from '@angular/material/dialog';
+import {MatDialog} from '@angular/material/dialog';
 import {ProjectModalComponent} from '../project-modal/project-modal.component';
 
 @Component({
