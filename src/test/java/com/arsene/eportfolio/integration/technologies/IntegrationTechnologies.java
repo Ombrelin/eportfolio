@@ -5,6 +5,8 @@ import com.arsene.eportfolio.integration.IntegrationUtil;
 import com.arsene.eportfolio.model.data.AbilityRepository;
 import com.arsene.eportfolio.model.data.SubjectRepository;
 import com.arsene.eportfolio.model.data.TechnologyRepository;
+import com.arsene.eportfolio.model.dtos.CreateTechnologyDto;
+import com.arsene.eportfolio.model.dtos.TechnologyDto;
 import com.arsene.eportfolio.model.entities.Ability;
 import com.arsene.eportfolio.model.entities.Subject;
 import com.arsene.eportfolio.model.entities.Technology;
@@ -20,9 +22,10 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.context.WebApplicationContext;
-
-import java.util.HashSet;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -52,6 +55,10 @@ public class IntegrationTechnologies {
     @Autowired
     private AbilityRepository abilitiesRepository;
 
+    @Autowired
+    private PlatformTransactionManager transactionManager;
+
+
     private MockMvc mvc;
 
     @Autowired
@@ -74,53 +81,45 @@ public class IntegrationTechnologies {
     public void updateTechnology() throws Exception {
         // Given
         var token = IntegrationUtil.login(mvc, objectMapper);
-        var subject = new Subject();
-        subject.setImage("test subject image");
-        subject.setIcon("test subject icon");
-        subject.setName("test subject name");
-        subject.setAbilities(new HashSet<>() {
-        });
-
-        var technology = new Technology();
-        technology.setName("test technology name");
-        technology.setImage("test technology image");
-        technologyRepository.save(technology);
-
-        var ability = new Ability();
-        ability.setImage("test ability image");
-        ability.setName("test ability name");
-        ability.setColor("test ability color");
-        subject.getAbilities().add(ability);
-        abilitiesRepository.save(ability);
+        var subject = new Subject("test subject name", "test subject icon", "test subject image");
         subjectRepository.save(subject);
 
-        technology.setName("test technology name updated");
+        var ability = new Ability("test ability name", "test ability color", "test ability image", subject);
+        abilitiesRepository.save(ability);
 
+        var technology = new Technology("test technology name", "test technology image", ability);
+        technologyRepository.save(technology);
+
+        var dto = new TechnologyDto(technology);
+        dto.setName("test technology name updated");
 
         // When
         mvc.perform(put("/subjects/" + subject.getId() + "/abilities/" + ability.getId() + "/technologies/" + technology.getId())
                 .header("Authorization", token)
                 .contentType("application/json")
-                .content(objectMapper.writeValueAsString(technology)))
+                .content(objectMapper.writeValueAsString(dto)))
 
                 // Then
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is("test technology name updated")))
                 .andExpect(jsonPath("$.image", is("test technology image")))
                 .andExpect(jsonPath("$.id", notNullValue()));
-        ;
 
-        assertEquals("The record should still be there", 1L, technologyRepository.count());
-        technology = technologyRepository.findById(technology.getId()).get();
-        assertEquals("Technology name should be correct", "test technology name updated", technology.getName());
-        assertEquals("Technology image should be correct", "test technology image", technology.getImage());
+        var transactionTemplate = new TransactionTemplate(transactionManager);
+        transactionTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
+        transactionTemplate.execute(status -> {
+            assertEquals("The record should still be there", 1L, technologyRepository.count());
+            var technologyDb = technologyRepository.findById(technology.getId()).get();
+            assertEquals("Technology name should be correct", "test technology name updated", technologyDb.getName());
+            assertEquals("Technology image should be correct", "test technology image", technologyDb.getImage());
 
-        ability = abilitiesRepository.findById(ability.getId()).get();
-        assertEquals("Technology should have been added to the ability", 1L, technologyRepository.count());
-        technology = ability.getTechnologies().stream().findFirst().get();
-        assertEquals("Technology name should be correct", "test technology name updated", technology.getName());
-        assertEquals("Technology image should be correct", "test technology image", technology.getImage());
-
+            var abilityDb = abilitiesRepository.findById(ability.getId()).get();
+            assertEquals("Technology should have been added to the ability", 1L, technologyRepository.count());
+            var technologyFromAbilityDb = abilityDb.getTechnologies().stream().findFirst().get();
+            assertEquals("Technology name should be correct", "test technology name updated", technologyFromAbilityDb.getName());
+            assertEquals("Technology image should be correct", "test technology image", technologyFromAbilityDb.getImage());
+            return null;
+        });
     }
 
     // POST /subjects/{subjectId}/abilities/{abilityId}/technologies
@@ -128,38 +127,32 @@ public class IntegrationTechnologies {
     public void createTechnology() throws Exception {
         // Given
         var token = IntegrationUtil.login(mvc, objectMapper);
-        var subject = new Subject();
-        subject.setImage("test subject image");
-        subject.setIcon("test subject icon");
-        subject.setName("test subject name");
-        subject.setAbilities(new HashSet<>() {
-        });
-
-        var ability = new Ability();
-        ability.setImage("test ability image");
-        ability.setName("test ability name");
-        ability.setColor("test ability color");
-        subject.getAbilities().add(ability);
-        abilitiesRepository.save(ability);
+        var subject = new Subject("test subject name", "test subject icon", "test subject image");
         subjectRepository.save(subject);
 
-        var technology = new Technology();
-        technology.setName("test technology name");
-        technology.setImage("test technology image");
+        var ability = new Ability("test ability name", "test ability color", "test ability image", subject);
+        abilitiesRepository.save(ability);
+
+        var technologyDto = new CreateTechnologyDto("test technology name", "test technology image");
 
         // When
-        mvc.perform(post("/subjects/" + subject.getId() + "/abilities/" + ability.getId() + "/technologies")
+        String response = mvc.perform(post("/subjects/" + subject.getId() + "/abilities/" + ability.getId() + "/technologies")
                 .header("Authorization", token)
                 .contentType("application/json")
-                .content(objectMapper.writeValueAsString(technology)))
+                .content(objectMapper.writeValueAsString(technologyDto)))
                 // Then
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name", is("test technology name")))
                 .andExpect(jsonPath("$.image", is("test technology image")))
-                .andExpect(jsonPath("$.id", notNullValue()));
+                .andExpect(jsonPath("$.id", notNullValue()))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        var resultTech = objectMapper.readValue(response, TechnologyDto.class);
 
         assertEquals("One record should have been inserted", 1L, technologyRepository.count());
-        technology = technologyRepository.findById(technology.getId()).get();
+        var technology = technologyRepository.findById(resultTech.getId()).get();
         assertEquals("Technology name should be correct", "test technology name", technology.getName());
         assertEquals("Technology image should be correct", "test technology image", technology.getImage());
     }
@@ -169,63 +162,45 @@ public class IntegrationTechnologies {
     public void deleteTechnology() throws Exception {
         // Given
         var token = IntegrationUtil.login(mvc, objectMapper);
-        var subject = new Subject();
-        subject.setImage("test subject image");
-        subject.setIcon("test subject icon");
-        subject.setName("test subject name");
-        subject.setAbilities(new HashSet<>() {
-        });
-
-        var technology = new Technology();
-        technology.setName("test technology name");
-        technology.setImage("test technology image");
-        technologyRepository.save(technology);
-
-        var ability = new Ability();
-        ability.setImage("test ability image");
-        ability.setName("test ability name");
-        ability.setColor("test ability color");
-        subject.getAbilities().add(ability);
-        abilitiesRepository.save(ability);
+        var subject = new Subject("test subject name", "test subject icon", "test subject image");
         subjectRepository.save(subject);
+
+        var ability = new Ability("test ability name", "test ability color", "test ability image", subject);
+        abilitiesRepository.save(ability);
+
+        var technology = new Technology("test technology name", "test technology image", ability);
+        technologyRepository.save(technology);
 
         // When
         mvc.perform(delete("/subjects/" + subject.getId() + "/abilities/" + ability.getId() + "/technologies/" + technology.getId())
-                .header("Authorization", token)
-                .contentType("application/json"))
+                .header("Authorization", token))
                 // Then
                 .andExpect(status().isNoContent());
-        assertEquals("The record should have been deleted", 0L, technologyRepository.count());
+
+        var transactionTemplate = new TransactionTemplate(transactionManager);
+        transactionTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
+        transactionTemplate.execute(status -> {
+            assertEquals("The record should have been deleted", 0L, technologyRepository.count());
+            return null;
+        });
     }
 
     // GET /technologies
     @Test
     public void getTechnologies() throws Exception {
         // Given
-        var subject = new Subject();
-        subject.setImage("test subject image");
-        subject.setIcon("test subject icon");
-        subject.setName("test subject name");
-        subject.setAbilities(new HashSet<>() {
-        });
+        var subject = new Subject("test subject name", "test subject icon", "test subject image");
+        subjectRepository.save(subject);
 
-        var technology = new Technology();
-        technology.setName("test technology name 1");
-        technology.setImage("test technology image 1");
+        var ability = new Ability("test ability name", "test ability color", "test ability image", subject);
+        abilitiesRepository.save(ability);
+
+        var technology = new Technology("test technology name 1", "test technology image 1", ability);
         technologyRepository.save(technology);
 
-        var technology2 = new Technology();
-        technology2.setName("test technology name 2");
-        technology2.setImage("test technology image 2");
+        var technology2 = new Technology("test technology name 2", "test technology image 2", ability);
         technologyRepository.save(technology2);
 
-        var ability = new Ability();
-        ability.setImage("test ability image");
-        ability.setName("test ability name");
-        ability.setColor("test ability color");
-        subject.getAbilities().add(ability);
-        abilitiesRepository.save(ability);
-        subjectRepository.save(subject);
 
         // When
         mvc.perform(get("/technologies")

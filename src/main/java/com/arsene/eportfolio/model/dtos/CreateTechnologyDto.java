@@ -3,16 +3,21 @@ package com.arsene.eportfolio.model.dtos;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-public class CreateSubjectDto {
+public class CreateTechnologyDto {
 
     @NotBlank
     private String name;
 
     @NotBlank
-    private String icon;
-
-    @NotBlank
     private String image;
+
+    public CreateTechnologyDto() {
+    }
+
+    public CreateTechnologyDto(@NotBlank String name, @NotBlank String image) {
+        this.name = name;
+        this.image = image;
+    }
 
     public String getName() {
         return name;
@@ -20,14 +25,6 @@ public class CreateSubjectDto {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getIcon() {
-        return icon;
-    }
-
-    public void setIcon(String icon) {
-        this.icon = icon;
     }
 
     public String getImage() {

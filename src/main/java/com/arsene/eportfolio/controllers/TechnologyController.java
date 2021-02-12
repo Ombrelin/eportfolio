@@ -3,66 +3,65 @@ package com.arsene.eportfolio.controllers;
 import com.arsene.eportfolio.exceptions.ResourceNotFoundException;
 import com.arsene.eportfolio.model.data.AbilityRepository;
 import com.arsene.eportfolio.model.data.TechnologyRepository;
-import com.arsene.eportfolio.model.entities.Ability;
+import com.arsene.eportfolio.model.dtos.CreateTechnologyDto;
+import com.arsene.eportfolio.model.dtos.TechnologyDto;
 import com.arsene.eportfolio.model.entities.Technology;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @RestController
-@RequestMapping("/technologies")
+@RequestMapping("/subjects/{subjectId}/abilities/{abilityId}/technologies")
 public class TechnologyController {
 
-    TechnologyRepository technologyRepository;
-    AbilityRepository abilityRepository;
+    private TechnologyRepository technologyRepository;
+    private AbilityRepository abilityRepository;
 
-    @GetMapping("/")
-    public Iterable<Technology> findAll() {
-        return technologyRepository.findAll();
+    public TechnologyController(TechnologyRepository technologyRepository, AbilityRepository abilityRepository) {
+        this.technologyRepository = technologyRepository;
+        this.abilityRepository = abilityRepository;
     }
 
-    @GetMapping("/{id}")
-    public Technology findById(@PathVariable("id") Integer id) {
-        Optional<Technology> t = technologyRepository.findById(id);
-        if (!t.isPresent()) {
-            throw new ResourceNotFoundException();
-        }
-        return t.get();
+    @DeleteMapping("{technologyId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable("technologyId") Integer technologyId, @PathVariable("subjectId") Integer subjectId, @PathVariable("abilityId") Integer abilityId) {
+        Technology tech = technologyRepository
+                .findBySubjectAndAbility(subjectId, abilityId, technologyId)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("No technology with Id : %s for subject with Id : %s and ability %s", technologyId, subjectId, abilityId)));
+
+        technologyRepository.delete(tech);
     }
 
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void delete(@PathVariable("id") Integer id) {
-        Optional<Technology> opt = technologyRepository.findById(id);
-        if (!opt.isPresent()) {
-            throw new ResourceNotFoundException();
-        }
-        Technology t = opt.get();
-
-        for (Ability a : abilityRepository.findAll()) {
-            if (a.getTechnologies().contains(t)) {
-                a.getTechnologies().remove(t);
-                abilityRepository.save(a);
-            }
-        }
-    }
-
-    @PostMapping("/")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Technology create(@RequestBody Technology t) {
+    public TechnologyDto create(@RequestBody CreateTechnologyDto dto,
+                                @PathVariable("subjectId") Integer subjectId, @PathVariable("abilityId") Integer abilityId) {
 
-        return technologyRepository.save(t);
+        var ability = abilityRepository
+                .getAbilityBySubjectId(subjectId, abilityId)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("No ability with Id : %s for subject with Id : %s", abilityId, subjectId)));
+
+        var tech = new Technology(dto.getName(), dto.getImage(), ability);
+        technologyRepository.save(tech);
+
+        return new TechnologyDto(tech);
     }
 
-    @PutMapping(value = "/{id}")
+    @PutMapping("{technologyId}")
     @ResponseStatus(HttpStatus.OK)
-    public void update(@PathVariable("id") Integer id, @RequestBody Technology resource) {
-        Optional<Technology> t = technologyRepository.findById(id);
-        System.out.println("Techno : " + t.get());
-        if (!t.isPresent()) {
-            throw new ResourceNotFoundException();
-        }
-        technologyRepository.save(resource);
+    public TechnologyDto update(@RequestBody TechnologyDto dto,
+                                @PathVariable("technologyId") Integer technologyId,
+                                @PathVariable("subjectId") Integer subjectId,
+                                @PathVariable("abilityId") Integer abilityId) {
+
+        Technology tech = technologyRepository
+                .findBySubjectAndAbility(subjectId, abilityId, technologyId)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("No technology with Id : %s for subject with Id : %s and ability %s", technologyId, subjectId, abilityId)));
+
+        tech.setName(dto.getName());
+        tech.setImage(dto.getImage());
+
+        technologyRepository.save(tech);
+
+        return new TechnologyDto(tech);
     }
 }

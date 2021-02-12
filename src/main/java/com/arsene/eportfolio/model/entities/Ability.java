@@ -18,7 +18,11 @@ public class Ability {
     )
     private Subject subject;
 
-    @OneToMany(fetch = FetchType.EAGER, targetEntity = Technology.class, orphanRemoval = true, cascade = CascadeType.REMOVE)
+    @OneToMany(
+            mappedBy = "ability",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     private Set<Technology> technologies;
 
     public Ability() {

@@ -1,9 +1,6 @@
 package com.arsene.eportfolio.model.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Technology {
@@ -13,18 +10,33 @@ public class Technology {
     private String name;
     private String image;
 
+    @ManyToOne(
+            fetch = FetchType.LAZY
+    )
+    private Ability ability;
+
     public Technology() {
     }
 
-    public Technology(String name, String image) {
+    public Technology(String name, String image, Ability ability) {
         this.name = name;
         this.image = image;
+        this.ability = ability;
     }
 
-    public Technology(Integer id, String name, String image) {
+    public Technology(Integer id, String name, String image, Ability ability) {
         this.id = id;
         this.name = name;
         this.image = image;
+        this.ability = ability;
+    }
+
+    public Ability getAbility() {
+        return ability;
+    }
+
+    public void setAbility(Ability ability) {
+        this.ability = ability;
     }
 
     public Integer getId() {

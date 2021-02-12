@@ -4,6 +4,7 @@ import com.arsene.eportfolio.model.entities.Ability;
 import com.arsene.eportfolio.model.entities.Technology;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class AbilityDto {
 
@@ -11,17 +12,20 @@ public class AbilityDto {
     private String name;
     private String color;
     private String image;
-    private Set<Technology> technologies;
+    private Set<TechnologyDto> technologies;
 
     public AbilityDto(Ability ability) {
         this.id = ability.getId();
         this.name = ability.getName();
         this.color = ability.getColor();
         this.image = ability.getImage();
-        this.technologies = ability.getTechnologies();
+        this.technologies = ability.getTechnologies()
+                                    .stream()
+                                    .map(TechnologyDto::new)
+                                    .collect(Collectors.toSet());
     }
 
-    public AbilityDto(Integer id, String name, String color, String image, Set<Technology> technologies) {
+    public AbilityDto(Integer id, String name, String color, String image, Set<TechnologyDto> technologies) {
         this.id = id;
         this.name = name;
         this.color = color;
@@ -61,11 +65,11 @@ public class AbilityDto {
         this.image = image;
     }
 
-    public Set<Technology> getTechnologies() {
+    public Set<TechnologyDto> getTechnologies() {
         return technologies;
     }
 
-    public void setTechnologies(Set<Technology> technologies) {
+    public void setTechnologies(Set<TechnologyDto> technologies) {
         this.technologies = technologies;
     }
 }

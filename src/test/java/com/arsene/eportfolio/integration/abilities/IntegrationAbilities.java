@@ -179,14 +179,8 @@ public class IntegrationAbilities {
         var ability = new Ability("test ability name", "test ability color", "test ability image", subject);
         abilitiesRepository.save(ability);
 
-        subject.getAbilities().add(ability);
-        subjectRepository.save(subject);
-
-        var tech = new Technology("test tech name", "test tech image");
+        var tech = new Technology("test tech name", "test tech image", ability);
         technologyRepository.save(tech);
-
-        ability.getTechnologies().add(tech);
-        abilitiesRepository.save(ability);
 
         // When
         mvc.perform(delete(String.format("/subjects/%d/abilities/%d", subject.getId(), ability.getId()))
@@ -219,11 +213,8 @@ public class IntegrationAbilities {
         subject.getAbilities().add(ability);
         subjectRepository.save(subject);
 
-        var tech = new Technology("test tech name", "test tech image");
+        var tech = new Technology("test tech name", "test tech image", ability);
         technologyRepository.save(tech);
-
-        ability.getTechnologies().add(tech);
-        abilitiesRepository.save(ability);
 
         // When
         mvc.perform(get("/subjects/" + subject.getId() + "/abilities/" + ability.getId())

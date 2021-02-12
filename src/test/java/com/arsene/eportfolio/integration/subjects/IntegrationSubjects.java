@@ -100,11 +100,7 @@ public class IntegrationSubjects {
         var ability = new Ability("test ability 1 name", "test ability 1 color", "test ability 1 image", subject1);
         abilitiesRepository.save(ability);
 
-        subject1.getAbilities().add(ability);
-
         var subject2 = new Subject("test name 2", "test icon 2", "test image 2");
-
-        repository.save(subject1);
         repository.save(subject2);
 
         // When

@@ -5,22 +5,15 @@ import com.arsene.eportfolio.model.data.AbilityRepository;
 import com.arsene.eportfolio.model.data.SubjectRepository;
 import com.arsene.eportfolio.model.data.TechnologyRepository;
 import com.arsene.eportfolio.model.dtos.AbilityDto;
+import com.arsene.eportfolio.model.dtos.CreateAbilityDto;
+import com.arsene.eportfolio.model.dtos.UpdateAbilityDto;
 import com.arsene.eportfolio.model.entities.Ability;
-import com.arsene.eportfolio.model.entities.Technology;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 @RestController
-@RequestMapping("/abilities")
+@RequestMapping("/subjects/{subjectId}/abilities")
 public class AbilityController {
-
-    private final Logger logger = LoggerFactory.getLogger(AbilityController.class);
 
     private final AbilityRepository abilityRepository;
     private final TechnologyRepository technologyRepository;
@@ -32,30 +25,55 @@ public class AbilityController {
         this.subjectRepository = subjectRepository;
     }
 
-
-
-    @GetMapping
+    @GetMapping("{abilityId}")
     @ResponseStatus(HttpStatus.OK)
-    public List<AbilityDto> findAll() {
-        return abilityRepository
-                .findByOrderByIdAsc()
-                .stream()
-                .map(AbilityDto::new)
-                .collect(Collectors.toList());
+    public AbilityDto getAbility(@PathVariable("subjectId") Integer subjectId, @PathVariable("abilityId") Integer abilityId) {
+        var ability = abilityRepository
+                .getAbilityBySubjectId(subjectId, abilityId)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("No ability with id : %s", abilityId)));
+        return new AbilityDto(ability);
     }
 
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public AbilityDto getAbility(@PathVariable("subjectId") Integer subjectId, @RequestBody CreateAbilityDto abilityDto) {
 
-    @PostMapping("/{id}/technologies")
-    @ResponseStatus(HttpStatus.OK)
-    public Technology addTechnology(@PathVariable("id") Integer id, @RequestBody Technology t) {
-        Optional<Ability> optionalAbility = abilityRepository.findById(id);
-        if (!optionalAbility.isPresent()) {
-            throw new ResourceNotFoundException();
-        }
-        Ability ability = optionalAbility.get();
-        technologyRepository.save(t);
-        ability.getTechnologies().add(t);
+        var subject = subjectRepository
+                .findById(subjectId)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("No subject with id : %s", subjectId)));
+
+        var ability = new Ability(abilityDto.getName(), abilityDto.getColor(), abilityDto.getImage(), subject);
         abilityRepository.save(ability);
-        return t;
+
+        return new AbilityDto(ability);
+    }
+
+    @DeleteMapping("{abilityId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteAbility(@PathVariable("subjectId") Integer subjectId, @PathVariable("abilityId") Integer abilityId) {
+        if (!abilityRepository.existsAbilityBySubjectId(subjectId, abilityId)) {
+            throw new ResourceNotFoundException(String.format("No ability with Id : %s", abilityId));
+        }
+
+        abilityRepository.deleteById(abilityId);
+    }
+
+    @PutMapping("{abilityId}")
+    @ResponseStatus(HttpStatus.OK)
+    public AbilityDto updateAbility(@PathVariable("subjectId") Integer subjectId, @PathVariable("abilityId") Integer abilityId, @RequestBody UpdateAbilityDto dto) {
+        if (!(abilityId.equals(dto.getId())
+                && abilityRepository.existsAbilityBySubjectId(subjectId, abilityId))) {
+            throw new ResourceNotFoundException(String.format("No ability with Id : %s", abilityId));
+        }
+
+        var ability = abilityRepository.findById(abilityId)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("No ability with Id : %s", abilityId)));
+
+        ability.setName(dto.getName());
+        ability.setColor(dto.getColor());
+        ability.setImage(dto.getImage());
+
+        abilityRepository.save(ability);
+        return new AbilityDto(ability);
     }
 }

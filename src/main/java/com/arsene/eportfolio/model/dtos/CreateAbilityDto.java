@@ -4,15 +4,13 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class CreateAbilityDto {
-    @NotNull
+
     @NotBlank
     private String name;
 
-    @NotNull
     @NotBlank
     private String color;
 
-    @NotNull
     @NotBlank
     private String image;
 
