@@ -4,13 +4,16 @@ import com.arsene.eportfolio.exceptions.ResourceNotFoundException;
 import com.arsene.eportfolio.model.data.AbilityRepository;
 import com.arsene.eportfolio.model.data.ProjectRepository;
 import com.arsene.eportfolio.model.data.TechnologyRepository;
+import com.arsene.eportfolio.model.dtos.ProjectDto;
 import com.arsene.eportfolio.model.entities.Ability;
 import com.arsene.eportfolio.model.entities.Project;
 import com.arsene.eportfolio.model.entities.Technology;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/projects")
@@ -26,9 +29,9 @@ public class ProjectController {
         this.technologyRepository = technologyRepository;
     }
 
-    @GetMapping("/")
-    public Iterable<Project> findAll() {
-        return projectRepository.findAll();
+    @GetMapping
+    public List<ProjectDto> findAll() {
+        return projectRepository.findAll().stream().map(ProjectDto::new).collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
@@ -42,32 +45,43 @@ public class ProjectController {
         projectRepository.deleteById(id);
     }
 
-    @PostMapping("/")
+    @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public Project create(@RequestBody Project t) {
-        return projectRepository.save(t);
+    public ProjectDto create(@RequestBody Project t) {
+        var project = projectRepository.save(t);
+        return new ProjectDto(project);
     }
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void update(@PathVariable("id") Integer id, @RequestBody Project resource) {
-        Optional<Project> t = projectRepository.findById(resource.getId());
-        if (!t.isPresent()) {
-            throw new ResourceNotFoundException();
-        }
+    public ProjectDto update(@PathVariable("id") Integer id, @RequestBody Project resource) {
+        // TODO : check that query id and payload id are equal
+        Project project = projectRepository.findById(resource.getId()).orElseThrow(ResourceNotFoundException::new);
+
+        project.setName(resource.getName());
+        project.setColor(resource.getColor());
+        project.setDescription(resource.getDescription());
+        project.setGit(resource.getGit());
+        project.setIcon(resource.getIcon());
+
         projectRepository.save(resource);
+
+        return new ProjectDto(project);
     }
 
-    @PostMapping("/{id}/abilities")
+    @PutMapping("/{id}/abilities/{abilityId}")
     @ResponseStatus(HttpStatus.OK)
-    public void addAbility(@PathVariable("id") Integer id, @RequestBody Ability ability) {
-        Project p = projectRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
-        p.getAbilities().add(ability);
-        projectRepository.save(p);
+    public ProjectDto addAbility(@PathVariable("id") Integer id, @PathVariable("abilityId") Integer abilityId) {
+        var project = projectRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        var ability = abilityRepository.findById(abilityId).orElseThrow(ResourceNotFoundException::new);
+        project.getAbilities().add(ability);
+        projectRepository.save(project);
+
+        return new ProjectDto(project);
     }
 
     @DeleteMapping("/{id}/abilities/{idAbility}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeAbility(@PathVariable("id") Integer id, @PathVariable("idAbility") Integer idAbility) {
         Project p = projectRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
         Ability ability = abilityRepository.findById(idAbility).orElseThrow(ResourceNotFoundException::new);
@@ -75,16 +89,18 @@ public class ProjectController {
         projectRepository.save(p);
     }
 
-    @PostMapping("/{id}/technologies")
+    @PutMapping("/{id}/technologies/{idTech}")
     @ResponseStatus(HttpStatus.OK)
-    public void addTechnology(@PathVariable("id") Integer id, @RequestBody Technology t) {
-        Project p = projectRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
-        p.getTechnologies().add(t);
-        projectRepository.save(p);
+    public ProjectDto addTechnology(@PathVariable("id") Integer id, @PathVariable("idTech") Integer idTech) {
+        var project = projectRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        var tech = technologyRepository.findById(idTech).orElseThrow(ResourceNotFoundException::new);
+        project.getTechnologies().add(tech);
+        projectRepository.save(project);
+        return new ProjectDto(project);
     }
 
     @DeleteMapping("/{id}/technologies/{idTech}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeTechnology(@PathVariable("id") Integer id, @PathVariable("idTech") Integer idTech) {
         Project p = projectRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
         Technology t = technologyRepository.findById(idTech).orElseThrow(ResourceNotFoundException::new);

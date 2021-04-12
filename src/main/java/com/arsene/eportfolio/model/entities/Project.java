@@ -20,16 +20,13 @@ public class Project {
     @ManyToMany
     private Set<Technology> technologies;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     private Set<Ability> abilities;
-
-    @ManyToOne
-    private Subject subject;
 
     public Project() {
     }
 
-    public Project(Integer id, String name, String icon, String description, String git, String color, Subject subject) {
+    public Project(Integer id, String name, String icon, String description, String git, String color) {
         this.id = id;
         this.name = name;
         this.icon = icon;
@@ -37,6 +34,16 @@ public class Project {
         this.git = git;
         this.color = color;
         this.technologies = new HashSet<>();
+        this.abilities = new HashSet<>();
+    }
+
+    public Project(Integer id, String name, String icon, String description, String git, String color, Subject subject) {
+        this(id, name,icon,description,git,color);
+        this.abilities = new HashSet<>();
+    }
+
+    public Project(String name, String icon, String description, String git, String color) {
+        this(null, name,icon,description,git,color);
         this.abilities = new HashSet<>();
     }
 
@@ -104,11 +111,4 @@ public class Project {
         this.abilities = abilities;
     }
 
-    public Subject getSubject() {
-        return subject;
-    }
-
-    public void setSubject(Subject subject) {
-        this.subject = subject;
-    }
 }
