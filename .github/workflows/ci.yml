@@ -17,7 +17,5 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 14
-    - name: NPM install
-      run: cd src/main/resources/frontend/eportfolio-frontend && npm install
     - name: Build with Maven
       run: mvn test
