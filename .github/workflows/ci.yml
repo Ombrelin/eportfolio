@@ -1,17 +1,15 @@
 # This workflow will build a Java project with Maven
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
 
-name: Java CI with Maven
+name: CI
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    branches: [ develop ]
 
 jobs:
   build:
-
+    name: Build & Test
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -25,10 +23,4 @@ jobs:
     - name: NPM install
       run: cd src/main/resources/frontend/eportfolio-frontend && npm install
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
-    - name: Build the Docker image
-      run: docker build -t ombrelin/eportfolio-backend:1.0 . --file Dockerfile
-    - name: Docker login
-      run: echo '${{ secrets.DOCKER_TOKEN }}' | docker login --username ombrelin --password-stdin
-    - name: Publish to Docker hub
-      run: docker push ombrelin/eportfolio-backend:1.0
+      run: mvn test
