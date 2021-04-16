@@ -18,4 +18,4 @@ jobs:
       with:
         java-version: 14
     - name: Test with Maven
-      run: mvn test
+      run: cd backend && mvn test
