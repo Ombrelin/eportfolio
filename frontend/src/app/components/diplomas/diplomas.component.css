@@ -1,0 +1,44 @@
+.diplomas {
+  padding: 2vw;
+}
+
+.fa {
+  font-size: 1.25vw;
+  text-align: right;
+}
+
+.diploma-logo {
+  background-size: cover;
+}
+
+.diplome-annee {
+  font-size: 16px;
+  text-align: center;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  width: 100%;
+  position: absolute;
+  bottom: 36px;
+}
+
+mat-card {
+  padding: 3rem;
+}
+
+@media screen and (max-width: 768px) {
+  mat-card {
+    margin-bottom: 2rem;
+  }
+}
+
+mat-card-actions {
+  position: absolute;
+  bottom: 24px;
+}
+
+mat-card {
+  background-color: #424242;
+  min-height: 24rem;
+  width: 80%;
+  margin-right: auto;
+  margin-left: auto;
+}

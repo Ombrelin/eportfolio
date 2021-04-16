@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>Ajouter ou modifier une Technologie</h1>
+
+<mat-card-content>
+  <mat-form-field>
+    <input matInput type="text" id="name" placeholder="Nom" [(ngModel)]="technology.name" name="name">
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput type="text" id="image" placeholder="Image" [(ngModel)]="technology.image" name="image">
+  </mat-form-field>
+</mat-card-content>
+
+<mat-dialog-actions>
+  <button type="button" color="primary" mat-raised-button (click)="handleClickSave()">Sauvgarder</button>
+</mat-dialog-actions>

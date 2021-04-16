@@ -1,0 +1,16 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>{{subject.name}}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content fxLayout="row wrap">
+    <div *ngFor="let ability of subject.abilities" fxFlex="33.3%" fxFlex.xs="50%">
+      <app-ability (delete)="handleDeleteAbility($event)" [subject]="subject" [ability]="ability"
+                   [logged]="logged"></app-ability>
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <a mat-button *ngIf="logged" (click)="handleAddAbility()">AJOUTER</a>
+    <a mat-button *ngIf="logged" (click)="handleUpdateSubject()">MODIFIER</a>
+    <a mat-button *ngIf="logged" class="hover-pointer" (click)="handleDelete()">SUPPRIMER</a>
+  </mat-card-actions>
+</mat-card>

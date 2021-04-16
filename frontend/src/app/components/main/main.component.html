@@ -1,0 +1,81 @@
+<body>
+
+<header>
+  <video autoplay loop>
+    <source src="../../../assets/video.mp4" type="video/mp4">
+  </video>
+  <mat-card>
+    <img alt="arsene" class="profile-image" src="/frontend/eportfolio-frontend/src/assets/img/arsene.png" (click)="showConnectDialog()"/>
+    <mat-card-content>
+      <h4>Arsène Lapostolet</h4>
+      <p>Etudiant en Informatique</p>
+    </mat-card-content>
+  </mat-card>
+</header>
+<nav>
+  <div class="menu-button" fxLayout="row wrap" fxLayoutGap.xs="0" fxLayoutAlign="space-around">
+    <div fxFlex.md="20%" fxFlex.xs="50%" fxFlex.sm="50%"><img src="/frontend/eportfolio-frontend/src/assets/img/abilities.png" class="header-icons"/>
+      <button (click)="scrollTo('abilities')"
+              data-target="abilities"
+              mat-raised-button color="primary">Compétences
+      </button>
+    </div>
+    <div fxFlex.md="20%" fxFlex.xs="50%" fxFlex.sm="50%"><img src="/frontend/eportfolio-frontend/src/assets/img/projects.png" class="header-icons"/>
+      <button (click)="scrollTo('projects')"
+              data-target="projects"
+              mat-raised-button color="primary">Projets
+      </button>
+    </div>
+    <div fxFlex.md="20%" fxFlex.xs="50%" fxFlex.sm="50%"><img src="/frontend/eportfolio-frontend/src/assets/img/diploma.png" class="header-icons"/>
+      <button (click)="scrollTo('diplomas')"
+              data-target="diplomas"
+              mat-raised-button color="primary">Diplomes
+      </button>
+    </div>
+
+    <div fxFlex.md="20%" fxFlex.xs="50%" fxFlex.sm="50%"><img src="/frontend/eportfolio-frontend/src/assets/img/cv.png" class="header-icons"/>
+      <a href="/frontend/eportfolio-frontend/src/assets/LAPOSTOLET%20Arsene-CV-LSI.pdf"
+         data-target="" mat-raised-button color="primary">CV
+      </a>
+    </div>
+  </div>
+</nav>
+
+<a *ngIf="logged && createMenuOpen" routerLink="/diploma" matTooltip="Créer un diplôme" matTooltipPosition="before"
+   class="create-button create-button-diploma" mat-fab color="accent">
+  <mat-icon>school</mat-icon>
+</a>
+<a *ngIf="logged && createMenuOpen" (click)="handleClickCreateProject()" matTooltip="Créer un projet"
+   matTooltipPosition="before"
+   class="create-button create-button-project" mat-fab color="accent">
+  <mat-icon>star</mat-icon>
+</a>
+<a *ngIf="logged && createMenuOpen" (click)="handleClickCreateSubject()" matTooltip="Créer un sujet"
+   matTooltipPosition="before"
+   class="create-button create-button-subject" mat-fab color="accent">
+  <mat-icon>build</mat-icon>
+</a>
+<button *ngIf="logged" (click)="toggleMenu()" class="create-button create-button-toggle" mat-fab color="primary">
+  <mat-icon>{{createMenuOpen ? 'close' : 'add'}}</mat-icon>
+</button>
+
+<section id="abilities">
+  <app-subjects></app-subjects>
+</section>
+
+<section id="projects">
+  <app-projects [logged]="logged"></app-projects>
+</section>
+
+<section id="diplomas">
+  <app-diplomas [logged]="logged"></app-diplomas>
+</section>
+
+<section id="experience">
+
+</section>
+
+<section id="hobbies">
+
+</section>
+</body>

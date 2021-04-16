@@ -1,0 +1,183 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <title>CV ARSENE LAPOSTOLET</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style>
+        /* ================= Global Page Style ==================*/
+        @page {
+            margin: -8px;
+            size: letter;
+        }
+
+        body {
+            font-family: "Segoe UI", sans-serif;
+            font-size: 10px;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        td {
+            vertical-align: top;
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        /* ================= Page header style ==================*/
+
+        .page-header {
+            background-color: #0066CC;
+            color: white;
+            height: 200px;
+            padding: 16px;
+            font-weight: bold;
+        }
+
+        .page-header td {
+            width: 33%;
+        }
+
+        .page-header hr {
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
+            border-color: white;
+        }
+
+        .page-header h1, h2 {
+            text-align: center;
+        }
+
+        /* ================= Page body Style ==================*/
+
+
+        .abilityIcon {
+            width: 16px;
+            height: auto;
+        }
+
+        .page-body {
+            padding: 16px;
+            height: 705px;
+            overflow: hidden;
+        }
+
+        .page-body td {
+            width: 50%;
+        }
+
+        .page-body hr {
+            margin-left: 2.5%;
+            width: 95%;
+            border-color: #0066CC;
+        }
+
+        /* ================= Page footer Style ==================*/
+
+        .page-footer {
+            background-color: #0066CC;
+            height: 38px;
+            padding: 24px;
+            color: white;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="page-header">
+    <table>
+        <tr>
+            <td>
+                <h1>ARSÈNE LAPOSTOLET</h1>
+                <hr/>
+                <p>10 / 09 / 1999</p>
+                <p>ARSENE@LAPOSTOLET.FR</p>
+                <p>06 98 40 20 57</p>
+                <p>17 RUE DE LA PLAINE<br/>75020 PARIS</p>
+                <p>https://arsenelapostolet.fr</p>
+                <p>https://www.linkedin.com/in/arsenelapostolet/</p>
+
+            </td>
+            <td></td>
+            <td>DEVELOPPEUR FULLSTACK</td>
+        </tr>
+    </table>
+
+</div>
+<div class="page-body">
+    <table>
+        <tr>
+            <td>
+                <h1>COMPÉTENCES</h1>
+                <hr/>
+                <br/>
+                <article th:each="subject: ${subjects}">
+                    <b><span th:text="${#strings.toUpperCase(subject.getName())}"></span> </b>
+                    <span th:each="ability: ${subject.getAbilities()}"><img
+                            class="abilityIcon" th:src="${ability.getImage()}"/></span><br/>
+
+                    <div th:each="ability: ${subject.getAbilities()}">
+                        - <span th:text="${#strings.toUpperCase(ability.getName())}"></span>
+                        <span th:if="${ability.getTechnologies().size() > 0
+                        }">
+                        (<span th:each="tech: ${ability.getTechnologies()}"
+                               th:text="|${#strings.toUpperCase(tech.getName())} ${techStat.last ? '':', '}|">
+
+                        </span>)
+                            </span>
+                    </div>
+                </article>
+                <br/><br/>
+            </td>
+            <td>
+                <h1>PROJETS</h1>
+                <hr/>
+                <br/>
+                <article>
+                    <div th:each="project: ${projects}">
+                        - <span th:text="${#strings.toUpperCase(project.getName())}"></span>
+                    </div>
+                </article>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h1>DIPLÔMES</h1>
+                <hr/>
+                <br/>
+                <article th:each="diploma:${diplomas}">
+                    <b><span
+                            th:text="|${diploma.getName()} ( ${diploma.getStartYear()} - ${diploma.getEndYear()} )|"></span></b>
+                    <br/>
+                    <span th:text="${diploma.getSchool()}"></span>
+                    <br/>
+                    <br/>
+                </article>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="page-footer">
+    <table>
+        <tr>
+            <td rowspan="2">POINTS FORTS</td>
+            <td>LEADERSHIP</td>
+            <td>TRAVAIL DE GROUPE</td>
+            <td>SENSIBILISÉ A LA SÉCURITÉ</td>
+        </tr>
+        <tr>
+            <td>CAPACITÉ D'ADAPTATION</td>
+            <td>COMMUNICATION</td>
+            <td>VEILLE TECHNOLOGIQUE</td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
