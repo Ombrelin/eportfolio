@@ -9,6 +9,7 @@ import com.arsene.eportfolio.model.dtos.CreateAbilityDto;
 import com.arsene.eportfolio.model.dtos.UpdateAbilityDto;
 import com.arsene.eportfolio.model.entities.Ability;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -54,7 +55,7 @@ public class AbilityController {
         if (!abilityRepository.existsAbilityBySubjectId(subjectId, abilityId)) {
             throw new ResourceNotFoundException(String.format("No ability with Id : %s", abilityId));
         }
-
+        System.out.format("Deleting ability %d from subject %d\n", abilityId, subjectId);
         abilityRepository.deleteById(abilityId);
     }
 

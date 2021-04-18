@@ -3,25 +3,25 @@
 </div>
 <mat-dialog-content>
   <mat-form-field>
-    <input matInput type="text" id="name" placeholder="Nom" [(ngModel)]="project.name" name="name">
+    <input [(ngModel)]="project.name" id="name" matInput name="name" placeholder="Nom" type="text">
   </mat-form-field>
 
   <mat-form-field>
-    <input matInput type="text" id="color" placeholder="Couleur" [(ngModel)]="project.color" name="color">
+    <input [(ngModel)]="project.color" id="color" matInput name="color" placeholder="Couleur" type="text">
   </mat-form-field>
 
   <mat-form-field>
-    <input matInput type="text" id="description" placeholder="Description" [(ngModel)]="project.description"
-           name="description">
+    <input [(ngModel)]="project.description" id="description" matInput name="description" placeholder="Description"
+           type="text">
   </mat-form-field>
 
 
   <mat-form-field>
-    <input matInput type="text" id="git" placeholder="Git" [(ngModel)]="project.git" name="git">
+    <input [(ngModel)]="project.git" id="git" matInput name="git" placeholder="Git" type="text">
   </mat-form-field>
 
   <mat-form-field>
-    <input matInput type="text" id="icon" placeholder="Icone" [(ngModel)]="project.icon" name="icon">
+    <input [(ngModel)]="project.icon" id="icon" matInput name="icon" placeholder="Icone" type="text">
   </mat-form-field>
 
   <div *ngIf="this.project.id === null || this.project.id === undefined">
@@ -37,10 +37,10 @@
   </div>
 
   <div *ngIf="this.project.id !== null && this.project.id !== undefined">
-        <span *ngFor="let ability of project.abilities">{{ability.name}} <i class="fa fa-trash-alt"
-                                                                            (click)="removeAbility(project.id,ability.id)"></i><br></span>
-    <span *ngFor="let technology of project.technologies">{{technology.name}} <i class="fa fa-trash-alt"
-                                                                                 (click)="removeTechnology(project.id,technology.id)"></i><br></span>
+        <span *ngFor="let ability of project.abilities">{{ability.name}} <i (click)="removeAbility(project.id,ability.id)"
+                                                                            class="fa fa-trash-alt"></i><br></span>
+    <span *ngFor="let technology of project.technologies">{{technology.name}} <i (click)="removeTechnology(project.id,technology.id)"
+                                                                                 class="fa fa-trash-alt"></i><br></span>
 
     <h4>Ajouter une compétence</h4>
     <mat-form-field>
@@ -52,7 +52,7 @@
       </mat-select>
     </mat-form-field>
 
-    <button mat-raised-button color="primary" (click)="addAbility()">Ajouter
+    <button (click)="addAbility()" color="primary" mat-raised-button>Ajouter
       la compétence
     </button>
 
@@ -65,7 +65,7 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
-    <button mat-raised-button color="primary" (click)="addTechnology()">
+    <button (click)="addTechnology()" color="primary" mat-raised-button>
       Ajouter la technologie
     </button>
   </div>
@@ -74,7 +74,7 @@
 </mat-dialog-content>
 
 <mat-dialog-actions>
-  <button type="button" mat-raised-button color="primary"
-          (click)="handleClickSave()">Sauvegarder
+  <button (click)="handleClickSave()" color="primary" mat-raised-button
+          type="button">Sauvegarder
   </button>
 </mat-dialog-actions>

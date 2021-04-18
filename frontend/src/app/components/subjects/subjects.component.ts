@@ -1,8 +1,8 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {Subject} from '../subject/subject.component';
-import {SubjectService} from '../../core/services/subject.service';
 import {DOCUMENT} from '@angular/common';
 import {AuthService} from '../../core/services/auth.service';
+import {SubjectApiService} from "../../core/api/subject-api.service";
+import {Subject} from "../../core/model/Subject";
 
 @Component({
   selector: 'app-subjects',
@@ -16,7 +16,7 @@ export class SubjectsComponent implements OnInit {
   loaded: boolean;
 
   constructor(
-    private service: SubjectService,
+    private service: SubjectApiService,
     @Inject(DOCUMENT) private document: Document,
     private auth: AuthService
   ) {
@@ -25,12 +25,7 @@ export class SubjectsComponent implements OnInit {
   }
 
   ngOnInit() {
-
-    this.subjects = new Array<Subject>();
-    this.service.findAll().subscribe(response => {
-      this.subjects = response;
-      this.loaded = true;
-    });
+    this.loadSubjects();
   }
 
   refreshAuth() {
@@ -39,5 +34,11 @@ export class SubjectsComponent implements OnInit {
 
   handleDelete(subject: Subject) {
     this.subjects = this.subjects.filter(e => e.id !== subject.id);
+  }
+
+  async loadSubjects() {
+    const response = await this.service.getSubjects();
+    this.subjects = response.data;
+    this.loaded = true;
   }
 }

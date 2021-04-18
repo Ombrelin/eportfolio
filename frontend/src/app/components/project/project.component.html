@@ -1,9 +1,9 @@
-<div class="tile" [ngStyle]="{'background-color' : project.color}">
+<div [ngStyle]="{'background-color' : project.color}" class="tile">
 
   <div class="textTile ">
     <button
-      mat-raised-button color="primary"
-      (click)="showModale()"
+      (click)="showModale()" color="primary"
+      mat-raised-button
     >DETAILS
     </button>
   </div>

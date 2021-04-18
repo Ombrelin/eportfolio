@@ -1,4 +1,4 @@
-<div fxLayout="row wrap" fxFlexAlign="center">
+<div fxFlexAlign="center" fxLayout="row wrap">
   <div fxFlex.gt-md="35%"></div>
   <mat-card fxFlex.gt-md="30%">
     <mat-card-header>
@@ -6,37 +6,37 @@
     </mat-card-header>
     <mat-card-content>
       <mat-form-field>
-        <input matInput type="text" id="name" placeholder="Nom" [(ngModel)]="diploma.name" name="name">
+        <input [(ngModel)]="diploma.name" id="name" matInput name="name" placeholder="Nom" type="text">
       </mat-form-field>
 
       <mat-form-field>
-        <input matInput type="text" id="school" placeholder="Ecole" [(ngModel)]="diploma.school" name="school">
+        <input [(ngModel)]="diploma.school" id="school" matInput name="school" placeholder="Ecole" type="text">
       </mat-form-field>
 
       <mat-form-field>
-        <input matInput type="number" id="startYear" placeholder="Année de début" [(ngModel)]="diploma.startYear"
-               name="startYear"/>
+        <input [(ngModel)]="diploma.startYear" id="startYear" matInput name="startYear" placeholder="Année de début"
+               type="number"/>
       </mat-form-field>
 
       <mat-form-field>
-        <input matInput type="number" id="endYear" placeholder="Année de fin" [(ngModel)]="diploma.endYear"
-               name="endYear"/>
+        <input [(ngModel)]="diploma.endYear" id="endYear" matInput name="endYear" placeholder="Année de fin"
+               type="number"/>
       </mat-form-field>
 
       <mat-form-field>
-        <input matInput type="text" placeholder="Logo" id="logo" [(ngModel)]="diploma.logo" name="logo">
+        <input [(ngModel)]="diploma.logo" id="logo" matInput name="logo" placeholder="Logo" type="text">
       </mat-form-field>
 
       <mat-form-field>
-        <textarea matInput type="text" id="description" placeholder="Description" [(ngModel)]="diploma.description"
-                  name="description"></textarea>
+        <textarea [(ngModel)]="diploma.description" id="description" matInput name="description" placeholder="Description"
+                  type="text"></textarea>
       </mat-form-field>
 
     </mat-card-content>
 
     <mat-card-actions>
-      <button mat-raised-button color="primary"
-              (click)="submit()">Sauvegarder
+      <button (click)="submit()" color="primary"
+              mat-raised-button>Sauvegarder
       </button>
     </mat-card-actions>
   </mat-card>

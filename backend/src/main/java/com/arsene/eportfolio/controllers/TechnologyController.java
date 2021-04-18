@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/subjects/{subjectId}/abilities/{abilityId}/technologies")
 public class TechnologyController {
 
-    private TechnologyRepository technologyRepository;
-    private AbilityRepository abilityRepository;
+    private final TechnologyRepository technologyRepository;
+    private final AbilityRepository abilityRepository;
 
     public TechnologyController(TechnologyRepository technologyRepository, AbilityRepository abilityRepository) {
         this.technologyRepository = technologyRepository;

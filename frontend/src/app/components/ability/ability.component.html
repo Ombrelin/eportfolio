@@ -1,5 +1,5 @@
-<span class="mdl-chip mdl-chip--contact"
-      [style.background-color]="ability.color" (click)="showModale()">
-    <img class="mdl-chip__contact" src="{{ability.image}}" alt="{{ability.name}}"/>
+<span (click)="showModale()"
+      [style.background-color]="ability.color" class="mdl-chip mdl-chip--contact">
+    <img alt="{{ability.name}}" class="mdl-chip__contact" src="{{ability.image}}"/>
     <span class="mdl-chip__text">{{ability.name}}</span>
 </span>

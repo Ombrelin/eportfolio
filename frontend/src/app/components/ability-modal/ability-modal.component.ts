@@ -1,11 +1,14 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {Ability, AbilityModalData, Technology} from '../ability/ability.component';
-import {Subject} from '../subject/subject.component';
-import {TechnologyService} from '../../core/services/technology.service';
 import {AbilityFormComponent} from '../ability-form/ability-form.component';
 import {TechnologyFormComponent} from '../technology-form/technology-form.component';
 import {AbilityApiService} from "../../core/api/ability-api.service";
+import {Ability} from "../../core/model/Ability";
+import {AbilityModalData} from "../ability/ability.component";
+import {TechnologyApiService} from "../../core/api/technology-api.service";
+import {AuthService} from "../../core/services/auth.service";
+import {Technology} from "../../core/model/Technology";
+import {Subject} from "../../core/model/Subject";
 
 @Component({
   selector: 'app-ability-modal',
@@ -22,8 +25,9 @@ export class AbilityModalComponent implements OnInit {
     public dialogRef: MatDialogRef<AbilityModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: AbilityModalData,
     private service: AbilityApiService,
-    private technologyService: TechnologyService,
-    public dialog: MatDialog
+    private technologyService: TechnologyApiService,
+    public dialog: MatDialog,
+    private authService: AuthService
   ) {
     this.ability = data.ability;
     this.subject = data.subject;
@@ -34,25 +38,23 @@ export class AbilityModalComponent implements OnInit {
 
   }
 
-  handleDelete() {
-    // this.service.delete(this.ability.id).subscribe(() => {
-    //     this.deleted = true;
-    //     this.dialogRef.close(this.deleted);
-    //   }
-    // );
+  async handleDelete() {
+    await this.service.deleteAbility(this.authService.getAuthString(),this.subject.id,this.ability.id);
+    this.deleted = true;
+    this.dialogRef.close(this.deleted);
   }
 
-  deleteTechnology(id: number) {
-    this.technologyService.delete(id).subscribe(() => {
-      this.ability.technologies = this.ability.technologies.filter(e => e.id !== id);
-    });
+  async deleteTechnology(id: number) {
+    await this.technologyService.deleteTechnology(this.authService.getAuthString(),this.subject.id,this.ability.id,id);
+    this.ability.technologies = this.ability.technologies.filter(e => e.id !== id);
   }
 
   handleClickEditTechnology(technology: Technology) {
     const dialogRef = this.dialog.open(TechnologyFormComponent, {
-      width: '250px',
+      width: '400px',
       data: {
-        abilityId: this.subject.id,
+        abilityId: this.ability.id,
+        subjectId: this.subject.id,
         technology
       }
     });
@@ -64,9 +66,10 @@ export class AbilityModalComponent implements OnInit {
 
   handleClickAdd() {
     const dialogRef = this.dialog.open(TechnologyFormComponent, {
-      width: '250px',
+      width: '400px',
       data: {
-        abilityId: this.ability.id
+        abilityId: this.ability.id,
+        subjectId: this.subject.id
       }
     });
 
@@ -80,8 +83,8 @@ export class AbilityModalComponent implements OnInit {
   }
 
   handleClickEdit() {
-    const dialogRef = this.dialog.open(AbilityFormComponent, {
-      width: '250px',
+    this.dialog.open(AbilityFormComponent, {
+      width: '400px',
       data: {
         subjectId: this.subject.id,
         ability: this.ability

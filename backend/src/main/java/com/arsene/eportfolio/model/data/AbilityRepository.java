@@ -2,6 +2,7 @@ package com.arsene.eportfolio.model.data;
 
 import com.arsene.eportfolio.model.entities.Ability;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -17,7 +18,5 @@ public interface AbilityRepository extends JpaRepository<Ability, Integer> {
             "FROM Ability a " +
             "WHERE a.subject.id = :subjectId AND a.id = :abilityId")
     boolean existsAbilityBySubjectId(@Param("subjectId") Integer subjectId, @Param("abilityId") Integer abilityId);
-
-
     List<Ability> findByOrderByIdAsc();
 }

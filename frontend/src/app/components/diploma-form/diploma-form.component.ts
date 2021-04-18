@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {Diploma} from '../diplomas/diplomas.component';
 import {ActivatedRoute, Router} from '@angular/router';
-import {DiplomasService} from '../../core/services/diplomas.service';
+import {Diploma} from "../../core/model/Diploma";
+import {DiplomaApiService} from "../../core/api/diploma-api.service";
+import {AuthService} from "../../core/services/auth.service";
 
 @Component({
   selector: 'app-diploma-form',
@@ -10,14 +11,14 @@ import {DiplomasService} from '../../core/services/diplomas.service';
 })
 export class DiplomaFormComponent implements OnInit {
 
-  private id: number;
   public diploma: Diploma;
-
+  private id: number;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private service: DiplomasService
+    private service: DiplomaApiService,
+    private authService: AuthService
   ) {
     this.diploma = new Diploma();
   }
@@ -25,22 +26,19 @@ export class DiplomaFormComponent implements OnInit {
   ngOnInit() {
     this.id = this.route.snapshot.params['id'];
     if (this.id !== null && this.id !== undefined) {
-      this.service.find(this.id).subscribe(result => {
-        this.diploma = result;
+      this.service.getDiploma(this.id).then(result => {
+        this.diploma = result.data;
       });
     }
   }
 
-  submit() {
+  async submit() {
     if (this.diploma.id == null) {
-      this.service.create(this.diploma).subscribe(result => {
-        this.router.navigate(['/']);
-      });
-    } else {
-      this.service.update(this.diploma).subscribe(result => {
+      await this.service.createDiploma(this.authService.getAuthString(), this.diploma);
 
-        this.router.navigate(['/']);
-      });
+    } else {
+      await this.service.updateDiploma(this.authService.getAuthString(), this.diploma,this.diploma.id);
     }
+    await this.router.navigate(['/']);
   }
 }

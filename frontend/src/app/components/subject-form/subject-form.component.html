@@ -2,20 +2,20 @@
 
 
 <mat-dialog-content>
-  <mat-form-field>
-    <input matInput type="text" id="name" placeholder="Nom" [(ngModel)]="subject.name" name="name">
+  <mat-form-field appearance="fill">
+    <input [(ngModel)]="subject.name" id="name" matInput name="name" placeholder="Nom" type="text">
   </mat-form-field>
   <br>
-  <mat-form-field>
-    <input matInput type="text" id="image" placeholder="Image" [(ngModel)]="subject.image" name="image">
+  <mat-form-field appearance="fill">
+    <input [(ngModel)]="subject.image" id="image" matInput name="image" placeholder="Image" type="text">
   </mat-form-field>
   <br>
-  <mat-form-field>
-    <input matInput type="text" id="icon" placeholder="Icone" [(ngModel)]="subject.icon" name="icon">
+  <mat-form-field appearance="fill">
+    <input [(ngModel)]="subject.icon" id="icon" matInput name="icon" placeholder="Icone" type="text">
   </mat-form-field>
   <br>
 </mat-dialog-content>
 
 <mat-dialog-actions>
-  <button mat-raised-button (click)="submit()" color="primary">Sauvegarder</button>
+  <button (click)="submit()" color="primary" mat-raised-button>Sauvegarder</button>
 </mat-dialog-actions>

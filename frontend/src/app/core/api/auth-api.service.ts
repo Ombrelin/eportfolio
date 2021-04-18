@@ -1,23 +1,20 @@
-import { Injectable } from '@angular/core';
-import {BaseService, Body, Header, Path, POST, Response, ServiceBuilder} from "ts-retrofit";
-import {Ability} from "../../components/ability/ability.component";
+import {BaseService, Body, POST, Response, ServiceBuilder} from "ts-retrofit";
 import {Auth} from "../model/Auth";
+import {API_URL} from "../constants/api-constants";
 
-@Injectable({
-  providedIn: 'root'
-})
-export class AuthApiService extends BaseService{
+
+export class AuthApiService extends BaseService {
 
   @POST("/login")
-  async authenticate(@Body auth: Auth){
-    return <Response>{}
+  async authenticate(@Body auth: Auth): Promise<Response> {
+    return <Response> {};
   }
 
 }
 
 const createAuthApi = (): AuthApiService => new ServiceBuilder()
-  .setEndpoint("")
+  .setEndpoint(API_URL)
   .setTimeout(4000)
-  .build(AuthApiService)
+  .build(AuthApiService);
 
-export {createAuthApi}
+export {createAuthApi};

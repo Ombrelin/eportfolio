@@ -8,21 +8,21 @@
     <p>
       <markdown ngPreserveWhitespaces>{{project.description}}</markdown>
     </p>
-    <a *ngIf="project.git" href="{{project.git}}"
-       mat-raised-button color="primary">GitLab</a>
+    <a *ngIf="project.git" color="primary"
+       href="{{project.git}}" mat-raised-button>GitLab</a>
   </div>
   <div class="specs">
-    <img class="spec" *ngFor="let ability of project.abilities" src="{{ability.image}}"/>
-    <img class="spec" *ngFor="let technology of project.technologies" src="{{technology.image}}"/>
+    <img *ngFor="let ability of project.abilities" class="spec" src="{{ability.image}}"/>
+    <img *ngFor="let technology of project.technologies" class="spec" src="{{technology.image}}"/>
   </div>
 </div>
 <div mat-dialog-actions>
 
-  <a mat-button *ngIf="logged" (click)="handleClickEdit()">MODIFIER</a>
+  <a (click)="handleClickEdit()" *ngIf="logged" mat-button>MODIFIER</a>
 
-  <a mat-button *ngIf="logged" (click)="handleDelete(project.id)" (click)="close()">SUPPRIMER</a>
+  <a (click)="handleDelete(project.id)" (click)="close()" *ngIf="logged" mat-button>SUPPRIMER</a>
 
-  <button mat-button class="close" [mat-dialog-close]="this.deleted">FERMER</button>
+  <button [mat-dialog-close]="this.deleted" class="close" mat-button>FERMER</button>
 
 
 </div>

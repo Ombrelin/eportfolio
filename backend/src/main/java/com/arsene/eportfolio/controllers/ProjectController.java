@@ -12,16 +12,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/projects")
 public class ProjectController {
 
-    private ProjectRepository projectRepository;
-    private AbilityRepository abilityRepository;
-    private TechnologyRepository technologyRepository;
+    private final ProjectRepository projectRepository;
+    private final AbilityRepository abilityRepository;
+    private final TechnologyRepository technologyRepository;
 
     public ProjectController(ProjectRepository projectRepository, AbilityRepository abilityRepository, TechnologyRepository technologyRepository) {
         this.projectRepository = projectRepository;

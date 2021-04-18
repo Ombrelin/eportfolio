@@ -1,6 +1,4 @@
 import {Component, Inject, OnInit, ViewChild} from '@angular/core';
-import {Subject} from '../subject/subject.component';
-import {SubjectService} from '../../core/services/subject.service';
 import {DOCUMENT} from '@angular/common';
 import {AuthService} from '../../core/services/auth.service';
 import {MatDialog} from '@angular/material/dialog';
@@ -9,6 +7,8 @@ import {SubjectsComponent} from '../subjects/subjects.component';
 import {SubjectFormComponent} from '../subject-form/subject-form.component';
 import {ProjectFormComponent} from '../project-form/project-form.component';
 import {ProjectsComponent} from '../projects/projects.component';
+import {SubjectApiService} from "../../core/api/subject-api.service";
+import {Subject} from "../../core/model/Subject";
 
 @Component({
   selector: 'app-main',
@@ -21,21 +21,10 @@ export class MainComponent implements OnInit {
   createMenuOpen = false;
 
   subjectComponent: SubjectsComponent;
-
-  @ViewChild(SubjectsComponent, {static: true})
-  set subjectsComponent(subjects: SubjectsComponent) {
-    this.subjectComponent = subjects;
-  }
-
   projects: ProjectsComponent;
 
-  @ViewChild(ProjectsComponent, {static: true})
-  set projectsComponent(projects: ProjectsComponent) {
-    this.projects = projects;
-  }
-
   constructor(
-    private service: SubjectService,
+    private service: SubjectApiService,
     @Inject(DOCUMENT) private document: Document,
     private auth: AuthService,
     public dialog: MatDialog
@@ -43,11 +32,21 @@ export class MainComponent implements OnInit {
     this.logged = auth.isAuthenticated();
   }
 
+  @ViewChild(SubjectsComponent, {static: true})
+  set subjectsComponent(subjects: SubjectsComponent) {
+    this.subjectComponent = subjects;
+  }
+
+  @ViewChild(ProjectsComponent, {static: true})
+  set projectsComponent(projects: ProjectsComponent) {
+    this.projects = projects;
+  }
+
   ngOnInit() {
 
     this.subjects = new Array<Subject>();
-    this.service.findAll().subscribe(response => {
-      this.subjects = response;
+    this.service.getSubjects().then(response => {
+      this.subjects = response.data;
     });
   }
 
@@ -73,10 +72,13 @@ export class MainComponent implements OnInit {
   }
 
   handleClickCreateSubject() {
-    this.dialog.open(SubjectFormComponent, {
+    const dialogRef = this.dialog.open(SubjectFormComponent, {
       width: '250px',
       data: {}
     });
+    dialogRef.afterClosed().subscribe(() => {
+      this.subjectComponent.loadSubjects();
+    })
   }
 
   handleClickCreateProject() {

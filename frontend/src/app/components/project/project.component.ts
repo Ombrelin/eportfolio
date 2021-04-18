@@ -1,8 +1,9 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Subject} from '../subject/subject.component';
-import {Ability, Technology} from '../ability/ability.component';
 import {MatDialog} from '@angular/material/dialog';
 import {ProjectModalComponent} from '../project-modal/project-modal.component';
+import {Ability} from "../../core/model/Ability";
+import {Technology} from "../../core/model/Technology";
+import {Subject} from "../../core/model/Subject";
 
 @Component({
   selector: 'app-project',

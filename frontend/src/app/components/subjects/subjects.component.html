@@ -2,7 +2,7 @@
   <h1>Compétences</h1>
   <mat-spinner *ngIf="!loaded"></mat-spinner>
   <div fxLayout="row wrap">
-    <section *ngFor="let subject of subjects" fxFlex.sm="100%" fxFlex.xs="100%" fxFlex="33%">
+    <section *ngFor="let subject of subjects" fxFlex="33%" fxFlex.sm="100%" fxFlex.xs="100%">
       <app-subject (delete)="handleDelete($event)" [logged]="logged" [subject]="subject"></app-subject>
     </section>
   </div>

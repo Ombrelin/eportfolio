@@ -12,7 +12,7 @@ import java.util.Optional;
 @RequestMapping("/diplomas")
 public class DiplomaController {
 
-    private DiplomaRepository diplomaRepository;
+    private final DiplomaRepository diplomaRepository;
 
     public DiplomaController(DiplomaRepository diplomaRepository) {
         this.diplomaRepository = diplomaRepository;

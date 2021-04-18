@@ -19,7 +19,8 @@ public class Subject {
     @OneToMany(
             mappedBy = "subject",
             cascade = CascadeType.ALL,
-            orphanRemoval = true
+            orphanRemoval = true,
+            fetch = FetchType.EAGER
     )
     private Set<Ability> abilities;
 

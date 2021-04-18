@@ -15,7 +15,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RequestMapping("/files")
 public class FileStorageController {
 
-    private FileStorageService fileStorageService;
+    private final FileStorageService fileStorageService;
 
     public FileStorageController(FileStorageService fileStorageService) {
         this.fileStorageService = fileStorageService;

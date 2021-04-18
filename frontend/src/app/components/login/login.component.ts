@@ -27,19 +27,13 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
   }
 
-  handleLogin() {
-    this.auth.authenticate(this.login, this.password).then(result => {
-
-      this.dialogRef.close();
-      this.snackBar.open('Connecté !');
-
-      // sessionStorage.setItem('token', result.headers.get('Authorization'));
-      // setTimeout(() => {
-      //     this.snackBar.dismiss();
-      //   },
-      //   3000);
-
-    });
+  async handleLogin() {
+    await this.auth.authenticate(this.login, this.password);
+    setTimeout(() => {
+        this.snackBar.dismiss();
+      },
+      3000);
+    this.cancel();
   }
 
   cancel() {

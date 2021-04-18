@@ -2,10 +2,11 @@
 
 <header>
   <video autoplay loop>
-    <source src="../../../assets/video.mp4" type="video/mp4">
+    <source src="/assets/video.mp4" type="video/mp4">
   </video>
   <mat-card>
-    <img alt="arsene" class="profile-image" src="/frontend/eportfolio-frontend/src/assets/img/arsene.png" (click)="showConnectDialog()"/>
+    <img (click)="showConnectDialog()" alt="arsene" class="profile-image"
+         src="/assets/img/arsene.png"/>
     <mat-card-content>
       <h4>Arsène Lapostolet</h4>
       <p>Etudiant en Informatique</p>
@@ -13,49 +14,53 @@
   </mat-card>
 </header>
 <nav>
-  <div class="menu-button" fxLayout="row wrap" fxLayoutGap.xs="0" fxLayoutAlign="space-around">
-    <div fxFlex.md="20%" fxFlex.xs="50%" fxFlex.sm="50%"><img src="/frontend/eportfolio-frontend/src/assets/img/abilities.png" class="header-icons"/>
+  <div class="menu-button" fxLayout="row wrap" fxLayoutAlign="space-around" fxLayoutGap.xs="0">
+    <div fxFlex.md="20%" fxFlex.sm="50%" fxFlex.xs="50%"><img
+      class="header-icons" src="/assets/img/abilities.png"/>
       <button (click)="scrollTo('abilities')"
-              data-target="abilities"
-              mat-raised-button color="primary">Compétences
+              color="primary"
+              data-target="abilities" mat-raised-button>Compétences
       </button>
     </div>
-    <div fxFlex.md="20%" fxFlex.xs="50%" fxFlex.sm="50%"><img src="/frontend/eportfolio-frontend/src/assets/img/projects.png" class="header-icons"/>
+    <div fxFlex.md="20%" fxFlex.sm="50%" fxFlex.xs="50%"><img
+      class="header-icons" src="/assets/img/projects.png"/>
       <button (click)="scrollTo('projects')"
-              data-target="projects"
-              mat-raised-button color="primary">Projets
+              color="primary"
+              data-target="projects" mat-raised-button>Projets
       </button>
     </div>
-    <div fxFlex.md="20%" fxFlex.xs="50%" fxFlex.sm="50%"><img src="/frontend/eportfolio-frontend/src/assets/img/diploma.png" class="header-icons"/>
+    <div fxFlex.md="20%" fxFlex.sm="50%" fxFlex.xs="50%"><img
+      class="header-icons" src="/assets/img/diploma.png"/>
       <button (click)="scrollTo('diplomas')"
-              data-target="diplomas"
-              mat-raised-button color="primary">Diplomes
+              color="primary"
+              data-target="diplomas" mat-raised-button>Diplomes
       </button>
     </div>
 
-    <div fxFlex.md="20%" fxFlex.xs="50%" fxFlex.sm="50%"><img src="/frontend/eportfolio-frontend/src/assets/img/cv.png" class="header-icons"/>
-      <a href="/frontend/eportfolio-frontend/src/assets/LAPOSTOLET%20Arsene-CV-LSI.pdf"
-         data-target="" mat-raised-button color="primary">CV
+    <div fxFlex.md="20%" fxFlex.sm="50%" fxFlex.xs="50%"><img class="header-icons"
+                                                              src="/assets/img/cv.png"/>
+      <a color="primary"
+         data-target="" href="/assets/LAPOSTOLET%20Arsene-CV-LSI.pdf" mat-raised-button>CV
       </a>
     </div>
   </div>
 </nav>
 
-<a *ngIf="logged && createMenuOpen" routerLink="/diploma" matTooltip="Créer un diplôme" matTooltipPosition="before"
-   class="create-button create-button-diploma" mat-fab color="accent">
+<a *ngIf="logged && createMenuOpen" class="create-button create-button-diploma" color="accent" mat-fab
+   matTooltip="Créer un diplôme" matTooltipPosition="before" routerLink="/diploma">
   <mat-icon>school</mat-icon>
 </a>
-<a *ngIf="logged && createMenuOpen" (click)="handleClickCreateProject()" matTooltip="Créer un projet"
-   matTooltipPosition="before"
-   class="create-button create-button-project" mat-fab color="accent">
+<a (click)="handleClickCreateProject()" *ngIf="logged && createMenuOpen" class="create-button create-button-project"
+   color="accent"
+   mat-fab matTooltip="Créer un projet" matTooltipPosition="before">
   <mat-icon>star</mat-icon>
 </a>
-<a *ngIf="logged && createMenuOpen" (click)="handleClickCreateSubject()" matTooltip="Créer un sujet"
-   matTooltipPosition="before"
-   class="create-button create-button-subject" mat-fab color="accent">
+<a (click)="handleClickCreateSubject()" *ngIf="logged && createMenuOpen" class="create-button create-button-subject"
+   color="accent"
+   mat-fab matTooltip="Créer un sujet" matTooltipPosition="before">
   <mat-icon>build</mat-icon>
 </a>
-<button *ngIf="logged" (click)="toggleMenu()" class="create-button create-button-toggle" mat-fab color="primary">
+<button (click)="toggleMenu()" *ngIf="logged" class="create-button create-button-toggle" color="primary" mat-fab>
   <mat-icon>{{createMenuOpen ? 'close' : 'add'}}</mat-icon>
 </button>
 

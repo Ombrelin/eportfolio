@@ -4,13 +4,13 @@
   </mat-card-header>
   <mat-card-content fxLayout="row wrap">
     <div *ngFor="let ability of subject.abilities" fxFlex="33.3%" fxFlex.xs="50%">
-      <app-ability (delete)="handleDeleteAbility($event)" [subject]="subject" [ability]="ability"
-                   [logged]="logged"></app-ability>
+      <app-ability (delete)="handleDeleteAbility($event)" [ability]="ability" [logged]="logged"
+                   [subject]="subject"></app-ability>
     </div>
   </mat-card-content>
   <mat-card-actions>
-    <a mat-button *ngIf="logged" (click)="handleAddAbility()">AJOUTER</a>
-    <a mat-button *ngIf="logged" (click)="handleUpdateSubject()">MODIFIER</a>
-    <a mat-button *ngIf="logged" class="hover-pointer" (click)="handleDelete()">SUPPRIMER</a>
+    <a (click)="handleAddAbility()" *ngIf="logged" mat-button>AJOUTER</a>
+    <a (click)="handleUpdateSubject()" *ngIf="logged" mat-button>MODIFIER</a>
+    <a (click)="handleDelete()" *ngIf="logged" class="hover-pointer" mat-button>SUPPRIMER</a>
   </mat-card-actions>
 </mat-card>

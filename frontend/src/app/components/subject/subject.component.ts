@@ -1,9 +1,11 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Ability} from '../ability/ability.component';
-import {SubjectService} from '../../core/services/subject.service';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {AbilityFormComponent} from '../ability-form/ability-form.component';
 import {SubjectFormComponent} from '../subject-form/subject-form.component';
+import {Ability} from "../../core/model/Ability";
+import {SubjectApiService} from "../../core/api/subject-api.service";
+import {AuthService} from "../../core/services/auth.service";
+import {Subject} from "../../core/model/Subject";
 
 @Component({
   selector: 'app-subject',
@@ -21,8 +23,9 @@ export class SubjectComponent implements OnInit {
   dialogref: MatDialogRef<AbilityFormComponent, Ability>;
 
   constructor(
-    private service: SubjectService,
-    private dialog: MatDialog
+    private service: SubjectApiService,
+    private dialog: MatDialog,
+    private authService: AuthService
   ) {
   }
 
@@ -32,7 +35,7 @@ export class SubjectComponent implements OnInit {
 
   handleAddAbility() {
     this.dialogref = this.dialog.open(AbilityFormComponent, {
-      width: '250px',
+      width: '400px',
       data: {
         subjectId: this.subject.id
       }
@@ -46,10 +49,9 @@ export class SubjectComponent implements OnInit {
     });
   }
 
-  handleDelete() {
-    this.service.delete(this.subject.id).subscribe(() => {
-      this.delete.emit(this.subject);
-    });
+  async handleDelete() {
+    await this.service.deleteSubject(this.authService.getAuthString(),this.subject.id);
+    this.delete.emit(this.subject);
   }
 
 
@@ -67,12 +69,3 @@ export class SubjectComponent implements OnInit {
   }
 }
 
-export class Subject {
-  constructor(
-    public id?: number,
-    public name?: string,
-    public icon?: string,
-    public image?: string,
-    public abilities?: Array<Ability>) {
-  }
-}

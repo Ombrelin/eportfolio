@@ -21,7 +21,6 @@ import {ExperiencesComponent} from './components/experiences/experiences.compone
 import {AbilityModalComponent} from './components/ability-modal/ability-modal.component';
 import {DiplomaFormComponent} from './components/diploma-form/diploma-form.component';
 import {DiplomasComponent} from './components/diplomas/diplomas.component';
-import {AuthInterceptorService} from './core/http/auth-interceptor.service';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
@@ -29,6 +28,7 @@ import {MarkdownModule} from 'ngx-markdown';
 import {ProjectModalComponent} from './components/project-modal/project-modal.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MccColorPickerModule} from 'material-community-components';
+import {CoreModule} from "./core/core.module";
 
 @NgModule({
   declarations: [
@@ -62,9 +62,10 @@ import {MccColorPickerModule} from 'material-community-components';
     MaterialModule,
     FlexLayoutModule,
     MarkdownModule.forRoot(),
-    MccColorPickerModule
+    MccColorPickerModule,
+    CoreModule
   ],
-  providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true}],
+  providers: [],
   bootstrap: [AppComponent],
 
   entryComponents: [AbilityModalComponent,

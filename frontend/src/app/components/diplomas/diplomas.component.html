@@ -6,7 +6,7 @@
     <div *ngFor="let diploma of diplomas" fxFlex.gt-md="33.3%">
       <mat-card>
         <mat-card-header>
-          <div mat-card-avatar class="diploma-logo" [style.background-image]="'url(' + diploma.logo +')'">
+          <div [style.background-image]="'url(' + diploma.logo +')'" class="diploma-logo" mat-card-avatar>
           </div>
           <mat-card-title>{{diploma.name}} - {{diploma.school}}</mat-card-title>
           <mat-card-subtitle>  {{diploma.startYear}} - {{diploma.endYear}}</mat-card-subtitle>
@@ -17,8 +17,8 @@
           </markdown>
         </mat-card-content>
         <mat-card-actions>
-          <a mat-button *ngIf="logged" routerLink="/diploma/{{diploma.id}}">MODIFIER</a>
-          <a mat-button *ngIf="logged" (click)="delete(diploma)">SUPPRIMER</a>
+          <a *ngIf="logged" mat-button routerLink="/diploma/{{diploma.id}}">MODIFIER</a>
+          <a (click)="delete(diploma)" *ngIf="logged" mat-button>SUPPRIMER</a>
         </mat-card-actions>
       </mat-card>
     </div>

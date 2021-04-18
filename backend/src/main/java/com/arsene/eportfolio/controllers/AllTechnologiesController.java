@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/technologies")
 public class AllTechnologiesController {
 
-    private TechnologyRepository technologyRepository;
+    private final TechnologyRepository technologyRepository;
 
     public AllTechnologiesController(TechnologyRepository technologyRepository) {
         this.technologyRepository = technologyRepository;

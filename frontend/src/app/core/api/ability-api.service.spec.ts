@@ -1,6 +1,6 @@
-import { TestBed } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 
-import { AbilityApiService } from './ability-api.service';
+import {AbilityApiService} from './ability-api.service';
 
 describe('AbilityApiService', () => {
   let service: AbilityApiService;

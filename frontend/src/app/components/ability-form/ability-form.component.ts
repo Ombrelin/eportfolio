@@ -1,10 +1,11 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {Ability} from '../ability/ability.component';
-import {SubjectService} from '../../core/services/subject.service';
-// import {AbilityService} from '../../core/services/ability.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {FilesService} from '../../core/services/files.service';
+import {Ability} from "../../core/model/Ability";
+import {AbilityApiService} from "../../core/api/ability-api.service";
+import {SubjectApiService} from "../../core/api/subject-api.service";
+import {AuthService} from "../../core/services/auth.service";
 
 @Component({
   selector: 'app-ability-form',
@@ -13,18 +14,19 @@ import {FilesService} from '../../core/services/files.service';
 })
 export class AbilityFormComponent implements OnInit {
 
-  private subjectId: number;
-  private abilityId: number;
   public ability: Ability;
   public fileToUpload: File = null;
+  private readonly subjectId: number;
+  private readonly abilityId: number;
 
   constructor(
     public dialogRef: MatDialogRef<AbilityFormComponent>,
-    private subjectService: SubjectService,
-    // private abilityService: AbilityService,
+    private subjectService: SubjectApiService,
+    private abilityService: AbilityApiService,
     private fileService: FilesService,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private authService: AuthService
   ) {
     if (this.data.ability) {
       this.ability = this.data.ability;
@@ -45,19 +47,35 @@ export class AbilityFormComponent implements OnInit {
   async save() {
     console.log(this.ability.color);
     // Create
-    if (this.ability.id === null || this.ability.id === undefined) {
+    if (!this.ability.id) {
       if (this.fileToUpload) {
-        this.ability.image = await this.fileService.upload(this.fileToUpload);
+        this.ability.image = await this.fileService.upload(
+          this.authService.getAuthString(),
+          this.fileToUpload
+        );
       }
-      this.ability = await this.subjectService.addAbility(this.subjectId, this.ability).toPromise();
+      const response = await this.abilityService.createAbility(
+        this.authService.getAuthString(),
+        this.subjectId, this.ability
+      );
+      this.ability = response.data;
       this.snackBar.open(`Ability created ${this.ability.id}`);
 
     } else { // Update
 
       if (this.fileToUpload) {
-        this.ability.image = await this.fileService.upload(this.fileToUpload);
+        this.ability.image = await this.fileService.upload(
+          this.authService.getAuthString(),
+          this.fileToUpload
+        );
       }
-      // this.ability = await this.abilityService.update(this.ability).toPromise();
+      const response = await this.abilityService.updateAbility(
+        this.authService.getAuthString(),
+        this.subjectId,
+        this.abilityId,
+        this.ability
+      );
+      this.ability = response.data;
       this.snackBar.open(`Ability updated ${this.ability.id}`);
     }
 

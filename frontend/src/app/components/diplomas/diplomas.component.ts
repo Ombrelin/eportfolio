@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {DiplomasService} from '../../core/services/diplomas.service';
 import {AuthService} from '../../core/services/auth.service';
+import {DiplomaApiService} from "../../core/api/diploma-api.service";
+import {Diploma} from "../../core/model/Diploma";
 
 @Component({
   selector: 'app-diplomas',
@@ -14,38 +15,23 @@ export class DiplomasComponent implements OnInit {
 
   @Input() logged: boolean;
 
-  constructor(private service: DiplomasService, private authService: AuthService) {
+  constructor(
+    private service: DiplomaApiService,
+    private authService: AuthService) {
     this.loaded = false;
   }
 
   ngOnInit() {
-    this.service.findAll().subscribe(result => {
-      this.diplomas = result;
+    this.service.getAllDiplomas().then(result => {
+      this.diplomas = result.data;
       this.loaded = true;
     });
   }
 
-  delete(diploma: Diploma) {
-    this.service.delete(diploma.id).subscribe(() => {
-      for (const d of this.diplomas) {
-        if (d.id === diploma.id) {
-          this.diplomas.splice(this.diplomas.indexOf(diploma));
-          break;
-        }
-      }
-    });
+  async delete(diploma: Diploma) {
+    await this.service.deleteDiploma(this.authService.getAuthString(),diploma.id);
+    this.diplomas = this.diplomas.filter(d => d.id != diploma.id);
   }
 }
 
-export class Diploma {
-  constructor(
-    public id?: number,
-    public name?: string,
-    public school?: string,
-    public startYear?: number,
-    public endYear?: number,
-    public logo?: string,
-    public description?: string
-  ) {
-  }
-}
+

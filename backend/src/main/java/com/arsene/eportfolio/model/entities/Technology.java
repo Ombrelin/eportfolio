@@ -11,7 +11,7 @@ public class Technology {
     private String image;
 
     @ManyToOne(
-            fetch = FetchType.LAZY
+            fetch = FetchType.EAGER
     )
     private Ability ability;
 

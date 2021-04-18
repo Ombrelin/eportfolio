@@ -3,23 +3,22 @@ package com.arsene.eportfolio.controllers;
 import com.arsene.eportfolio.exceptions.ResourceNotFoundException;
 import com.arsene.eportfolio.model.data.AbilityRepository;
 import com.arsene.eportfolio.model.data.SubjectRepository;
-import com.arsene.eportfolio.model.dtos.*;
-import com.arsene.eportfolio.model.entities.Ability;
+import com.arsene.eportfolio.model.dtos.CreateSubjectDto;
+import com.arsene.eportfolio.model.dtos.SubjectDto;
+import com.arsene.eportfolio.model.dtos.UpdateSubjectDto;
 import com.arsene.eportfolio.model.entities.Subject;
 import org.springframework.http.HttpStatus;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Transactional
 @RestController
 @RequestMapping("/subjects")
 public class SubjectController {
 
-    private SubjectRepository subjectRepository;
-    private AbilityRepository abilityRepository;
+    private final SubjectRepository subjectRepository;
+    private final AbilityRepository abilityRepository;
 
     public SubjectController(SubjectRepository subjectRepository, AbilityRepository abilityRepository) {
         this.subjectRepository = subjectRepository;
@@ -73,7 +72,6 @@ public class SubjectController {
 
         return new SubjectDto(subject);
     }
-
 
 
 }
