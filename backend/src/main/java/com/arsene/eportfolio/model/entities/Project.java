@@ -38,12 +38,12 @@ public class Project {
     }
 
     public Project(Integer id, String name, String icon, String description, String git, String color, Subject subject) {
-        this(id, name,icon,description,git,color);
+        this(id, name, icon, description, git, color);
         this.abilities = new HashSet<>();
     }
 
     public Project(String name, String icon, String description, String git, String color) {
-        this(null, name,icon,description,git,color);
+        this(null, name, icon, description, git, color);
         this.abilities = new HashSet<>();
     }
 

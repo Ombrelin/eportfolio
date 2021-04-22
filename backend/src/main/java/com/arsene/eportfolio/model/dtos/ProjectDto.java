@@ -1,9 +1,7 @@
 package com.arsene.eportfolio.model.dtos;
 
-import com.arsene.eportfolio.model.entities.Ability;
 import com.arsene.eportfolio.model.entities.Project;
 import com.arsene.eportfolio.model.entities.Subject;
-import com.arsene.eportfolio.model.entities.Technology;
 
 import java.util.Set;
 import java.util.stream.Collectors;

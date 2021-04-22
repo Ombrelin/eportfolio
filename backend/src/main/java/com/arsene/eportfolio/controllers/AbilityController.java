@@ -9,7 +9,6 @@ import com.arsene.eportfolio.model.dtos.CreateAbilityDto;
 import com.arsene.eportfolio.model.dtos.UpdateAbilityDto;
 import com.arsene.eportfolio.model.entities.Ability;
 import org.springframework.http.HttpStatus;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

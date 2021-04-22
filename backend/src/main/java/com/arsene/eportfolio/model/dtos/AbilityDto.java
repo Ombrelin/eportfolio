@@ -1,7 +1,6 @@
 package com.arsene.eportfolio.model.dtos;
 
 import com.arsene.eportfolio.model.entities.Ability;
-import com.arsene.eportfolio.model.entities.Technology;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -20,9 +19,9 @@ public class AbilityDto {
         this.color = ability.getColor();
         this.image = ability.getImage();
         this.technologies = ability.getTechnologies()
-                                    .stream()
-                                    .map(TechnologyDto::new)
-                                    .collect(Collectors.toSet());
+                .stream()
+                .map(TechnologyDto::new)
+                .collect(Collectors.toSet());
     }
 
     public AbilityDto(Integer id, String name, String color, String image, Set<TechnologyDto> technologies) {

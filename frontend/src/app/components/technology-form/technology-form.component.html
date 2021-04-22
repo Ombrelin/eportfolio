@@ -5,9 +5,7 @@
     <input [(ngModel)]="technology.name" id="name" matInput name="name" placeholder="Nom" type="text">
   </mat-form-field>
 
-  <mat-form-field appearance="fill">
-    <input [(ngModel)]="technology.image" id="image" matInput name="image" placeholder="Image" type="text">
-  </mat-form-field>
+  <input (change)="handleFileInput($event.target.files)" id="image" name="image" placeholder="Image" type="file">
 </mat-card-content>
 
 <mat-dialog-actions>

@@ -11,7 +11,7 @@ import java.io.IOException;
 @Service
 public class FileStorageService {
 
-    private DBFileRepository dbFileRepository;
+    private final DBFileRepository dbFileRepository;
 
     public FileStorageService(DBFileRepository dbFileRepository) {
         this.dbFileRepository = dbFileRepository;
