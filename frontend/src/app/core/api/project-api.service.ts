@@ -1,7 +1,9 @@
 
 import {BaseService, Body, DELETE, GET, Header, Path, POST, PUT, Response, ServiceBuilder} from "ts-retrofit";
-import {Project} from "../../components/project/project.component";
 import {API_URL} from "../constants/api-constants";
+import {CreateProjectDto} from "../model/dtos/CreateProjectDto";
+import {Project} from "../model/Project";
+import {UpdateProjectDto} from "../model/dtos/UpdateProjectDto";
 
 export class ProjectApiService extends BaseService {
 
@@ -9,7 +11,7 @@ export class ProjectApiService extends BaseService {
   @PUT("/projects/{id}")
   async updateProject(@Header('Authorization') authorization: string,
                       @Path("id") id: number,
-                      @Body project: Project
+                      @Body project: UpdateProjectDto
   ): Promise<Response<Project>> {
     return <Response<Project>> {};
   }
@@ -48,7 +50,7 @@ export class ProjectApiService extends BaseService {
 
   @POST("/projects")
   async createProject(@Header('Authorization') authorization: string,
-                      @Body project: Project
+                      @Body project: CreateProjectDto
   ): Promise<Response<Project>> {
     return <Response<Project>> {};
   }

@@ -1,9 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ProjectModalComponent} from '../project-modal/project-modal.component';
-import {Ability} from "../../core/model/Ability";
-import {Technology} from "../../core/model/Technology";
-import {Subject} from "../../core/model/Subject";
+import {Project} from "../../core/model/Project";
 
 @Component({
   selector: 'app-project',
@@ -39,17 +37,3 @@ export class ProjectComponent implements OnInit {
   }
 }
 
-export class Project {
-  constructor(
-    public id?: number,
-    public name?: string,
-    public icon?: string,
-    public description?: string,
-    public git?: string,
-    public color?: string,
-    public subject?: Subject,
-    public abilities?: Array<Ability>,
-    public technologies?: Array<Technology>
-  ) {
-  }
-}

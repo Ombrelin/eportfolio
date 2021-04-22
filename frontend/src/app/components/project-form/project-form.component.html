@@ -24,59 +24,46 @@
     <input [(ngModel)]="project.icon" id="icon" matInput name="icon" placeholder="Icone" type="text">
   </mat-form-field>
 
-  <div *ngIf="this.project.id === null || this.project.id === undefined">
-    <h4>Subject</h4>
-    <mat-form-field>
-      <mat-label>Sujet</mat-label>
-      <mat-select [(ngModel)]="project.subject">
-        <mat-option *ngFor="let subject of subjects" [value]="subject">
-          {{subject.name}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
+  <span *ngFor="let ability of project.abilities">{{ability.name}} <i
+    (click)="removeAbility(ability.id)"
+    class="fa fa-trash-alt"></i><br></span>
 
-  <div *ngIf="this.project.id !== null && this.project.id !== undefined">
-        <span *ngFor="let ability of project.abilities">{{ability.name}} <i
-          (click)="removeAbility(project.id,ability.id)"
-          class="fa fa-trash-alt"></i><br></span>
-    <span *ngFor="let technology of project.technologies">{{technology.name}} <i
-      (click)="removeTechnology(project.id,technology.id)"
-      class="fa fa-trash-alt"></i><br></span>
+  <span *ngFor="let technology of project.technologies">{{technology.name}} <i
+    (click)="removeTechnology(technology.id)"
+    class="fa fa-trash-alt"></i><br></span>
 
-    <h4>Ajouter une compétence</h4>
-    <mat-form-field>
-      <mat-label>Compétence</mat-label>
-      <mat-select [(value)]="addedAbility">
-        <mat-option *ngFor="let ability of abilities" [value]="ability">
-          {{ability.name}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+  <h4>Add ability</h4>
+  <mat-form-field>
+    <mat-label>Ability</mat-label>
+    <mat-select [(value)]="addedAbility">
+      <mat-option *ngFor="let ability of abilities" [value]="ability">
+        {{ability.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 
-    <button (click)="addAbility()" color="primary" mat-raised-button>Ajouter
-      la compétence
-    </button>
+  <button *ngIf="!!addedAbility" (click)="addAbility()" color="primary" mat-raised-button>
+    Add
+  </button>
 
-    <h4>Ajouter une technologie</h4>
-    <mat-form-field>
-      <mat-label>Technologie</mat-label>
-      <mat-select [(value)]="addedTechnology">
-        <mat-option *ngFor="let technology of technologies" [value]="technology">
-          {{technology.name}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <button (click)="addTechnology()" color="primary" mat-raised-button>
-      Ajouter la technologie
-    </button>
-  </div>
+  <h4>Add technology</h4>
+  <mat-form-field>
+    <mat-label>Technology</mat-label>
+    <mat-select [(value)]="addedTechnology">
+      <mat-option *ngFor="let technology of technologies" [value]="technology">
+        {{technology.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <button *ngIf="!!addedTechnology" (click)="addTechnology()" color="primary" mat-raised-button>
+    Add
+  </button>
 
 
 </mat-dialog-content>
 
 <mat-dialog-actions>
   <button (click)="handleClickSave()" color="primary" mat-raised-button
-          type="button">Sauvegarder
+          type="button">Save
   </button>
 </mat-dialog-actions>

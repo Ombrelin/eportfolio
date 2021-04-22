@@ -17,10 +17,10 @@ public class Project {
     private String color;
 
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Technology> technologies;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Ability> abilities;
 
     public Project() {

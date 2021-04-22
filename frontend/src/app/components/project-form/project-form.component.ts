@@ -1,14 +1,15 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {Project} from '../project/project.component';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {AbilityApiService} from "../../core/api/ability-api.service";
 import {Ability} from "../../core/model/Ability";
 import {Technology} from "../../core/model/Technology";
-import {SubjectApiService} from "../../core/api/subject-api.service";
 import {ProjectApiService} from "../../core/api/project-api.service";
 import {TechnologyApiService} from "../../core/api/technology-api.service";
-import {Subject} from "../../core/model/Subject";
+import {CreateProjectDto} from "../../core/model/dtos/CreateProjectDto";
+import {AuthService} from "../../core/services/auth.service";
+import {UpdateProjectDto} from "../../core/model/dtos/UpdateProjectDto";
+import {Project} from "../../core/model/Project";
 
 @Component({
   selector: 'app-project-form',
@@ -18,100 +19,73 @@ import {Subject} from "../../core/model/Subject";
 export class ProjectFormComponent implements OnInit {
 
   public project: Project;
-  public subjects: Array<Subject>;
-  public addedAbility: Ability;
-  public addedTechnology: Technology;
   public abilities: Array<Ability>;
   public technologies: Array<Technology>;
+  addedAbility: Ability;
+  addedTechnology: Technology;
 
   constructor(
-    private subjectService: SubjectApiService,
     private projectService: ProjectApiService,
     private abilityService: AbilityApiService,
     @Inject(MAT_DIALOG_DATA) public data: Project,
     private technologyService: TechnologyApiService,
     private snackBar: MatSnackBar,
-    public dialogRef: MatDialogRef<ProjectFormComponent>
+    public dialogRef: MatDialogRef<ProjectFormComponent>,
+    private authService: AuthService
   ) {
     if (data) {
       this.project = data;
     } else {
       this.project = new Project();
     }
-    this.addedTechnology = new Technology();
-    this.addedAbility = new Ability();
-
   }
 
   ngOnInit() {
-    this.abilityService.getAbilities().then(result => {
-      this.abilities = result.data;
-    });
-
-    this.technologyService.getTechnologies().then(result => {
-      this.technologies = result.data;
-    });
-
-    this.subjectService.getSubjects().then(result => {
-      this.subjects = result.data;
-    });
+    this.loadData();
   }
 
-  handleClickSave() {
-    // if (this.project.subject === null || this.project.subject === undefined) {
-    //   this.snackBar.open('Please set a subject');
-    //   setTimeout(() => {
-    //     this.snackBar.dismiss();
-    //   }, 2000);
-    // } else {
-    //   if (this.project.id == null) {
-    //     this.subjectService.addproject(this.project.subject.id, this.project).subscribe(result => {
-    //       this.dialogRef.close(result);
-    //     });
-    //   } else {
-    //     this.projectService.update(this.project).subscribe(result => {
-    //       this.dialogRef.close(result);
-    //     });
-    //   }
-    // }
-
+  async handleClickSave() {
+    if (this.project.id) { // Update
+      const dto = UpdateProjectDto.fromProject(this.project);
+      const result = await this.projectService.updateProject(this.authService.getAuthString(), this.project.id, dto);
+      this.dialogRef.close(result.data);
+    } else { // Create
+      const dto = CreateProjectDto.fromProject(this.project);
+      const result = await this.projectService.createProject(this.authService.getAuthString(), dto);
+      this.dialogRef.close(result.data);
+    }
   }
 
-  removeAbility(projectId: number, abilityId: number) {
-    // this.projectService.removeAbility(projectId, abilityId).subscribe(result => {
-    //   for (const a of this.project.abilities) {
-    //     if (a.id === abilityId) {
-    //       this.project.abilities.splice(this.project.abilities.indexOf(a));
-    //     }
-    //   }
-    // });
+  async removeAbility(abilityId: number) {
+    if (this.project.id) {
+      await this.projectService.removeAbility(this.authService.getAuthString(), this.project.id, abilityId);
+    }
+    this.project.abilities = this.project.abilities.filter(a => a.id !== abilityId);
   }
 
-  removeTechnology(projectId: number, technologyId: number) {
-    // this.projectService.removeTechnology(projectId, technologyId).subscribe(result => {
-    //   for (const t of this.project.technologies) {
-    //     if (t.id === technologyId) {
-    //       this.project.technologies.splice(this.project.technologies.indexOf(t));
-    //     }
-    //   }
-    // });
+  async removeTechnology(technologyId: number) {
+    if (this.project.id) {
+      await this.projectService.removeTechnology(this.authService.getAuthString(), this.project.id, technologyId);
+    }
+    this.project.technologies = this.project.technologies.filter(t => t.id !== technologyId);
   }
 
-  addAbility() {
-    // this.projectService.addAbility(this.project.id, this.addedAbility).subscribe(result => {
-    //   if (!this.project.abilities) {
-    //     this.project.abilities = new Array<Ability>();
-    //   }
-    //   this.project.abilities.push(this.addedAbility);
-    // });
+  async addAbility() {
+    if (this.project.id) {
+      await this.projectService.addAbility(this.authService.getAuthString(), this.project.id, this.addedAbility.id);
+    }
+    this.project.abilities.push(this.addedAbility);
   }
 
-  addTechnology() {
-    // this.projectService.addTechnology(this.project.id, this.addedTechnology).subscribe(result => {
-    //   if (!this.project.technologies) {
-    //     this.project.technologies = new Array<Technology>();
-    //   }
-    //   this.project.technologies.push(this.addedTechnology);
-    // });
+  async addTechnology() {
+    if (this.project.id) {
+      await this.projectService.addTechnology(this.authService.getAuthString(), this.project.id, this.addedTechnology.id);
+    }
+    this.project.technologies.push(this.addedTechnology);
+  }
+
+  private async loadData() {
+    this.abilities = (await this.abilityService.getAbilities()).data;
+    this.technologies = (await this.technologyService.getTechnologies()).data;
   }
 }

@@ -87,6 +87,7 @@ export class MainComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
       this.projects.addProject(result);
     });
   }

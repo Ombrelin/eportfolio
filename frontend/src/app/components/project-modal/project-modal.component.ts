@@ -1,9 +1,9 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {AuthService} from '../../core/services/auth.service';
-import {Project} from '../project/project.component';
 import {ProjectFormComponent} from '../project-form/project-form.component';
 import {ProjectApiService} from "../../core/api/project-api.service";
+import {Project} from "../../core/model/Project";
 
 @Component({
   selector: 'app-project-modal',
@@ -28,11 +28,10 @@ export class ProjectModalComponent implements OnInit {
   ngOnInit() {
   }
 
-  handleDelete(id: number) {
-    // this.service.delete(id).subscribe(() => {
-    //   this.deleted = true;
-    //   this.dialogRef.close(true);
-    // });
+  async handleDelete(id: number) {
+    await this.service.deleteProject(this.auth.getAuthString(), id);
+    this.deleted = true;
+    this.dialogRef.close(true);
   }
 
   close() {
