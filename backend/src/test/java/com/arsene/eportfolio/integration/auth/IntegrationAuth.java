@@ -24,6 +24,7 @@ import static org.springframework.test.util.AssertionErrors.assertEquals;
 import static org.springframework.test.util.AssertionErrors.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 @ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = EportfolioApplication.class)
@@ -35,6 +36,8 @@ public class IntegrationAuth {
     @Autowired
     private WebApplicationContext context;
     private MockMvc mvc;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @BeforeEach
     public void setup() {
@@ -43,9 +46,6 @@ public class IntegrationAuth {
                 .apply(springSecurity())
                 .build();
     }
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @Test
     void loginCorrectCredentials_returnsToken() throws Exception {

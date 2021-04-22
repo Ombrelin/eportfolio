@@ -10,6 +10,7 @@ import com.arsene.eportfolio.model.dtos.UpdateAbilityDto;
 import com.arsene.eportfolio.model.entities.Ability;
 import com.arsene.eportfolio.model.entities.Subject;
 import com.arsene.eportfolio.model.entities.Technology;
+import com.arsene.eportfolio.utils.DataFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,6 +37,7 @@ import static org.springframework.test.util.AssertionErrors.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 @ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = EportfolioApplication.class)
@@ -84,10 +86,10 @@ public class IntegrationAbilities {
     public void createAbility() throws Exception {
         // Given
         var token = IntegrationUtil.login(mvc, objectMapper);
-        var subject = new Subject("test subject name", "test subject icon", "test subject image");
+        var subject = DataFactory.createSubject();
         subjectRepository.save(subject);
 
-        var ability = new Ability("test ability name", "test ability color", "test ability image", subject);
+        var ability = DataFactory.createAbility(subject);
 
         // When
         var result = mvc.perform(post("/subjects/" + subject.getId() + "/abilities")
@@ -134,10 +136,10 @@ public class IntegrationAbilities {
         // Given
         var token = IntegrationUtil.login(mvc, objectMapper);
 
-        var subject = new Subject("test subject name", "test subject icon", "test subject image");
+        var subject = DataFactory.createSubject();
         subjectRepository.save(subject);
 
-        var ability = new Ability("test ability name", "test ability color", "test ability image", subject);
+        var ability = DataFactory.createAbility(subject);
         abilitiesRepository.save(ability);
 
         subject.getAbilities().add(ability);
@@ -182,7 +184,7 @@ public class IntegrationAbilities {
         var ability = new Ability("test ability name", "test ability color", "test ability image", subject);
         abilitiesRepository.save(ability);
 
-        var tech = new Technology("test tech name", "test tech image", ability);
+        var tech = DataFactory.createTechnology(ability);
         technologyRepository.save(tech);
 
         // When

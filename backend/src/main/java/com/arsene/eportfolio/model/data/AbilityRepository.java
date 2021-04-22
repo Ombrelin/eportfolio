@@ -18,5 +18,7 @@ public interface AbilityRepository extends JpaRepository<Ability, Integer> {
             "WHERE a.subject.id = :subjectId AND a.id = :abilityId")
     boolean existsAbilityBySubjectId(@Param("subjectId") Integer subjectId, @Param("abilityId") Integer abilityId);
 
+    List<Ability> findByIdIn(List<Integer> ids);
+
     List<Ability> findByOrderByIdAsc();
 }

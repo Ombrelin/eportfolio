@@ -39,13 +39,13 @@ export class AbilityModalComponent implements OnInit {
   }
 
   async handleDelete() {
-    await this.service.deleteAbility(this.authService.getAuthString(),this.subject.id,this.ability.id);
+    await this.service.deleteAbility(this.authService.getAuthString(), this.subject.id, this.ability.id);
     this.deleted = true;
     this.dialogRef.close(this.deleted);
   }
 
   async deleteTechnology(id: number) {
-    await this.technologyService.deleteTechnology(this.authService.getAuthString(),this.subject.id,this.ability.id,id);
+    await this.technologyService.deleteTechnology(this.authService.getAuthString(), this.subject.id, this.ability.id, id);
     this.ability.technologies = this.ability.technologies.filter(e => e.id !== id);
   }
 

@@ -78,7 +78,7 @@ export class MainComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(() => {
       this.subjectComponent.loadSubjects();
-    })
+    });
   }
 
   handleClickCreateProject() {

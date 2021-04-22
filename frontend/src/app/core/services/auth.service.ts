@@ -13,7 +13,7 @@ export class AuthService {
   async authenticate(username: string, password: string) {
     const authResponse = await this.authApi.authenticate(new Auth(username, password));
     const bearerString = authResponse.headers.authorization;
-    console.info(`Logged in as ${username}`)
+    console.info(`Logged in as ${username}`);
     sessionStorage.setItem("token", bearerString);
   }
 

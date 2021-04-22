@@ -37,7 +37,7 @@ export class DiplomaFormComponent implements OnInit {
       await this.service.createDiploma(this.authService.getAuthString(), this.diploma);
 
     } else {
-      await this.service.updateDiploma(this.authService.getAuthString(), this.diploma,this.diploma.id);
+      await this.service.updateDiploma(this.authService.getAuthString(), this.diploma, this.diploma.id);
     }
     await this.router.navigate(['/']);
   }

@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface TechnologyRepository extends JpaRepository<Technology, Integer> {
@@ -17,4 +18,5 @@ public interface TechnologyRepository extends JpaRepository<Technology, Integer>
                                                  @Param("abilityId") Integer abilityId,
                                                  @Param("technologyId") Integer technologyId);
 
+    List<Technology> findByIdIn(List<Integer> integers);
 }

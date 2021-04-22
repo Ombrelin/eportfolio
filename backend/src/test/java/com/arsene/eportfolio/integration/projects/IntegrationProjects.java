@@ -10,6 +10,7 @@ import com.arsene.eportfolio.model.entities.Ability;
 import com.arsene.eportfolio.model.entities.Project;
 import com.arsene.eportfolio.model.entities.Subject;
 import com.arsene.eportfolio.model.entities.Technology;
+import com.arsene.eportfolio.utils.DataFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,6 +40,7 @@ import static org.springframework.test.util.AssertionErrors.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 @ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = EportfolioApplication.class)
@@ -89,8 +91,7 @@ public class IntegrationProjects {
     @Test
     public void getProjects_returnsProjects() throws Exception {
         // Given
-        var project1 = new Project("test project 1 name", "test project 1 icon", "test project 1 description", "test project 1 git", "test project 1 color");
-
+        var project1 = DataFactory.createProject();
         var subject = new Subject("test name", "test icon", "test image");
         subjectRepository.save(subject);
         var ability = new Ability("test ability name", "test ability color", "test ability image", subject);
@@ -187,13 +188,20 @@ public class IntegrationProjects {
     @Test
     public void createProject_createsProject() throws Exception {
         // Given
+        var subject = new Subject("test name", "test icon", "test image");
+        subjectRepository.save(subject);
+        var ability = new Ability("test ability name", "test ability color", "test ability image", subject);
+        abilitiesRepository.save(ability);
+        var tech = new Technology("test tech name", "test tech image", ability);
+        technologyRepository.save(tech);
+
         var token = IntegrationUtil.login(mvc, objectMapper);
-        var project1 = new Project("test project 1 name", "test project 1 icon", "test project 1 description", "test project 1 git", "test project 1 color");
+        var projectDto = DataFactory.createProjectDto(ability.getId(), tech.getId());
 
         // When
         var response = mvc.perform(post("/projects")
                 .contentType("application/json")
-                .content(objectMapper.writeValueAsString(project1))
+                .content(objectMapper.writeValueAsString(projectDto))
                 .header("Authorization", token))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.icon", is("test project 1 icon")))
@@ -202,20 +210,27 @@ public class IntegrationProjects {
                 .andExpect(jsonPath("$.id", notNullValue()))
                 .andExpect(jsonPath("$.description", is("test project 1 description")))
                 .andExpect(jsonPath("$.git", is("test project 1 git")))
-                .andExpect(jsonPath("$.abilities", hasSize(0)))
-                .andExpect(jsonPath("$.technologies", hasSize(0)))
+                .andExpect(jsonPath("$.abilities", hasSize(1)))
+                .andExpect(jsonPath("$.technologies", hasSize(1)))
                 .andReturn()
                 .getResponse();
 
         var project = objectMapper.readValue(response.getContentAsString(), Project.class);
 
-        assertEquals("One project should have been created", 1L, projectRepository.count());
-        project1 = projectRepository.findById(project.getId()).get();
-        assertEquals("Project in DB should have correct image", "test project 1 icon", project1.getIcon());
-        assertEquals("Project in DB should have correct image", "test project 1 name", project1.getName());
-        assertEquals("Project in DB should have correct image", "test project 1 color", project1.getColor());
-        assertEquals("Project in DB should have correct image", "test project 1 git", project1.getGit());
-        assertEquals("Project in DB should have correct image", "test project 1 description", project1.getDescription());
+        var transactionTemplate = new TransactionTemplate(transactionManager);
+        transactionTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
+        transactionTemplate.execute(status -> {
+            assertEquals("One project should have been created", 1L, projectRepository.count());
+            var projectDb = projectRepository.findById(project.getId()).get();
+            assertEquals("Project in DB should have correct image", "test project 1 icon", projectDb.getIcon());
+            assertEquals("Project in DB should have correct image", "test project 1 name", projectDb.getName());
+            assertEquals("Project in DB should have correct image", "test project 1 color", projectDb.getColor());
+            assertEquals("Project in DB should have correct image", "test project 1 git", projectDb.getGit());
+            assertEquals("Project in DB should have correct image", "test project 1 description", projectDb.getDescription());
+            assertEquals("Project in DB should have 1 ability", 1, projectDb.getAbilities().size());
+            assertEquals("Project in DB should have 1 technology", 1, projectDb.getTechnologies().size());
+            return null;
+        });
     }
 
     // PUT /projects/{id}/technologies/{techId}

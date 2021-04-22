@@ -50,7 +50,7 @@ export class SubjectComponent implements OnInit {
   }
 
   async handleDelete() {
-    await this.service.deleteSubject(this.authService.getAuthString(),this.subject.id);
+    await this.service.deleteSubject(this.authService.getAuthString(), this.subject.id);
     this.delete.emit(this.subject);
   }
 

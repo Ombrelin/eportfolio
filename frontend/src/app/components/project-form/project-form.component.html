@@ -2,25 +2,25 @@
   <h4>Ajouter ou modifier un projet</h4>
 </div>
 <mat-dialog-content>
-  <mat-form-field>
+  <mat-form-field appearance="fill">
     <input [(ngModel)]="project.name" id="name" matInput name="name" placeholder="Nom" type="text">
   </mat-form-field>
 
-  <mat-form-field>
+  <mat-form-field appearance="fill">
     <input [(ngModel)]="project.color" id="color" matInput name="color" placeholder="Couleur" type="text">
   </mat-form-field>
 
-  <mat-form-field>
+  <mat-form-field appearance="fill">
     <input [(ngModel)]="project.description" id="description" matInput name="description" placeholder="Description"
            type="text">
   </mat-form-field>
 
 
-  <mat-form-field>
+  <mat-form-field appearance="fill">
     <input [(ngModel)]="project.git" id="git" matInput name="git" placeholder="Git" type="text">
   </mat-form-field>
 
-  <mat-form-field>
+  <mat-form-field appearance="fill">
     <input [(ngModel)]="project.icon" id="icon" matInput name="icon" placeholder="Icone" type="text">
   </mat-form-field>
 
@@ -37,10 +37,12 @@
   </div>
 
   <div *ngIf="this.project.id !== null && this.project.id !== undefined">
-        <span *ngFor="let ability of project.abilities">{{ability.name}} <i (click)="removeAbility(project.id,ability.id)"
-                                                                            class="fa fa-trash-alt"></i><br></span>
-    <span *ngFor="let technology of project.technologies">{{technology.name}} <i (click)="removeTechnology(project.id,technology.id)"
-                                                                                 class="fa fa-trash-alt"></i><br></span>
+        <span *ngFor="let ability of project.abilities">{{ability.name}} <i
+          (click)="removeAbility(project.id,ability.id)"
+          class="fa fa-trash-alt"></i><br></span>
+    <span *ngFor="let technology of project.technologies">{{technology.name}} <i
+      (click)="removeTechnology(project.id,technology.id)"
+      class="fa fa-trash-alt"></i><br></span>
 
     <h4>Ajouter une compétence</h4>
     <mat-form-field>

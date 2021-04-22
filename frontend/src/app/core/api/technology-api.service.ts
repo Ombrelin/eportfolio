@@ -1,6 +1,5 @@
 import {BaseService, Body, DELETE, GET, Header, Path, POST, PUT, Response, ServiceBuilder} from "ts-retrofit";
 import {Technology} from "../model/Technology";
-import {SubjectApiService} from "./subject-api.service";
 import {API_URL} from "../constants/api-constants";
 
 export class TechnologyApiService extends BaseService {

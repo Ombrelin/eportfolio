@@ -32,6 +32,7 @@ import static org.springframework.test.util.AssertionErrors.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 @ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = EportfolioApplication.class)
@@ -51,6 +52,8 @@ public class IntegrationSubjects {
     private AbilityRepository abilitiesRepository;
 
     private MockMvc mvc;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @BeforeEach
     public void setup() {
@@ -61,9 +64,6 @@ public class IntegrationSubjects {
 
         repository.deleteAll();
     }
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @Test
     public void createSubject_InsertsInDb() throws Exception {

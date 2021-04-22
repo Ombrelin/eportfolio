@@ -21,7 +21,7 @@ import {ExperiencesComponent} from './components/experiences/experiences.compone
 import {AbilityModalComponent} from './components/ability-modal/ability-modal.component';
 import {DiplomaFormComponent} from './components/diploma-form/diploma-form.component';
 import {DiplomasComponent} from './components/diplomas/diplomas.component';
-import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
 import {MarkdownModule} from 'ngx-markdown';

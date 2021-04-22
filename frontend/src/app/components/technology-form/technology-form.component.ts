@@ -17,8 +17,8 @@ export class TechnologyFormComponent {
 
   public abilityId: number;
   public technology: Technology;
-  private subjectId: number;
   public fileToUpload: File = null;
+  private subjectId: number;
 
   constructor(
     private abilityService: AbilityApiService,
@@ -49,17 +49,24 @@ export class TechnologyFormComponent {
       );
     }
     let response;
-    if(this.technology.id == null) { // Create
+    if (this.technology.id == null) { // Create
       response =
-        await this.technologyService.createTechnology(authString,this.technology,this.subjectId,this.abilityId)
+        await this.technologyService.createTechnology(authString, this.technology, this.subjectId, this.abilityId);
 
       this.snackBar.open(`Technology created ${this.technology.id}`);
     } else { // Update
       response =
-        await this.technologyService.updateTechnology(authString,this.technology,this.subjectId,this.abilityId, this.technology.id);
+        await this.technologyService.updateTechnology(authString, this.technology, this.subjectId, this.abilityId, this.technology.id);
 
       this.snackBar.open(`Technology updated ${this.technology.id}`);
+
     }
+    setTimeout(() => {
+        this.snackBar.dismiss();
+      },
+      3000);
+
+
     this.technology = response.data;
     this.dialogRef.close(response.data);
   }

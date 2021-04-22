@@ -29,7 +29,7 @@ export class DiplomasComponent implements OnInit {
   }
 
   async delete(diploma: Diploma) {
-    await this.service.deleteDiploma(this.authService.getAuthString(),diploma.id);
+    await this.service.deleteDiploma(this.authService.getAuthString(), diploma.id);
     this.diplomas = this.diplomas.filter(d => d.id != diploma.id);
   }
 }
