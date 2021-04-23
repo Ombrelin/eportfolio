@@ -46,8 +46,8 @@
   </div>
 </nav>
 
-<a *ngIf="logged && createMenuOpen" class="create-button create-button-diploma" color="accent" mat-fab
-   matTooltip="Créer un diplôme" matTooltipPosition="before" routerLink="/diploma">
+<a (click)="handleClickCreateDiploma()" *ngIf="logged && createMenuOpen" class="create-button create-button-diploma" color="accent"
+   mat-fab matTooltip="Créer un diplôme" matTooltipPosition="before">
   <mat-icon>school</mat-icon>
 </a>
 <a (click)="handleClickCreateProject()" *ngIf="logged && createMenuOpen" class="create-button create-button-project"

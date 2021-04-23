@@ -42,7 +42,7 @@
     </mat-select>
   </mat-form-field>
 
-  <button *ngIf="!!addedAbility" (click)="addAbility()" color="primary" mat-raised-button>
+  <button (click)="addAbility()" *ngIf="!!addedAbility" color="primary" mat-raised-button>
     Add
   </button>
 
@@ -55,7 +55,7 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
-  <button *ngIf="!!addedTechnology" (click)="addTechnology()" color="primary" mat-raised-button>
+  <button (click)="addTechnology()" *ngIf="!!addedTechnology" color="primary" mat-raised-button>
     Add
   </button>
 

@@ -18,7 +18,7 @@ public class DiplomaController {
         this.diplomaRepository = diplomaRepository;
     }
 
-    @GetMapping("/")
+    @GetMapping
     public Iterable<Diploma> findAll() {
         return diplomaRepository.findAll();
     }
@@ -34,7 +34,7 @@ public class DiplomaController {
         diplomaRepository.deleteById(id);
     }
 
-    @PostMapping("/")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Diploma create(@RequestBody Diploma t) {
         return diplomaRepository.save(t);

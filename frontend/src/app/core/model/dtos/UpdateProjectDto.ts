@@ -8,17 +8,6 @@ export class UpdateProjectDto {
   public git?: string;
   public color?: string;
 
-  static fromProject(project: Project): UpdateProjectDto{
-    return new UpdateProjectDto(
-      project.id,
-      project.name,
-      project.icon,
-      project.description,
-      project.git,
-      project.color
-    );
-  }
-
   constructor(id: number,
               name: string,
               icon: string,
@@ -32,5 +21,16 @@ export class UpdateProjectDto {
     this.description = description;
     this.git = git;
     this.color = color;
+  }
+
+  static fromProject(project: Project): UpdateProjectDto {
+    return new UpdateProjectDto(
+      project.id,
+      project.name,
+      project.icon,
+      project.description,
+      project.git,
+      project.color
+    );
   }
 }

@@ -9,6 +9,9 @@ import {ProjectFormComponent} from '../project-form/project-form.component';
 import {ProjectsComponent} from '../projects/projects.component';
 import {SubjectApiService} from "../../core/api/subject-api.service";
 import {Subject} from "../../core/model/Subject";
+import {DiplomaFormComponent} from "../diploma-form/diploma-form.component";
+import {Diploma} from "../../core/model/Diploma";
+import {DiplomasComponent} from "../diplomas/diplomas.component";
 
 @Component({
   selector: 'app-main',
@@ -22,6 +25,7 @@ export class MainComponent implements OnInit {
 
   subjectComponent: SubjectsComponent;
   projects: ProjectsComponent;
+  diplomas: DiplomasComponent;
 
   constructor(
     private service: SubjectApiService,
@@ -30,6 +34,11 @@ export class MainComponent implements OnInit {
     public dialog: MatDialog
   ) {
     this.logged = auth.isAuthenticated();
+  }
+
+  @ViewChild(DiplomasComponent, {static: true})
+  set diplomaComponent(diplomas: DiplomasComponent) {
+    this.diplomas = diplomas;
   }
 
   @ViewChild(SubjectsComponent, {static: true})
@@ -87,9 +96,16 @@ export class MainComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
       this.projects.addProject(result);
     });
   }
 
+  handleClickCreateDiploma() {
+    const dialogRef = this.dialog.open(DiplomaFormComponent, {
+      width: '500px'
+    });
+    dialogRef.afterClosed().subscribe((result: Diploma) => {
+      this.diplomas.addDiploma(result);
+    });
+  }
 }

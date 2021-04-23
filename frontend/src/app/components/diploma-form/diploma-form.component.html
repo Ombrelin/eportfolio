@@ -1,45 +1,35 @@
-<div fxFlexAlign="center" fxLayout="row wrap">
-  <div fxFlex.gt-md="35%"></div>
-  <mat-card fxFlex.gt-md="30%">
-    <mat-card-header>
-      <mat-card-title>Ajouter ou modifier un diplôme</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <mat-form-field>
-        <input [(ngModel)]="diploma.name" id="name" matInput name="name" placeholder="Nom" type="text">
-      </mat-form-field>
+<h1 mat-dialog-title>Create or Update Ability</h1>
 
-      <mat-form-field>
-        <input [(ngModel)]="diploma.school" id="school" matInput name="school" placeholder="Ecole" type="text">
-      </mat-form-field>
+<mat-dialog-content>
+  <mat-form-field appearance="fill">
+    <input [(ngModel)]="diploma.name" id="name" matInput name="name" placeholder="Nom" type="text">
+  </mat-form-field>
 
-      <mat-form-field>
-        <input [(ngModel)]="diploma.startYear" id="startYear" matInput name="startYear" placeholder="Année de début"
-               type="number"/>
-      </mat-form-field>
+  <mat-form-field appearance="fill">
+    <input [(ngModel)]="diploma.school" id="school" matInput name="school" placeholder="Ecole" type="text">
+  </mat-form-field>
 
-      <mat-form-field>
-        <input [(ngModel)]="diploma.endYear" id="endYear" matInput name="endYear" placeholder="Année de fin"
-               type="number"/>
-      </mat-form-field>
+  <mat-form-field appearance="fill">
+    <input [(ngModel)]="diploma.startYear" id="startYear" matInput name="startYear" placeholder="Année de début"
+           type="number"/>
+  </mat-form-field>
 
-      <mat-form-field>
-        <input [(ngModel)]="diploma.logo" id="logo" matInput name="logo" placeholder="Logo" type="text">
-      </mat-form-field>
+  <mat-form-field appearance="fill">
+    <input [(ngModel)]="diploma.endYear" id="endYear" matInput name="endYear" placeholder="Année de fin"
+           type="number"/>
+  </mat-form-field>
 
-      <mat-form-field>
+  <label for="image">Logo :</label>
+  <input (change)="handleFileInput($event.target.files)" id="image" name="image" placeholder="Image" type="file">
+
+  <mat-form-field appearance="fill">
         <textarea [(ngModel)]="diploma.description" id="description" matInput name="description"
                   placeholder="Description"
                   type="text"></textarea>
-      </mat-form-field>
+  </mat-form-field>
 
-    </mat-card-content>
 
-    <mat-card-actions>
-      <button (click)="submit()" color="primary"
-              mat-raised-button>Sauvegarder
-      </button>
-    </mat-card-actions>
-  </mat-card>
-
-</div>
+  <button (click)="submit()" color="primary"
+          mat-raised-button>Sauvegarder
+  </button>
+</mat-dialog-content>

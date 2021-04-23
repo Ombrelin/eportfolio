@@ -12,10 +12,10 @@ export class Project {
     public abilities?: Array<Ability>,
     public technologies?: Array<Technology>
   ) {
-    if(!abilities){
+    if (!abilities) {
       this.abilities = new Array<Ability>();
     }
-    if(!technologies){
+    if (!technologies) {
       this.technologies = new Array<Technology>();
     }
   }

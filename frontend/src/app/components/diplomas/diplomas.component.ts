@@ -2,6 +2,8 @@ import {Component, Input, OnInit} from '@angular/core';
 import {AuthService} from '../../core/services/auth.service';
 import {DiplomaApiService} from "../../core/api/diploma-api.service";
 import {Diploma} from "../../core/model/Diploma";
+import {MatDialog} from "@angular/material/dialog";
+import {DiplomaFormComponent} from "../diploma-form/diploma-form.component";
 
 @Component({
   selector: 'app-diplomas',
@@ -17,7 +19,8 @@ export class DiplomasComponent implements OnInit {
 
   constructor(
     private service: DiplomaApiService,
-    private authService: AuthService) {
+    private authService: AuthService,
+    private dialog: MatDialog) {
     this.loaded = false;
   }
 
@@ -31,6 +34,19 @@ export class DiplomasComponent implements OnInit {
   async delete(diploma: Diploma) {
     await this.service.deleteDiploma(this.authService.getAuthString(), diploma.id);
     this.diplomas = this.diplomas.filter(d => d.id != diploma.id);
+  }
+
+  addDiploma(diploma: Diploma) {
+    if (diploma) {
+      this.diplomas.push(diploma);
+    }
+  }
+
+  editDiploma(diploma: Diploma) {
+    const dialogRef = this.dialog.open(DiplomaFormComponent, {
+      width: '500px',
+      data: diploma
+    });
   }
 }
 
