@@ -92,7 +92,7 @@ public class IntegrationProjects {
     public void getProjects_returnsProjects() throws Exception {
         // Given
         var project1 = DataFactory.createProject();
-        var subject = new Subject("test name", "test icon", "test image");
+        var subject = new Subject("test name");
         subjectRepository.save(subject);
         var ability = new Ability("test ability name", "test ability color", "test ability image", subject);
         abilitiesRepository.save(ability);
@@ -188,7 +188,7 @@ public class IntegrationProjects {
     @Test
     public void createProject_createsProject() throws Exception {
         // Given
-        var subject = new Subject("test name", "test icon", "test image");
+        var subject = new Subject("test name");
         subjectRepository.save(subject);
         var ability = new Ability("test ability name", "test ability color", "test ability image", subject);
         abilitiesRepository.save(ability);
@@ -241,7 +241,7 @@ public class IntegrationProjects {
         var project1 = new Project("test project 1 name", "test project 1 icon", "test project 1 description", "test project 1 git", "test project 1 color");
         projectRepository.save(project1);
 
-        var subject = new Subject("test name", "test icon", "test image");
+        var subject = new Subject("test name");
         subjectRepository.save(subject);
         var ability = new Ability("test ability name", "test ability color", "test ability image", subject);
         abilitiesRepository.save(ability);
@@ -292,7 +292,7 @@ public class IntegrationProjects {
         var project1 = new Project("test project 1 name", "test project 1 icon", "test project 1 description", "test project 1 git", "test project 1 color");
         projectRepository.save(project1);
 
-        var subject = new Subject("test name", "test icon", "test image");
+        var subject = new Subject("test name");
         subjectRepository.save(subject);
         var ability = new Ability("test ability name", "test ability color", "test ability image", subject);
         abilitiesRepository.save(ability);
@@ -343,7 +343,7 @@ public class IntegrationProjects {
         // Given
         var token = IntegrationUtil.login(mvc, objectMapper);
 
-        var subject = new Subject("test name", "test icon", "test image");
+        var subject = new Subject("test name");
         subjectRepository.save(subject);
         var ability = new Ability("test ability name", "test ability color", "test ability image", subject);
         abilitiesRepository.save(ability);
@@ -377,7 +377,7 @@ public class IntegrationProjects {
         // Given
         var token = IntegrationUtil.login(mvc, objectMapper);
 
-        var subject = new Subject("test name", "test icon", "test image");
+        var subject = new Subject("test name");
         subjectRepository.save(subject);
         var ability = new Ability("test ability name", "test ability color", "test ability image", subject);
         abilitiesRepository.save(ability);

@@ -5,30 +5,18 @@ import javax.validation.constraints.NotNull;
 
 public class UpdateSubjectDto {
 
-    @NotNull
     @NotBlank
     private Integer id;
 
-    @NotNull
     @NotBlank
     private String name;
-
-    @NotNull
-    @NotBlank
-    private String icon;
-
-    @NotNull
-    @NotBlank
-    private String image;
 
     public UpdateSubjectDto() {
     }
 
-    public UpdateSubjectDto(@NotNull @NotBlank Integer id, @NotNull @NotBlank String name, @NotNull @NotBlank String icon, @NotNull @NotBlank String image) {
+    public UpdateSubjectDto(@NotNull @NotBlank Integer id, @NotNull @NotBlank String name) {
         this.id = id;
         this.name = name;
-        this.icon = icon;
-        this.image = image;
     }
 
     public Integer getId() {
@@ -45,21 +33,5 @@ public class UpdateSubjectDto {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getIcon() {
-        return icon;
-    }
-
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
     }
 }

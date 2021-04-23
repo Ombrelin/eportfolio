@@ -9,12 +9,7 @@ public class Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-
     private String name;
-
-    private String icon;
-
-    private String image;
 
     @OneToMany(
             mappedBy = "subject",
@@ -27,18 +22,14 @@ public class Subject {
     public Subject() {
     }
 
-    public Subject(String name, String icon, String image) {
+    public Subject(String name) {
         this.name = name;
-        this.icon = icon;
-        this.image = image;
         this.abilities = new HashSet<>();
     }
 
-    public Subject(Integer id, String name, String icon, String image) {
+    public Subject(Integer id, String name) {
         this.id = id;
         this.name = name;
-        this.icon = icon;
-        this.image = image;
         this.abilities = new HashSet<>();
     }
 
@@ -56,22 +47,6 @@ public class Subject {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getIcon() {
-        return icon;
-    }
-
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
     }
 
     public Set<Ability> getAbilities() {

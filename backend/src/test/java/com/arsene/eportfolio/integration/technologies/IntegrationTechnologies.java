@@ -86,7 +86,7 @@ public class IntegrationTechnologies {
     public void updateTechnology() throws Exception {
         // Given
         var token = IntegrationUtil.login(mvc, objectMapper);
-        var subject = new Subject("test subject name", "test subject icon", "test subject image");
+        var subject = new Subject("test subject name");
         subjectRepository.save(subject);
 
         var ability = new Ability("test ability name", "test ability color", "test ability image", subject);
@@ -132,7 +132,7 @@ public class IntegrationTechnologies {
     public void createTechnology() throws Exception {
         // Given
         var token = IntegrationUtil.login(mvc, objectMapper);
-        var subject = new Subject("test subject name", "test subject icon", "test subject image");
+        var subject = new Subject("test subject name");
         subjectRepository.save(subject);
 
         var ability = new Ability("test ability name", "test ability color", "test ability image", subject);
@@ -167,7 +167,7 @@ public class IntegrationTechnologies {
     public void deleteTechnology() throws Exception {
         // Given
         var token = IntegrationUtil.login(mvc, objectMapper);
-        var subject = new Subject("test subject name", "test subject icon", "test subject image");
+        var subject = new Subject("test subject name");
         subjectRepository.save(subject);
 
         var ability = new Ability("test ability name", "test ability color", "test ability image", subject);
@@ -194,7 +194,7 @@ public class IntegrationTechnologies {
     @Test
     public void getTechnologies() throws Exception {
         // Given
-        var subject = new Subject("test subject name", "test subject icon", "test subject image");
+        var subject = new Subject("test subject name");
         subjectRepository.save(subject);
 
         var ability = new Ability("test ability name", "test ability color", "test ability image", subject);

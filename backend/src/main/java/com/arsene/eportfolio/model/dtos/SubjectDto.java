@@ -9,15 +9,11 @@ public class SubjectDto {
 
     private Integer id;
     private String name;
-    private String icon;
-    private String image;
     private Set<AbilityDto> abilities;
 
     public SubjectDto(Subject subject) {
         this.id = subject.getId();
         this.name = subject.getName();
-        this.icon = subject.getIcon();
-        this.image = subject.getImage();
         this.abilities = subject.getAbilities().stream().map(AbilityDto::new).collect(Collectors.toSet());
     }
 
@@ -35,22 +31,6 @@ public class SubjectDto {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getIcon() {
-        return icon;
-    }
-
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
     }
 
     public Set<AbilityDto> getAbilities() {

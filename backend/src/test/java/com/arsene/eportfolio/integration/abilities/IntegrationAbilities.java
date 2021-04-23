@@ -178,7 +178,7 @@ public class IntegrationAbilities {
         // Given
         var token = IntegrationUtil.login(mvc, objectMapper);
 
-        var subject = new Subject("test subject name", "test subject icon", "test subject image");
+        var subject = new Subject("test subject name");
         subjectRepository.save(subject);
 
         var ability = new Ability("test ability name", "test ability color", "test ability image", subject);
@@ -209,7 +209,7 @@ public class IntegrationAbilities {
     @Test
     public void getAbility() throws Exception {
         // Given
-        var subject = new Subject("test subject 1 name", "test subject 1 icon", "test subject 1 image");
+        var subject = new Subject("test subject 1 name");
         subjectRepository.save(subject);
 
         var ability = new Ability("test ability 1 name", "test ability 1 color", "test ability 1 image", subject);
@@ -241,7 +241,7 @@ public class IntegrationAbilities {
     @Test
     public void getAllAbilities() throws Exception {
         // Given
-        var subject = new Subject("test subject 1 name", "test subject 1 icon", "test subject 1 image");
+        var subject = new Subject("test subject 1 name");
         subjectRepository.save(subject);
 
         var ability = new Ability("test ability 1 name", "test ability 1 color", "test ability 1 image", subject);
@@ -250,7 +250,7 @@ public class IntegrationAbilities {
         subject.getAbilities().add(ability);
         subjectRepository.save(subject);
 
-        var subject2 = new Subject("test subject 2 name", "test subject 2 icon", "test subject 2 image");
+        var subject2 = new Subject("test subject 2 name");
         subjectRepository.save(subject2);
 
         var ability2 = new Ability("test ability 2 name", "test ability 2 color", "test ability 2 image", subject);

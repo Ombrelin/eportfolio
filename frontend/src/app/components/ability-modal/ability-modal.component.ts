@@ -59,8 +59,10 @@ export class AbilityModalComponent implements OnInit {
       }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      technology = result;
+    dialogRef.afterClosed().subscribe((result: Technology) => {
+      if(technology){
+        technology = result;
+      }
     });
   }
 
@@ -74,7 +76,9 @@ export class AbilityModalComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.ability.technologies.push(result);
+      if(result) {
+        this.ability.technologies.push(result);
+      }
     });
   }
 

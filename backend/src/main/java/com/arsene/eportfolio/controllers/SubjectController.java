@@ -49,7 +49,7 @@ public class SubjectController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public SubjectDto create(@RequestBody CreateSubjectDto dto) {
-        var subject = new Subject(dto.getName(), dto.getIcon(), dto.getImage());
+        var subject = new Subject(dto.getName());
         subjectRepository.save(subject);
         return new SubjectDto(subject);
     }
@@ -65,8 +65,6 @@ public class SubjectController {
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("No subject with id : %s", id)));
 
         subject.setName(dto.getName());
-        subject.setImage(dto.getImage());
-        subject.setIcon(dto.getIcon());
 
         subjectRepository.save(subject);
 

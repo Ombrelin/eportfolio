@@ -13,7 +13,7 @@ import java.util.stream.IntStream;
 public class DataFactory {
 
     public static Subject createSubject() {
-        return new Subject("test subject name", "test subject icon", "test subject image");
+        return new Subject("test subject name");
     }
 
     public static Ability createAbility(Subject subject) {

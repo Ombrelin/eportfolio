@@ -69,7 +69,7 @@ public class IntegrationSubjects {
     public void createSubject_InsertsInDb() throws Exception {
         // Given
         var token = IntegrationUtil.login(mvc, objectMapper);
-        var subject = new Subject("test name", "test icon", "test image");
+        var subject = new Subject("test name");
 
         // When
         mvc.perform(
@@ -86,8 +86,6 @@ public class IntegrationSubjects {
 
         var createdSubject = repository.findAll().get(0);
 
-        assertEquals("Created Subject should have the right image", "test image", createdSubject.getImage());
-        assertEquals("Created Subject should have the right icon", "test icon", createdSubject.getIcon());
         assertEquals("Created Subject should have the right name", "test name", createdSubject.getName());
         assertNotNull("Created Subject should have an Id", createdSubject.getId());
     }
@@ -97,13 +95,13 @@ public class IntegrationSubjects {
         // Given
 
 
-        var subject1 = new Subject("test name 1", "test icon 1", "test image 1");
+        var subject1 = new Subject("test name 1");
         repository.save(subject1);
 
         var ability = new Ability("test ability 1 name", "test ability 1 color", "test ability 1 image", subject1);
         abilitiesRepository.save(ability);
 
-        var subject2 = new Subject("test name 2", "test icon 2", "test image 2");
+        var subject2 = new Subject("test name 2");
         repository.save(subject2);
 
         // When
@@ -115,8 +113,6 @@ public class IntegrationSubjects {
                 // Then
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].image", is("test image 1")))
-                .andExpect(jsonPath("$[0].icon", is("test icon 1")))
                 .andExpect(jsonPath("$[0].name", is("test name 1")))
                 .andExpect(jsonPath("$[0].id", notNullValue()))
                 .andExpect(jsonPath("$[0].abilities", hasSize(1)))
@@ -124,8 +120,6 @@ public class IntegrationSubjects {
                 .andExpect(jsonPath("$[0].abilities[0].image", is("test ability 1 image")))
                 .andExpect(jsonPath("$[0].abilities[0].color", is("test ability 1 color")))
                 .andExpect(jsonPath("$[0].abilities[0].id", notNullValue()))
-                .andExpect(jsonPath("$[1].image", is("test image 2")))
-                .andExpect(jsonPath("$[1].icon", is("test icon 2")))
                 .andExpect(jsonPath("$[1].name", is("test name 2")))
                 .andExpect(jsonPath("$[1].id", notNullValue()));
 
@@ -137,7 +131,7 @@ public class IntegrationSubjects {
         var token = IntegrationUtil.login(mvc, objectMapper);
 
 
-        var subject1 = new Subject("test name 1", "test icon 1", "test image 1");
+        var subject1 = new Subject("test name 1");
         repository.save(subject1);
 
         var ability = new Ability("test ability 1 name", "test ability 1 color", "test ability 1 image", subject1);
@@ -163,10 +157,10 @@ public class IntegrationSubjects {
         // Given
         var token = IntegrationUtil.login(mvc, objectMapper);
 
-        var subject1 = new Subject("test name 1", "test icon 1", "test image 1");
+        var subject1 = new Subject("test name 1");
         repository.save(subject1);
 
-        var editDto = new UpdateSubjectDto(subject1.getId(), "test name updated", "test icon 1", "test image 1");
+        var editDto = new UpdateSubjectDto(subject1.getId(), "test name updated");
 
         // When
         mvc.perform(
